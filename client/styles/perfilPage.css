@@ -1,0 +1,89 @@
+@import url(/bibliopocket/client/styles/globals.css);
+
+body {
+  align-items: normal;
+}
+
+.datos-user {
+  display: flex;
+  flex-direction: column;
+  margin: 30px;
+
+  & .username-pic {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 30px;
+    margin-bottom: 25px;
+
+    & .username {
+      color: var(--primary-color);
+      font-size: 30px;
+      font-weight: bolder;
+      max-width: 255px;
+      
+      border: none;
+      outline: none;
+      background-color: transparent;
+
+      &:focus-visible {
+        box-shadow: 0 0 2px var(--primary-color);
+      }
+    }
+  }
+}
+
+.userpic-upload {
+  & input {
+    display: none;
+  }
+
+  & label::before {
+    content: none;
+  }
+}
+
+label {
+  &::before {
+    content: "•";
+    margin-right: 7px;
+  }
+
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin: 0 10px;
+}
+
+.wrap-user-pic {
+  position: relative;
+ 
+  & .user-pic {
+    width: 128px;
+    height: 128px;
+
+    border: 4px solid var(--primary-color);
+    border-radius: 100%;
+    transition: filter .4s ease;
+  }
+
+  & .lapiz-icon {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #00000080;
+
+    transform: translate(-50%, -50%);
+    transition: background .3s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #000000;
+    }
+  }
+}

@@ -1,0 +1,263 @@
+:root {
+  --ancho-vista-libro: 180px;
+  --ancho-datos-libro: 170px;
+}
+
+/* Tema Claro ☀️ */
+html[data-theme="light"] {
+  --background-vista-libro: color-mix(in srgb, var(--primary-color) 20%, var(--secondary-lighten-color) 40%);
+  --color-titulo-libro: ;
+
+}
+
+/* Tema Oscuro 🌙 */
+html[data-theme="dark"] {
+  --background-vista-libro: color-mix(in srgb, var(--background-color), black 20%);
+  --color-titulo-libro: #fff;
+  --color-subtitulo-libro: color-mix(in srgb, var(--color-titulo-libro), #485059 50%);
+  --color-autoria-libro: #d1db0a;
+
+}
+
+.grupo-buttons {
+  margin-bottom: 20px;
+}
+
+.estanteria {
+  display: flex;
+  flex-direction: column;
+
+  & .libro {
+    display: flex;
+    column-gap: 10px;
+
+    width: 80vw;
+    min-height: 180px;
+    max-height: min-content;
+    padding: 12px;
+
+    margin: 10px auto;
+    box-shadow: 1px 1px 2px 1px var(--primary-color);
+
+    background-color: var(--background-vista-libro);
+
+    & .portada{
+      margin: auto 10px;
+      width: 108px;
+      height: 172px;
+
+      border-radius: 5px;
+    }
+
+    & .datos-libro {
+      font-size: 14px;
+      width: 100%;
+
+      & .cabecera {
+        margin: unset;
+        font-weight: bold;
+        font-style: italic;
+        color: var(--color-titulo-libro);
+
+        min-height: 10px;
+        row-gap: 2px;
+
+        & .titulo {
+          margin: 10px auto 8px auto;
+          font-size: 18px;
+        }
+  
+        & .subtitulo {
+          margin: unset;
+          color: var(--color-subtitulo-libro);
+        }
+      }
+
+      & hr {
+        margin-left: unset;
+        width: 50%;
+        border: 0.5px solid var(--primary-color);
+      }
+
+      & .autoria {
+        color: var(--color-autoria-libro);
+      }
+
+      & .grupo-buttons {
+        text-align: end;
+        margin: unset;
+
+        & .icon {
+          margin: unset;
+          width: 32px;
+          height: 32px;
+          transition: fill .3s ease;
+
+          &:hover {
+            fill: var(--color-titulo-libro)
+          }
+        }
+      }
+    }
+  }
+}
+
+.input-buscador {
+  width: 230px;
+  padding: 9px;
+  margin-left: 5px;
+  font-size: 15px;
+
+  outline: none;
+  border: 1px solid var(--primary-color);
+  background-color: color-mix(in srgb, var(--secondary-contrast-color), white 20%);
+  color: var(--secondary-lighten-color);
+  font-weight: bold;
+  
+  transition: .6s ease;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3.5px var(--primary-color);
+  }
+
+  &::placeholder {
+    font-style: italic;
+    color: var(--primary-color);
+    opacity: 0.5;
+  }
+
+  &::-webkit-search-cancel-button{
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    right: 0;
+    
+    -webkit-mask-image: url("/bibliopocket/client/assets/images/x-circle-icon.svg");
+    mask-image: url("/bibliopocket/client/assets/images/x-circle-icon.svg");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background-color: var(--primary-color);
+    
+    cursor: pointer;
+    transition: opacity .3s ease;
+  }
+}
+
+#busqueda-libro-modal {
+  width: 80vw;
+  height: 65vh;
+  padding: 40px;
+
+  & h2 {
+    margin-top: unset;
+    margin-bottom: 30px;
+  }
+
+  & img {
+    display: flex;
+    margin: auto;
+  }
+
+  & .resultados-busqueda {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    row-gap: 13px;
+    column-gap: 13px;
+    margin: 20px auto;
+
+    flex-wrap: wrap;
+
+    & .libro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      width: var(--ancho-vista-libro);
+      height: 370px;
+      padding: 10px;
+      white-space: nowrap;
+
+      border: 2px solid var(--secondary-contrast-color);
+      background-color: var(--background-vista-libro);
+
+      & .titulo {
+        width: var(--ancho-datos-libro);
+        text-align: center;
+        display: block;
+        margin-bottom: unset;
+
+        color: var(--secondary-lighten-color);
+        font-style: italic;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      & .subtitulo {
+        width: var(--ancho-datos-libro);
+        height: 14px;
+        text-align: center;
+        display: block;
+        margin-bottom: 10px;
+
+        color: var(--secondary-lighten-color);
+        font-style: italic;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+  
+      & .portada {
+        min-width: 128px;
+        max-width: 128px;
+        min-height: 192px;
+        max-height: 192px;
+  
+        border-radius: 10px;
+      }
+
+      & .autoria {
+        width: var(--ancho-datos-libro);
+        text-align: center;
+        display: block;
+
+        color: var(--primary-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      & .fecha-publicacion {
+        margin-top: unset;
+      }
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--secondary-contrast-color);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+  }
+}
+
+
+#eliminar-libro-modal {
+  & p {
+    font-size: 16px;
+    font-weight: bold;
+    margin: unset;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 13px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--header-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
+}

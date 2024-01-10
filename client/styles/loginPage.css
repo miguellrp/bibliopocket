@@ -1,0 +1,36 @@
+@import "globals.css";
+
+.book {
+  margin: 10px auto;
+
+  .color-book {
+    animation: change-color-book 20s infinite linear;
+  }
+}
+
+
+@keyframes change-color-book {
+  0% {
+    fill: #6f20b9;
+  }
+
+  20% {
+    fill: #13a7af;
+  }
+
+  40% {
+    fill: brown;
+  }
+
+  60% {
+    fill: salmon;
+  }
+
+  80% {
+    fill: #abcf34;
+  }
+
+  100% {
+    fill: #6f20b9;
+  }
+}

@@ -14,38 +14,40 @@ class Usuario {
   function __construct($id, $nombreUsuario = null, $contrasenha = null, $email = null) {
     $this->conexionDB = new Conector;
   
-    /* En caso de que se cree un Usuario de forma temporal (para validar registro o login): */
+    // En caso de que se cree un Usuario de forma temporal (para validar registro o login):
     if ($id == "idTemporal" || $id == "idTemporalRegistro") {
       $this->nombreUsuario = $nombreUsuario;
       $this->contrasenha = $contrasenha;
 
       if ($id == "idTemporalRegistro") $this->email = $email;
-
     } 
-    /* En caso de ser un usuario con cuenta válida en la app, se crea un usuario con sus propiedades recogidas de la BD: */
+    // En caso de ser un usuario con cuenta válida en la app, se crea un usuario con sus propiedades recogidas de la DB:
     else {
-      $nombreUsuarioDB = $this->conexionDB->conn->prepare("SELECT nombre_usuario FROM usuarios WHERE id = :id");
-      $nombreUsuarioDB->execute(array(":id" => $id));
-
-      $contrasenhaDB = $this->conexionDB->conn->prepare("SELECT contrasenha_usuario FROM usuarios WHERE id = :id");
-      $contrasenhaDB->execute(array(":id" => $id));
-
-      $emailDB = $this->conexionDB->conn->prepare("SELECT email_usuario FROM usuarios WHERE id = :id");
-      $emailDB->execute(array(":id" => $id));
-      
-      $userPicDB = $this->conexionDB->conn->prepare("SELECT user_pic FROM usuarios WHERE id = :id");
-      $userPicDB->execute(array(":id" => $id));
-      
-      $ultimoLoginDB = $this->conexionDB->conn->prepare("SELECT ultimo_login FROM usuarios WHERE id = :id");
-      $ultimoLoginDB->execute(array(":id" => $id));
-
       $this->id             = $id;
-      $this->nombreUsuario  = $nombreUsuarioDB->fetchColumn(0);
-      $this->contrasenha    = $contrasenhaDB->fetchColumn(0);
-      $this->email          = $emailDB->fetchColumn(0);
-      $this->userPic        = $userPicDB->fetchColumn(0);
-      $this->ultimoLogin    = $ultimoLoginDB->fetchColumn(0);
+      $camposDB             = $this->getCamposDB();
+
+      $this->nombreUsuario  = $camposDB["nombreUsuarioDB"];
+      $this->contrasenha    = $camposDB["contrasenhaDB"];
+      $this->email          = $camposDB["emailDB"];
+      $this->userPic        = $camposDB["userPicDB"];
+      $this->ultimoLogin    = $camposDB["ultimoLoginDB"];
     }
+  }
+
+  private function getCamposDB() {
+    $id = $this->getId();
+    $camposDB = [];
+
+    $queryDB = $this->conexionDB->conn->prepare("SELECT * FROM usuarios WHERE id = :id");
+    $queryDB->execute(array(":id" => $id));
+    
+    $camposDB["nombreUsuarioDB"]  = $queryDB->fetchColumn(1);
+    $camposDB["contrasenhaDB"]    = $queryDB->fetchColumn(2);
+    $camposDB["emailDB"]          = $queryDB->fetchColumn(3);
+    $camposDB["userPicDB"]        = $queryDB->fetchColumn(4);
+    $camposDB["ultimoLoginDB"]    = $queryDB->fetchColumn(5);
+
+    return $camposDB;
   }
 
   // --- GETTERS ---

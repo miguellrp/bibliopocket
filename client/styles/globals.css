@@ -196,6 +196,11 @@ a {
   line-height: 30px;
 }
 
+.footer-inicio {
+  position: absolute;
+  bottom: 10px;
+}
+
 html[data-theme = "dark"] {
   .input-text {
     color: var(--secondary-lighten-color);

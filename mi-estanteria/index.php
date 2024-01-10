@@ -83,10 +83,10 @@ if (isset($_POST["eliminar"])) {
         <input type="search" id="buscador-libro" placeholder="Cien años de soledad" class="input-buscador">
       </label>
       <div class="resultados-busqueda">
-      <img src="/bibliopocket/client/assets/images/torre-libros.svg">
+        <img src="/bibliopocket/client/assets/images/torre-libros.svg">
       </div>
     </dialog>
-    </div>
+    
     <div class="estanteria">
       <?php
         $estanteriaUsuario = $usuarioActivo->getLibros();

@@ -69,8 +69,8 @@ if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_COOKIE["codi
   // $para      = $email;
   // $titulo    = "BiblioPocket 📚 Correo de confirmación";
   // $mensaje   = "Hola, ".$usuario."!\r\nAquí está tu código de confirmación: ".$codigoGenerado;
-  // $cabeceras = 'From: marpvilla@gmail.com' . "\r\n" .
-  //     'Reply-To: marpvilla@gmail.com' . "\r\n" .
+  // $cabeceras = 'From: bibliopocket@correo.com' . "\r\n" .
+  //     'Reply-To: bibliopocket@correo.com' . "\r\n" .
   //     'X-Mailer: PHP/' . phpversion();
 
   // mail($para, $titulo, $mensaje, $cabeceras);
@@ -185,6 +185,7 @@ if (isset($_POST["confirm-registro-check"]) && $_COOKIE["codigoGenerado"] == $_P
       font-color="var(--primary-color)">
     </custom-button>
   </div>
+  <small class="footer-inicio">Icons by: <a href="https://phosphoricons.com/" target="_blank">Phosphor Icons</a></small>
   <script src="client/handlers/registroHandler.js"></script>
   <script src="client/handlers/modalHandler.js"></script>
   <script src="client/handlers/themeHandler.js"></script>

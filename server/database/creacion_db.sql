@@ -19,7 +19,7 @@ CREATE TABLE libros (
   titulo VARCHAR(255),
   subtitulo VARCHAR(255),
   autoria VARCHAR(255),
-  descripcion VARCHAR(512),
+  descripcion TEXT,
   portada VARCHAR(255),
   numPaginas INTEGER,
   editorial VARCHAR(128),

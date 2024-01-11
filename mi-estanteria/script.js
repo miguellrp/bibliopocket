@@ -29,6 +29,7 @@ modificarGroupBtn.forEach(modificarButton => {
     eliminarModalActivo();
     document.body.appendChild(modalModificacion);
     modalModificacion.showModal();
+    modalModificacion.querySelector("#titulo").blur();
   });
 });
 
@@ -87,16 +88,25 @@ function generarFormModificacion (libroVinculado) {
   return /* html */` 
     <h2>Modificar datos del libro ✍️</h2>
     <form action="" method="POST">
-      <img src="${datosLibro.portada}">
+      <div class="wrap-portada">
+        <img src="${datosLibro.portada}" class="portada" alt="Portada de ${datosLibro.titulo}">
+        <div class="portada-upload">
+          <label for="portada-input">
+            <img src="/bibliopocket/client/assets/images/pencil-icon.png" class="lapiz-icon">
+          </label>
+          <input id="portada-input" type="file" accept="image/*" name="portada" />
+        </div>   
+      </div>
+      <div class="datos-cabecera">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" class="input-txt" name="titulo" value="${datosLibro.titulo}">
 
-      <label for="titulo">Título:</label>
-      <input type="text" id="titulo" class="input-txt" name="titulo" value="${datosLibro.titulo}">
-
-      <label for="subtitulo">Subtítulo:</label>
-      <input type="text" id="subtitulo" class="input-txt" name="subtitulo" value="${datosLibro.subtitulo}">
+        <label for="subtitulo">Subtítulo:</label>
+        <input type="text" id="subtitulo" class="input-txt" name="subtitulo" value="${datosLibro.subtitulo}">
+      </div>
 
       <label for="descripcion">Descripción:</label>
-      <textarea id="descripcion" class="input-txt" name="descripcion" value="${datosLibro.descripcion}"></textarea>
+      <textarea id="descripcion" class="input-txt" name="descripcion">${datosLibro.descripcion}</textarea>
 
       <label for="autoria">Autoría:</label>
       <input type="text" id="autoria" class="input-txt" name="autoria" value="${datosLibro.autoria}">

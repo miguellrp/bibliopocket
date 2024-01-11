@@ -12,7 +12,7 @@ $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bibliopocket 📗 Mi perfil</title>
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
-  <link rel="stylesheet" href="/bibliopocket/client/styles/perfilPage.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>

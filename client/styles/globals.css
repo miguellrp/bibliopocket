@@ -222,7 +222,21 @@ html[data-theme = "dark"] {
   }
 }
 
+
 ::selection {
   color: var(--background-color);
   background: var(--primary-color);
+}
+
+
+::-webkit-scrollbar {
+  width: 13px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--header-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
 }

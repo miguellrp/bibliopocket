@@ -241,7 +241,6 @@ html[data-theme="dark"] {
   }
 }
 
-
 #eliminar-libro-modal {
   & p {
     font-size: 16px;
@@ -250,14 +249,38 @@ html[data-theme="dark"] {
   }
 }
 
-::-webkit-scrollbar {
-  width: 13px;
-}
+#modificar-libro-modal {
+  width: 70vw;
+  height: 75vh;
+  padding: 20px 30px;
 
-::-webkit-scrollbar-track {
-  background: var(--header-background);
-}
+  & h2 {
+    text-align: center;
+    margin-top: unset;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: var(--secondary-color);
+  & form {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 15px;
+  
+    & label {
+      text-align:right;
+    }
+
+    & input[type="text"] {
+      padding: 7px;
+    
+      font-size: 15px;
+      outline: none;
+      border: 2px solid var(--primary-color);
+      background-color: color-mix(in srgb, var(--secondary-lighten-color), white 60%);
+    
+      transition: .6s ease;
+    
+      &:focus-visible {
+        box-shadow: 0 0 0 3.5px var(--primary-color);
+      }
+    }
+  }
 }

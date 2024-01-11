@@ -14,21 +14,11 @@ if(!isset($_SESSION["estanteria"])) {
 }
 
 if (isset($_POST["anhadir-libro"])) {
-  $libro = [
-    "id"                => $_POST["id"],
-    "titulo"            => $_POST["titulo"],
-    "subtitulo"         => $_POST["subtitulo"],
-    "autoria"           => $_POST["autoria"],
-    "descripcion"       => $_POST["descripcion"],
-    "portada"           => $_POST["portada"],
-    "numPaginas"        => $_POST["numPaginas"],
-    "editorial"         => $_POST["editorial"],
-    "anhoPublicacion"   => $_POST["anhoPublicacion"],
-    "enlaceAPI"         => $_POST["enlaceAPI"]
-  ];
-  
+  $idLibro = $_POST["id"];
+  $nuevoLibro = new Libro($idLibro);
+
   // Si el libro a añadir no está guardado todavía, se añade a su estantería:
-  if (!$usuarioActivo->libroGuardado($libro)) $usuarioActivo->registrarLibro($libro);
+  if (!$usuarioActivo->libroGuardado($nuevoLibro)) $usuarioActivo->registrarLibro($nuevoLibro);
   header("Location: index.php");
 }
 

@@ -162,16 +162,16 @@ class Usuario {
         :anhoPublicacion, :enlaceAPI, :userID)");
       
       $query->execute(array(
-        ":id"               => $libro["id"],
-        ":titulo"           => $libro["titulo"],
-        ":subtitulo"        => $libro["subtitulo"],
-        ":autoria"          => $libro["autoria"],
-        ":descripcion"      => $libro["descripcion"],
-        ":portada"          => $libro["portada"],
-        ":numPaginas"       => $libro["numPaginas"],
-        ":editorial"        => $libro["editorial"],
-        ":anhoPublicacion"  => $libro["anhoPublicacion"],
-        ":enlaceAPI"        => $libro["enlaceAPI"],
+        ":id"               => $libro->getId(),
+        ":titulo"           => $libro->getTitulo(),
+        ":subtitulo"        => $libro->getSubtitulo(),
+        ":autoria"          => $libro->getAutoria(),
+        ":descripcion"      => $libro->getDescripcion(),
+        ":portada"          => $libro->getPortada(),
+        ":numPaginas"       => $libro->getNumPaginas(),
+        ":editorial"        => $libro->getEditorial(),
+        ":anhoPublicacion"  => $libro->getAnhoPublicacion(),
+        ":enlaceAPI"        => $libro->getEnlaceAPI(),
         ":userID"           => $this->getId()
       ));
     }
@@ -199,7 +199,7 @@ class Usuario {
       $query = $this->conexionDB->conn->prepare("SELECT * from libros
         WHERE id = :idLibro AND id_usuario = :idUsuario");
       $query->execute(array(
-        ":idLibro"    => $libro["id"],
+        ":idLibro"    => $libro->getId(),
         ":idUsuario"  => $this->getId()
       ));
       return $query->rowCount() > 0;

@@ -12,42 +12,79 @@ class Libro {
   private $editorial;
   private $anhoPublicacion;
   private $enlaceAPI;
+  private $categorias;
   private $conexionDB;
 
   function __construct($id) {
     $this->conexionDB = new Conector;
     $this->id         = $id;
+    $datosLibro = [];
 
-    $camposDB = $this->getCamposDB();
-    $this->titulo           = $camposDB["tituloDB"];
-    $this->subtitulo        = $camposDB["subtituloDB"];
-    $this->autoria          = $camposDB["autoriaDB"];
-    $this->descripcion      = $camposDB["descripcionDB"];
-    $this->portada          = $camposDB["portadaDB"];
-    $this->numPaginas       = $camposDB["numPaginasDB"];
-    $this->editorial        = $camposDB["editorialDB"];
-    $this->anhoPublicacion  = $camposDB["anhoPublicacionDB"];
-    $this->enlaceAPI        = $camposDB["enlaceAPIDB"];
+    // Cuando se crea desde un form (Google API, libro desde 0...):
+    if (isset($_POST["anhadir-libro"])) {
+      $datosLibro = [
+        "titulo"            => $_POST["titulo"],
+        "subtitulo"         => $_POST["subtitulo"],
+        "autoria"           => $_POST["autoria"],
+        "descripcion"       => $_POST["descripcion"],
+        "portada"           => $_POST["portada"],
+        "numPaginas"        => $_POST["numPaginas"],
+        "editorial"         => $_POST["editorial"],
+        "anhoPublicacion"   => $_POST["anhoPublicacion"],
+        "enlaceAPI"         => $_POST["enlaceAPI"]
+      ];
+    // Cuando se crea desde la DB:
+    } else {
+      $camposDB = $this->getCamposDB();
+      $datosLibro["titulo"]           = $camposDB["tituloDB"];
+      $datosLibro["subtitulo"]        = $camposDB["subtituloDB"];
+      $datosLibro["autoria"]          = $camposDB["autoriaDB"];
+      $datosLibro["descripcion"]      = $camposDB["descripcionDB"];
+      $datosLibro["portada"]          = $camposDB["portadaDB"];
+      $datosLibro["numPaginas"]       = $camposDB["numPaginasDB"];
+      $datosLibro["editorial"]        = $camposDB["editorialDB"];
+      $datosLibro["anhoPublicacion"]  = $camposDB["anhoPublicacionDB"];
+      $datosLibro["enlaceAPI"]        = $camposDB["enlaceAPIDB"];
+      foreach($camposDB["categoriasDB"] as $categoriaDB) {
+        array_push($this->categorias, $categoriaDB);
+      }
+    }
+    $this->titulo           = $datosLibro["titulo"];
+    $this->subtitulo        = $datosLibro["subtitulo"];
+    $this->autoria          = $datosLibro["autoria"];
+    $this->descripcion      = $datosLibro["descripcion"];
+    $this->portada          = $datosLibro["portada"];
+    $this->numPaginas       = $datosLibro["numPaginas"];
+    $this->editorial        = $datosLibro["editorial"];
+    $this->anhoPublicacion  = $datosLibro["anhoPublicacion"];
+    $this->enlaceAPI        = $datosLibro["enlaceAPI"];
   }
 
   private function getCamposDB() {
     $id = $this->getId();
     $camposDB = [];
 
-    $queryDB = $this->conexionDB->conn->prepare("SELECT * FROM libros WHERE id = :id");
-    $queryDB->execute(array(":id" => $id));
-    $queryDB = $queryDB->fetch(PDO::FETCH_ASSOC);
+    $query = $this->conexionDB->conn->prepare("SELECT * FROM libros WHERE id = :id");
+    $query->execute(array(":id" => $id));
+    $query = $query->fetch(PDO::FETCH_ASSOC);
 
+    $querycategorias = $this->conexionDB->conn->prepare("SELECT categoria FROM libros_categorias WHERE id_libro = :id");
+    $querycategorias->execute(array(":id" => $id));
+    $categoriasDB = $querycategorias->fetchAll(PDO::FETCH_COLUMN);
 
-    $camposDB["tituloDB"]           = $queryDB["titulo"];
-    $camposDB["subtituloDB"]        = $queryDB["subtitulo"];
-    $camposDB["autoriaDB"]          = $queryDB["autoria"];
-    $camposDB["descripcionDB"]      = $queryDB["descripcion"];
-    $camposDB["portadaDB"]          = $queryDB["portada"];
-    $camposDB["numPaginasDB"]       = $queryDB["numPaginas"];
-    $camposDB["editorialDB"]        = $queryDB["editorial"];
-    $camposDB["anhoPublicacionDB"]  = $queryDB["anhoPublicacion"];
-    $camposDB["enlaceAPIDB"]        = $queryDB["enlaceAPI"];
+    $camposDB["tituloDB"]           = $query["titulo"];
+    $camposDB["subtituloDB"]        = $query["subtitulo"];
+    $camposDB["autoriaDB"]          = $query["autoria"];
+    $camposDB["descripcionDB"]      = $query["descripcion"];
+    $camposDB["portadaDB"]          = $query["portada"];
+    $camposDB["numPaginasDB"]       = $query["numPaginas"];
+    $camposDB["editorialDB"]        = $query["editorial"];
+    $camposDB["anhoPublicacionDB"]  = $query["anhoPublicacion"];
+    $camposDB["enlaceAPIDB"]        = $query["enlaceAPI"];
+    $camposDB["categoriasDB"]       = [];
+    foreach($categoriasDB as $categoriaDB) {
+      array_push($camposDB["categoriasDB"], $categoriaDB);
+    }
 
     return $camposDB;
   }
@@ -91,6 +128,10 @@ class Libro {
 
   function getEnlaceAPI() {
     return $this->enlaceAPI;
+  }
+
+  function getCategorias() {
+    return $this->categorias;
   }
 }
 ?>

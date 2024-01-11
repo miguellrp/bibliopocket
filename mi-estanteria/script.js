@@ -99,6 +99,19 @@ function generarFormModificacion (libroVinculado) {
       <label for="anho-publicacion">Año de publicación:</label>
       <input type="text" id="anho-publicacion" class="input-txt" name="anhoPublicacion" value="${datosLibro.anhoPublicacion}">
 
+      <label>Estado:</label>
+      <div class="grupo-estados-libro">
+        <input type="radio" name="estado" id="leido" value="leido">
+        <label for="leido">Leído</label>
+        <input type="radio" name="estado" id="leyendo" value="leyendo">
+        <label for="leyendo">Leyendo</label>
+        <input type="radio" name="estado" id="pendiente" value="pendiente">
+        <label for="pendiente">Pendiente</label>
+      </div>
+
+      <label for="categorias">Categorías:</label>
+      <input type="text" id="categorias">
+
       <input type="submit" value="Guardar cambios" name="modificar-libro">
       <input type="hidden" name="idLibroEstante" value="${datosLibro.id}" autofocus>
     </form>

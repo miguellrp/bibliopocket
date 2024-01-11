@@ -76,7 +76,10 @@ function generarFormModificacion (libroVinculado) {
     "id": libroVinculado.id.value,
     "titulo": libroVinculado.titulo.value,
     "subtitulo": libroVinculado.subtitulo.value,
+    "descripcion": libroVinculado.descripcion.value,
+    "portada": libroVinculado.portada.value,
     "autoria": libroVinculado.autoria.value,
+    "numPaginas": libroVinculado.numPaginas.value,
     "editorial": libroVinculado.editorial.value,
     "anhoPublicacion": libroVinculado.anhoPublicacion.value
   };
@@ -84,14 +87,22 @@ function generarFormModificacion (libroVinculado) {
   return /* html */` 
     <h2>Modificar datos del libro ✍️</h2>
     <form action="" method="POST">
+      <img src="${datosLibro.portada}">
+
       <label for="titulo">Título:</label>
       <input type="text" id="titulo" class="input-txt" name="titulo" value="${datosLibro.titulo}">
 
       <label for="subtitulo">Subtítulo:</label>
       <input type="text" id="subtitulo" class="input-txt" name="subtitulo" value="${datosLibro.subtitulo}">
 
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" class="input-txt" name="descripcion" value="${datosLibro.descripcion}"></textarea>
+
       <label for="autoria">Autoría:</label>
       <input type="text" id="autoria" class="input-txt" name="autoria" value="${datosLibro.autoria}">
+
+      <label for="num-paginas">Nº de páginas:</label>
+      <input type="text" id="num-paginas" class="input-txt" name="numPaginas" value="${datosLibro.numPaginas}">
 
       <label for="editorial">Editorial:</label>
       <input type="text" id="editorial" class="input-txt" name="editorial" value="${datosLibro.editorial}">
@@ -113,7 +124,8 @@ function generarFormModificacion (libroVinculado) {
       <input type="text" id="categorias">
 
       <input type="submit" value="Guardar cambios" name="modificar-libro">
-      <input type="hidden" name="idLibroEstante" value="${datosLibro.id}" autofocus>
+      <input type="hidden" name="idLibroEstante" value="${datosLibro.id}">
+      <input type="hidden" name="portada" value="${datosLibro.portada}">
     </form>
   `;
 }

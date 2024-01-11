@@ -269,6 +269,7 @@ html[data-theme="dark"] {
     }
 
     & input[type="text"] {
+      width: 98%;
       padding: 7px;
     
       font-size: 15px;
@@ -282,5 +283,41 @@ html[data-theme="dark"] {
         box-shadow: 0 0 0 3.5px var(--primary-color);
       }
     }
+
+    & textarea {
+      width: 98%;
+      height: 4rem;
+      padding: 7px;
+      resize: vertical;
+
+      font-size: 15px;
+      outline: none;
+      border: 2px solid var(--primary-color);
+      background-color: color-mix(in srgb, var(--secondary-lighten-color), white 60%);
+    
+      transition: box-shadow .6s ease;
+    
+      &:focus-visible {
+        box-shadow: 0 0 0 3.5px var(--primary-color);
+      }
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }

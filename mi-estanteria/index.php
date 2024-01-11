@@ -23,7 +23,11 @@ if (isset($_POST["anhadir-libro"])) {
 }
 
 if (isset($_POST["modificar-libro"])) {
-  
+  $idLibro = $_POST["idLibroEstante"];
+  $libroSeleccionado = new Libro($idLibro);
+  $libroSeleccionado->modificarLibroDB();
+
+  header("Location: index.php");
 }
 
 if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
@@ -106,9 +110,13 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
                 <input type='hidden' name='id' value='".$libro->getId()."'>
                 <input type='hidden' name='titulo' value='".$libro->getTitulo()."'>
                 <input type='hidden' name='subtitulo' value='".$libro->getSubtitulo()."'>
+                <input type='hidden' name='descripcion' value='".$libro->getDescripcion()."'>
+                <input type='hidden' name='portada' value='".$libro->getPortada()."'>
                 <input type='hidden' name='autoria' value='".$libro->getAutoria()."'>
+                <input type='hidden' name='numPaginas' value='".$libro->getNumPaginas()."'>
                 <input type='hidden' name='editorial' value='".$libro->getEditorial()."'>
                 <input type='hidden' name='anhoPublicacion' value='".$libro->getAnhoPublicacion()."'>
+                <input type='hidden' name='enlaceAPI' value='".$libro->getEnlaceAPI()."'>
               </form>
             </div>
           </div>";

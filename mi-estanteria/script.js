@@ -130,8 +130,9 @@ function anhadirCierreModal (modal) {
 }
 
 /* Con la finalidad de que no se vayan almacenando modales en el DOM, cada vez que se
-abre uno, se elimina el anterior que estuviese activo (si lo hubiese). */
+abre uno, se elimina el anterior que estuviese activo (exceptuando el de búsqueda de libros). */
 function eliminarModalActivo () {
-  const modalActivo = document.querySelector(".modal");
-  document.body.removeChild(modalActivo);
+  const modalActivo = document.querySelector("#modificar-libro-modal") || document.querySelector("#eliminar-libro-modal");
+
+  if (modalActivo != null) document.body.removeChild(modalActivo);
 }

@@ -65,7 +65,7 @@ function generarFormEliminacion (idLibro) {
         <input type="submit" name="eliminar" value="Confirmar">
         <input type="button" value="Cancelar">
       </div>
-      <input type="hidden" name="id-libro-estante" value="${idLibro}">
+      <input type="hidden" name="idLibroEstante" value="${idLibro}">
     </form>
   `;
 }
@@ -99,7 +99,7 @@ function generarFormModificacion (libroVinculado) {
       <label for="anho-publicacion">Año de publicación:</label>
       <input type="text" id="anho-publicacion" class="input-txt" name="anhoPublicacion" value="${datosLibro.anhoPublicacion}">
 
-      <input type="submit" value="Guardar cambios" name="modificarLibro">
+      <input type="submit" value="Guardar cambios" name="modificar-libro">
       <input type="hidden" name="idLibroEstante" value="${datosLibro.id}" autofocus>
     </form>
   `;

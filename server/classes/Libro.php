@@ -1,5 +1,5 @@
 <?php
-include($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+include_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
 
 class Libro {
   private $id;
@@ -36,16 +36,18 @@ class Libro {
 
     $queryDB = $this->conexionDB->conn->prepare("SELECT * FROM libros WHERE id = :id");
     $queryDB->execute(array(":id" => $id));
+    $queryDB = $queryDB->fetch(PDO::FETCH_ASSOC);
 
-    $camposDB["tituloDB"]           = $queryDB->fetchColumn(1);
-    $camposDB["subtituloDB"]        = $queryDB->fetchColumn(2);
-    $camposDB["autoriaDB"]          = $queryDB->fetchColumn(3);
-    $camposDB["descripcionDB"]      = $queryDB->fetchColumn(4);
-    $camposDB["portadaDB"]          = $queryDB->fetchColumn(5);
-    $camposDB["numPaginasDB"]       = $queryDB->fetchColumn(6);
-    $camposDB["editorialDB"]        = $queryDB->fetchColumn(7);
-    $camposDB["anhoPublicacionDB"]  = $queryDB->fetchColumn(8);
-    $camposDB["enlaceAPIDB"]        = $queryDB->fetchColumn(9);
+
+    $camposDB["tituloDB"]           = $queryDB["titulo"];
+    $camposDB["subtituloDB"]        = $queryDB["subtitulo"];
+    $camposDB["autoriaDB"]          = $queryDB["autoria"];
+    $camposDB["descripcionDB"]      = $queryDB["descripcion"];
+    $camposDB["portadaDB"]          = $queryDB["portada"];
+    $camposDB["numPaginasDB"]       = $queryDB["numPaginas"];
+    $camposDB["editorialDB"]        = $queryDB["editorial"];
+    $camposDB["anhoPublicacionDB"]  = $queryDB["anhoPublicacion"];
+    $camposDB["enlaceAPIDB"]        = $queryDB["enlaceAPI"];
 
     return $camposDB;
   }

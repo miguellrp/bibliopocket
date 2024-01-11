@@ -1,5 +1,5 @@
 <?php
-include($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+include_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
 
 class Usuario {
   private $id;
@@ -180,9 +180,9 @@ class Usuario {
     }
   }
 
-  function getLibros() {
+  function getLibrosIDs() {
     try {
-      $query = $this->conexionDB->conn->prepare("SELECT * FROM libros
+      $query = $this->conexionDB->conn->prepare("SELECT id FROM libros
         WHERE id_usuario = :userID");
 
       $query->execute(array(":userID" => $this->getId()));
@@ -191,7 +191,7 @@ class Usuario {
       echo "Ocurrió un error al cargar la estantería. ". $exception->getMessage();
     }
 
-    return $query->fetchAll();
+    return $query->fetchAll(PDO::FETCH_COLUMN);
   }
 
   function libroGuardado($libro) {

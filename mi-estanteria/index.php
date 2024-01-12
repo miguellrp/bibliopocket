@@ -64,25 +64,13 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
       >
       </custom-button>
       <custom-button
-        id="busqueda-button"
-        data-contenido="Añadir libro desde 0 ➕"
+        id="nuevo-libro-button"
+        data-contenido="Crear libro desde 0 ➕"
         background-color="var(--secondary-lighten-color)"
         font-color="var(--secondary-contrast-color)"
       >
       </custom-button>
     </div>
-
-    <!-- Modal Búsqueda libro API -->
-    <dialog class="modal" id="busqueda-libro-modal">
-      <h2>AÑADIR NUEVO LIBRO 🔎</h2>
-      <label for="buscador-libro">Buscar por título:
-        <input type="search" id="buscador-libro" placeholder="Cien años de soledad" class="input-buscador">
-      </label>
-      <div class="resultados-busqueda">
-        <img src="/bibliopocket/client/assets/images/torre-libros.svg">
-      </div>
-    </dialog>
-    
     <div class="estanteria">
       <?php
         $estanteriaUsuario = [];
@@ -125,7 +113,7 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
     </div>
 
   <?php endif; ?>
-  <script src="./script.js"></script>
+  <script src="./script.js" type="module"></script>
   <script src="../client/components/CustomHeader.js"></script>
   <script src="../client/components/CustomButton.js"></script>
   <script src="../client/handlers/themeHandler.js"></script>

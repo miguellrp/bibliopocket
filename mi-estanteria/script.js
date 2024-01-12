@@ -1,145 +1,71 @@
-const modalBusquedaAPI = document.getElementById("busqueda-libro-modal");
-const buscarLibroBtn = document.getElementById("busqueda-button");
+import * as modalesLibroCreado from "./modalesLibroCreado.js";
+import { generarModalNuevoLibro } from "./modalCrearLibro.js";
 
-buscarLibroBtn.addEventListener("click", () => modalBusquedaAPI.showModal());
-anhadirCierreModal(modalBusquedaAPI);
+prepararListenersButtons();
 
+/* --- FUNCIÓN "MAIN" --- */
+function prepararListenersButtons () {
+  listenerModalBusquedaAPI();
+  listenerModalCrearLibro();
+  listenersModalEliminarLibro();
+  listenersModalModificarLibro();
+}
 
-const eliminarGroupBtn = document.querySelectorAll(".icon.eliminar");
-eliminarGroupBtn.forEach(eliminarButton => {
-  const libroVinculado = eliminarButton.parentNode.parentNode;
-  const datosLibro = libroVinculado.querySelector("form").elements;
-  const idLibroSeleccionado = datosLibro.id.value;
+function listenerModalBusquedaAPI () {
+  const buscarLibroBtn = document.getElementById("busqueda-button");
 
-  const modalEliminacion = generarModalEliminacion(idLibroSeleccionado);
-  eliminarButton.addEventListener("click", () => {
-    eliminarModalActivo();
-    document.body.appendChild(modalEliminacion);
-    modalEliminacion.showModal();
+  buscarLibroBtn.addEventListener("click", () => {
+    const modalBusquedaAPI = modalesLibroCreado.generarModalBusquedaAPI();
+    anhadirCierreModal(modalBusquedaAPI);
+
+    modalBusquedaAPI.showModal()
   });
-});
+}
 
+function listenerModalCrearLibro () {
+  const nuevoLibroBtn = document.getElementById("nuevo-libro-button");
 
-const modificarGroupBtn = document.querySelectorAll(".icon.modificar");
-modificarGroupBtn.forEach(modificarButton => {
-  const libroVinculado = modificarButton.parentNode.parentNode;
-
-  const modalModificacion = generarModalModificacion(libroVinculado);
-  modificarButton.addEventListener("click", () => {
+  nuevoLibroBtn.addEventListener("click", () => {
     eliminarModalActivo();
-    document.body.appendChild(modalModificacion);
-    modalModificacion.showModal();
-    modalModificacion.querySelector("#titulo").blur();
+
+    const modalNuevoLibro = generarModalNuevoLibro();
+    anhadirCierreModal(modalNuevoLibro);
+    modalNuevoLibro.showModal();
   });
-});
-
-
-/* --- FUNCIONES GENERADORAS --- */
-function generarModalEliminacion (idLibro) {
-  const modalEliminacionLibro = document.createElement("dialog");
-  modalEliminacionLibro.setAttribute("class", "modal");
-  modalEliminacionLibro.setAttribute("id", "eliminar-libro-modal");
-
-  modalEliminacionLibro.innerHTML = generarFormEliminacion(idLibro);
-  anhadirCierreModal(modalEliminacionLibro);
-
-  return modalEliminacionLibro;
 }
 
-function generarModalModificacion (libroVinculado) {
-  const modalModificacionLibro = document.createElement("dialog");
-  modalModificacionLibro.setAttribute("class", "modal");
-  modalModificacionLibro.setAttribute("id", "modificar-libro-modal");
+function listenersModalEliminarLibro () {
+  const eliminarGroupBtn = document.querySelectorAll(".icon.eliminar");
+  eliminarGroupBtn.forEach(eliminarButton => {
+    const libroVinculado = eliminarButton.parentNode.parentNode;
+    const datosLibro = libroVinculado.querySelector("form").elements;
+    const idLibroSeleccionado = datosLibro.id.value;
 
-  modalModificacionLibro.innerHTML = generarFormModificacion(libroVinculado);
-  anhadirCierreModal(modalModificacionLibro);
+    eliminarButton.addEventListener("click", () => {
+      eliminarModalActivo();
 
-  return modalModificacionLibro;
+      const modalEliminacion = modalesLibroCreado.generarModalEliminacion(idLibroSeleccionado);
+      anhadirCierreModal(modalEliminacion);
+      modalEliminacion.showModal();
+    });
+  });
 }
 
-function generarFormEliminacion (idLibro) {
-  return /* html */`
-    <form action="" method="POST">
-      <p>¿Estás seguro de que quieres eliminar este libro de tu estantería?</p>
-      <small>Todos sus datos modificados se perderán</small>
-      <div class="grupo-buttons">
-        <input type="submit" name="eliminar" value="Confirmar">
-        <input type="button" value="Cancelar">
-      </div>
-      <input type="hidden" name="idLibroEstante" value="${idLibro}">
-    </form>
-  `;
+function listenersModalModificarLibro () {
+  const modificarGroupBtn = document.querySelectorAll(".icon.modificar");
+  modificarGroupBtn.forEach(modificarButton => {
+    const libroVinculado = modificarButton.parentNode.parentNode;
+
+    modificarButton.addEventListener("click", () => {
+      eliminarModalActivo();
+
+      const modalModificacion = modalesLibroCreado.generarModalModificacion(libroVinculado);
+      anhadirCierreModal(modalModificacion);
+      modalModificacion.showModal();
+      modalModificacion.querySelector("#titulo").blur();
+    });
+  });
 }
-
-function generarFormModificacion (libroVinculado) {
-  libroVinculado = libroVinculado.querySelector("form").elements;
-  const datosLibro = {
-    "id": libroVinculado.id.value,
-    "titulo": libroVinculado.titulo.value,
-    "subtitulo": libroVinculado.subtitulo.value,
-    "descripcion": libroVinculado.descripcion.value,
-    "portada": libroVinculado.portada.value,
-    "autoria": libroVinculado.autoria.value,
-    "numPaginas": libroVinculado.numPaginas.value,
-    "editorial": libroVinculado.editorial.value,
-    "anhoPublicacion": libroVinculado.anhoPublicacion.value
-  };
-
-  return /* html */` 
-    <h2>Modificar datos del libro ✍️</h2>
-    <form action="" method="POST">
-      <div class="wrap-portada">
-        <img src="${datosLibro.portada}" class="portada" alt="Portada de ${datosLibro.titulo}">
-        <div class="portada-upload">
-          <label for="portada-input">
-            <img src="/bibliopocket/client/assets/images/pencil-icon.png" class="lapiz-icon">
-          </label>
-          <input id="portada-input" type="file" accept="image/*" name="portada" />
-        </div>   
-      </div>
-      <div class="datos-cabecera">
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" class="input-txt" name="titulo" value="${datosLibro.titulo}">
-
-        <label for="subtitulo">Subtítulo:</label>
-        <input type="text" id="subtitulo" class="input-txt" name="subtitulo" value="${datosLibro.subtitulo}">
-      </div>
-
-      <label for="descripcion">Descripción:</label>
-      <textarea id="descripcion" class="input-txt" name="descripcion">${datosLibro.descripcion}</textarea>
-
-      <label for="autoria">Autoría:</label>
-      <input type="text" id="autoria" class="input-txt" name="autoria" value="${datosLibro.autoria}">
-
-      <label for="num-paginas">Nº de páginas:</label>
-      <input type="text" id="num-paginas" class="input-txt" name="numPaginas" value="${datosLibro.numPaginas}">
-
-      <label for="editorial">Editorial:</label>
-      <input type="text" id="editorial" class="input-txt" name="editorial" value="${datosLibro.editorial}">
-
-      <label for="anho-publicacion">Año de publicación:</label>
-      <input type="text" id="anho-publicacion" class="input-txt" name="anhoPublicacion" value="${datosLibro.anhoPublicacion}">
-
-      <label>Estado:</label>
-      <div class="grupo-estados-libro">
-        <input type="radio" name="estado" id="leido" value="leido">
-        <label for="leido">Leído</label>
-        <input type="radio" name="estado" id="leyendo" value="leyendo">
-        <label for="leyendo">Leyendo</label>
-        <input type="radio" name="estado" id="pendiente" value="pendiente">
-        <label for="pendiente">Pendiente</label>
-      </div>
-
-      <label for="categorias">Categorías:</label>
-      <input type="text" id="categorias">
-
-      <input type="submit" value="Guardar cambios" name="modificar-libro">
-      <input type="hidden" name="idLibroEstante" value="${datosLibro.id}">
-      <input type="hidden" name="portada" value="${datosLibro.portada}">
-    </form>
-  `;
-}
-
 
 /* --- FUNCIONES COMPLEMENTARIAS --- */
 function anhadirCierreModal (modal) {
@@ -152,9 +78,9 @@ function anhadirCierreModal (modal) {
 }
 
 /* Con la finalidad de que no se vayan almacenando modales en el DOM, cada vez que se
-abre uno, se elimina el anterior que estuviese activo (exceptuando el de búsqueda de libros). */
+abre uno, se elimina el anterior que estuviese activo. */
 function eliminarModalActivo () {
-  const modalActivo = document.querySelector("#modificar-libro-modal") || document.querySelector("#eliminar-libro-modal");
+  const modalActivo = document.querySelector(".modal");
 
   if (modalActivo != null) document.body.removeChild(modalActivo);
 }

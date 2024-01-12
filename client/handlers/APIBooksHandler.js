@@ -1,14 +1,10 @@
 import { Libro } from "../classes/Libro.js";
 
-/* ELEMENTOS DOM */
-const buscadorTag = document.getElementById("buscador-libro");
-
 /* VARIABLES GLOBALES */
 const MAX_RESULTADOS = 15;
 
-buscadorTag.addEventListener("search", buscarLibroAPI);
-
-async function buscarLibroAPI () {
+export async function buscarLibroAPI () {
+  const buscadorTag = document.getElementById("buscador-libro");
   const terminoBuscado = eliminarEspaciosExtra(buscadorTag.value);
 
   if (terminoBuscado != "") {
@@ -27,7 +23,7 @@ function parsearResultadosAPI (librosJSON) {
   librosJSON.items.forEach(item => {
     const dataLibro = item["volumeInfo"];
     const portadaLibro = dataLibro["imageLinks"] === undefined
-      ? "/bibliopocket/client/assets/images/caratulas/placeholder-portada-libro.webp"
+      ? "/bibliopocket/client/assets/images/portadas/placeholder-portada-libro.webp"
       : dataLibro["imageLinks"]["thumbnail"];
 
     librosItems.push(new Libro(

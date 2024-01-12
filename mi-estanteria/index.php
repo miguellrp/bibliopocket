@@ -80,7 +80,10 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
 
         foreach($estanteriaUsuario as $libro) {
           echo "<div class='libro'>
-            <img src='".$libro->getPortada()."' class='portada'>
+            <div class='portada-container'>
+              <img src='".$libro->getPortada()."' class='portada'>
+              <input type='button' value='🔖' class='marcador'>
+            </div>
             <div class='datos-libro'>
               <div class='cabecera'>
                 <p class='titulo'>".$libro->getTitulo()."</p>

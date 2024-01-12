@@ -1,4 +1,6 @@
 :root {
+  --ancho-portada-libro: 128px;
+  --alto-portada-libro: 192px;
   --ancho-vista-libro: 180px;
   --ancho-datos-libro: 170px;
 }
@@ -41,12 +43,23 @@ html[data-theme="dark"] {
 
     background-color: var(--background-vista-libro);
 
-    & .portada{
-      margin: auto 10px;
-      width: 108px;
-      height: 172px;
+    & .portada-container {
+      margin: auto;
+      height: var(--alto-portada-libro);
 
-      border-radius: 5px;
+      & .portada {
+        min-width: var(--ancho-portada-libro);
+        max-width: var(--ancho-portada-libro);
+        min-height: var(--alto-portada-libro);
+        max-height: var(--alto-portada-libro);
+  
+        border-radius: 10px;
+      }
+
+      & .marcador {
+        position: relative;
+        top: -190px;
+      }
     }
 
     & .datos-libro {
@@ -208,10 +221,10 @@ html[data-theme="dark"] {
       }
   
       & .portada {
-        min-width: 128px;
-        max-width: 128px;
-        min-height: 192px;
-        max-height: 192px;
+        min-width: var(--ancho-portada-libro);
+        max-width: var(--ancho-portada-libro);
+        min-height: var(--alto-portada-libro);
+        max-height: var(--alto-portada-libro);
   
         border-radius: 10px;
       }

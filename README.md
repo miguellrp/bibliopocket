@@ -10,7 +10,7 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
   - [ ] Estilado de la sección.
 
 - [ ] Sección "Mi estantería":
-  - [ ] Añadir modal de creación de libro desde 0.
+  - [x] Añadir modal de creación de libro desde 0.
   - [ ] * Previsualización en cambio de imagen de portada (modal [modificación | creación] de libro).
   - [ ] Estado de lecturas de los libros (estantería personal):
     - [ ] Cargar de la DB y mostrar correctamente en el _front_ la propiedad `categorías` de cada libro.

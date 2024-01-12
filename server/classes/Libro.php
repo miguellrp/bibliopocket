@@ -21,7 +21,7 @@ class Libro {
     $datosLibro = [];
 
     // Cuando se crea desde un form (Google API, libro desde 0...):
-    if (isset($_POST["anhadir-libro"]) || isset($_POST["modificar-libro"])) {
+    if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"]) || isset($_POST["modificar-libro"])) {
       $datosLibro = [
         "titulo"            => $_POST["titulo"],
         "subtitulo"         => $_POST["subtitulo"],
@@ -46,7 +46,7 @@ class Libro {
       $datosLibro["anhoPublicacion"]  = $camposDB["anhoPublicacionDB"];
       $datosLibro["enlaceAPI"]        = $camposDB["enlaceAPIDB"];
       foreach($camposDB["categoriasDB"] as $categoriaDB) {
-        array_push($this->categorias, $categoriaDB);
+        array_push($datosLibro["categorias"], $categoriaDB);
       }
     }
     $this->titulo           = $datosLibro["titulo"];

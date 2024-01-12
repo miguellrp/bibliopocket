@@ -13,8 +13,8 @@ if(!isset($_SESSION["estanteria"])) {
   $estanteriaDB = [];
 }
 
-if (isset($_POST["anhadir-libro"])) {
-  $idLibro = $_POST["id"];
+if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
+  $idLibro = isset($_POST["anhadir-libro"]) ? $_POST["id"] : uniqid();
   $nuevoLibro = new Libro($idLibro);
 
   // Si el libro a añadir no está guardado todavía, se añade a su estantería:

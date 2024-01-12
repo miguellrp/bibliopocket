@@ -60,7 +60,8 @@ function generarFormNuevoLibro () {
       <label for="categorias">Categorías:</label>
       <input type="text" id="categorias">
 
-      <input type="submit" value="Guardar cambios" name="modificar-libro">
+      <input type="submit" value="Añadir libro" name="anhadir-nuevo-libro">
+      <input type="hidden" name="portada" value="${portadaPlaceholder}">
     </form>
   `;
 }

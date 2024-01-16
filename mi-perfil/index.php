@@ -3,6 +3,19 @@ session_start();
 include_once "../server/classes/Usuario.php";
 
 $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
+
+if (isset($_POST["modificacion-datos-user"])) {
+  if (isset($_FILES["userProfilePic"]["name"])) {
+    $userID = $usuarioActivo->getId();
+    $temp = explode(".", $_FILES["userProfilePic"]["name"]);
+    $nombreArchivoImagen = $usuarioActivo->getNombreUsuario()."ProfilePic.".end($temp);
+    $rutaImagen = "../client/assets/images/user-pics/" . $nombreArchivoImagen;
+
+    move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen);
+    $usuarioActivo->setUserPicPathDB($rutaImagen);
+    header("Location: index.php");
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es-ES">
@@ -23,17 +36,16 @@ $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
     </div>
   <?php else: ?>
     <custom-header pagina-activa="mi-perfil"></custom-header>
-    <form class="datos-user" action="" method="POST">
+    <form class="datos-user" action="" method="POST" enctype="multipart/form-data">
       <section class="username-pic">
-        <div class="wrap-user-pic">
-            <img src="/bibliopocket/client/assets/images/user-pics/<?= $usuarioActivo->getUserPicPathDB() ?>"
-            class="user-pic" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>">
-            <div class="userpic-upload">
-              <label for="userpic-input">
-                <img src="/bibliopocket/client/assets/images/pencil-icon.png" class="lapiz-icon">
-              </label>
-              <input id="userpic-input" type="file" name="userpic" />
-            </div>   
+        <div class="wrap-image-uploader">
+          <img src="<?= $usuarioActivo->getUserPicPathDB() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
+          <div class="wrap-uploader" >
+            <label for="uploader-input">
+              <img src="/bibliopocket/client/assets/images/pencil-icon.png" class="lapiz-icon">
+            </label>
+            <input id="uploader-input" type="file" accept="image/*" name="userProfilePic" />
+          </div>
         </div>
         <input type="text" class="username" name="username" value="<?= $usuarioActivo->getNombreUsuario() ?>">
       </section>
@@ -47,6 +59,8 @@ $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
   <?php endif; ?>
   <script src="../client/components/CustomHeader.js"></script>
   <script src="../client/handlers/themeHandler.js"></script>
+  <script src="../client/handlers/previewHandler.js" type="module"></script>
+  <script src="script.js" type="module"></script>
 </body>
 
 </html>

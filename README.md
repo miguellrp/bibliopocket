@@ -6,7 +6,7 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
 ## ✍️ TO-DO:
 - [ ] Sección "Mi perfil":
   - [ ] Modificar datos de la persona usuaria y aplicar los cambios en la DB (sección "Mi perfil").
-  - [ ] * Previsualización en cambio de foto de perfil de la persona usuaria.
+  - [x] * Previsualización en cambio de foto de perfil de la persona usuaria.
   - [ ] Estilado de la sección.
 
 - [ ] Sección "Mi estantería":
@@ -21,4 +21,4 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
   - [ ] Adecuar nombre de variables (kebab-case ➡️ camelCase) y funciones.
   - [ ] Optimizar fragmentos de código correspondientes a la toma de datos de la DB y su carga en el _front_.
 
-> \*: Crear un componente encargado de procesar imágenes (`input type="file"`) que permita la previsualización de la nueva imagen procesada y cargarla en la DB (?).
+> \*: Crear un componente encargado de procesar imágenes (`input type="file"`) que permita la previsualización de la nueva imagen procesada y cargarla en la DB (no funciona correctamente como componente aislado del DOM -> pendiente de revisar).

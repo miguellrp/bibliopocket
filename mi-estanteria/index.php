@@ -82,7 +82,7 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
           echo "<div class='libro'>
             <div class='portada-container'>
               <img src='".$libro->getPortada()."' class='portada'>
-              <input type='button' value='🔖' class='marcador'>
+              <img src='/bibliopocket/client/assets/images/marcador-pendiente.svg' class='marcador'>
             </div>
             <div class='datos-libro'>
               <div class='cabecera'>

@@ -58,7 +58,11 @@ html[data-theme="dark"] {
 
       & .marcador {
         position: relative;
-        top: -190px;
+        width: 30px;
+        top: -196px;
+        left: 3px;
+        filter: drop-shadow(1px 1px 1px #2d2c2c);
+        border-radius: 6px;
       }
     }
 
@@ -98,7 +102,7 @@ html[data-theme="dark"] {
 
       & .grupo-buttons {
         text-align: end;
-        margin: unset;
+        margin: 50px auto 0 auto;
 
         & .icon {
           margin: unset;

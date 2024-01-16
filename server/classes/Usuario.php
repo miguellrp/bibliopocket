@@ -135,22 +135,42 @@ class Usuario {
     }
   }
 
+  function setUserPicPathDB($userPicPath) {
+    $conexionDB = new Conector;
+    
+    try {
+      $query = $conexionDB->conn->prepare("UPDATE usuarios
+        SET user_pic = :user_pic WHERE id = :id");
+  
+      $query->execute(array(
+        ":user_pic" => $userPicPath,
+        ":id"       => $this->id
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al guardar la nueva imagen. ". $exception->getMessage();
+    }
+  
+    return true;
+  }
+
   function getUserPicPathDB() {
       try {
         $query = $this->conexionDB->conn->prepare("SELECT user_pic FROM usuarios
-          WHERE nombre_usuario LIKE :nombreUsuario");
+          WHERE id LIKE :id");
     
-        $query->bindParam(":nombreUsuario", $this->nombreUsuario, PDO::PARAM_STR);
+        $query->bindParam(":id", $this->id, PDO::PARAM_STR);
         $query->execute();
+        $userPicPath = $query->fetchColumn();
       }
       catch (PDOException $exception) {
         echo "Ocurrió un error al cargar la imagen. ". $exception->getMessage();
-        return "placeholder-user-pic.webp";
+        return "/bibliopocket/client/assets/images/user-pics/placeholder-user-pic.webp";
       }
       
       // En el caso de que la persona usuaria no facilitase ninguna foto de perfil, se le da un placeholder genérico:
-      if($query->fetchColumn() == "") return "placeholder-user-pic.webp";
-      else return $query->fetchColumn();
+      if($userPicPath == NULL) $userPicPath = "/bibliopocket/client/assets/images/user-pics/placeholder-user-pic.webp";
+      return $userPicPath;
   }
 
   
@@ -209,4 +229,3 @@ class Usuario {
     }
   }
 }
-?>

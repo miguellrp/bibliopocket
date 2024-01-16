@@ -12,6 +12,7 @@ class Libro {
   private $editorial;
   private $anhoPublicacion;
   private $enlaceAPI;
+  private $estado;
   private $categorias;
   private $conexionDB;
 
@@ -31,7 +32,8 @@ class Libro {
         "numPaginas"        => $_POST["numPaginas"],
         "editorial"         => $_POST["editorial"],
         "anhoPublicacion"   => $_POST["anhoPublicacion"],
-        "enlaceAPI"         => $_POST["enlaceAPI"]
+        "enlaceAPI"         => $_POST["enlaceAPI"],
+        "estado"            => $_POST["estado"] 
       ];
     // Cuando se crea desde la DB:
     } else {
@@ -45,6 +47,7 @@ class Libro {
       $datosLibro["editorial"]        = $camposDB["editorialDB"];
       $datosLibro["anhoPublicacion"]  = $camposDB["anhoPublicacionDB"];
       $datosLibro["enlaceAPI"]        = $camposDB["enlaceAPIDB"];
+      $datosLibro["estado"]           = $camposDB["estadoDB"];
       foreach($camposDB["categoriasDB"] as $categoriaDB) {
         array_push($datosLibro["categorias"], $categoriaDB);
       }
@@ -58,6 +61,7 @@ class Libro {
     $this->editorial        = $datosLibro["editorial"];
     $this->anhoPublicacion  = $datosLibro["anhoPublicacion"];
     $this->enlaceAPI        = $datosLibro["enlaceAPI"];
+    $this->estado           = $datosLibro["estado"];
   }
 
   private function getCamposDB() {
@@ -81,6 +85,7 @@ class Libro {
     $camposDB["editorialDB"]        = $query["editorial"];
     $camposDB["anhoPublicacionDB"]  = $query["anhoPublicacion"];
     $camposDB["enlaceAPIDB"]        = $query["enlaceAPI"];
+    $camposDB["estadoDB"]           = $query["estado"];
     $camposDB["categoriasDB"]       = [];
     foreach($categoriasDB as $categoriaDB) {
       array_push($camposDB["categoriasDB"], $categoriaDB);
@@ -130,6 +135,10 @@ class Libro {
     return $this->enlaceAPI;
   }
 
+  function getEstado() {
+    return $this->estado;
+  }
+
   function getCategorias() {
     return $this->categorias;
   }
@@ -145,7 +154,8 @@ class Libro {
         portada         = :portada,
         numPaginas      = :numPaginas,
         editorial       = :editorial,
-        anhoPublicacion = :anhoPublicacion
+        anhoPublicacion = :anhoPublicacion,
+        estado          = :estado
       WHERE id = :id");
 
       $query->execute(array(
@@ -157,6 +167,7 @@ class Libro {
         ":numPaginas"       => $this->getNumPaginas(),
         ":editorial"        => $this->getEditorial(),
         ":anhoPublicacion"  => $this->getAnhoPublicacion(),
+        ":estado"           => $this->getEstado(),
         ":id"               => $this->getId()
       ));
     }

@@ -36,7 +36,8 @@ function parsearResultadosAPI (librosJSON) {
       dataLibro["pageCount"] || 0,
       dataLibro["publisher"] || "Editorial no disponible",
       dataLibro["publishedDate"],
-      dataLibro["infoLink"]
+      dataLibro["infoLink"],
+      "Pendiente"
     ))
   });
 
@@ -91,6 +92,7 @@ function generarForm (libro) {
       <input type="hidden" name="editorial" value="${libro["editorial"]}">
       <input type="hidden" name="anhoPublicacion" value="${libro["anhoPublicacion"]}">
       <input type="hidden" name="enlaceAPI" value="${libro["enlaceAPI"]}">
+      <input type="hidden" name="estado" value="${libro["estado"]}">
     </form>
   `;
 }

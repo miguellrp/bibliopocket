@@ -179,7 +179,7 @@ class Usuario {
       $query = $this->conexionDB->conn->prepare("INSERT INTO libros
         VALUES (:id, :titulo, :subtitulo, :autoria,
         :descripcion, :portada, :numPaginas, :editorial,
-        :anhoPublicacion, :enlaceAPI, :userID)");
+        :anhoPublicacion, :enlaceAPI, :estado, :userID)");
       
       $query->execute(array(
         ":id"               => $libro->getId(),
@@ -192,6 +192,7 @@ class Usuario {
         ":editorial"        => $libro->getEditorial(),
         ":anhoPublicacion"  => $libro->getAnhoPublicacion(),
         ":enlaceAPI"        => $libro->getEnlaceAPI(),
+        ":estado"           => $libro->getEstado(),
         ":userID"           => $this->getId()
       ));
     }

@@ -82,7 +82,7 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
           echo "<div class='libro'>
             <div class='portada-container'>
               <img src='".$libro->getPortada()."' class='portada'>
-              <img src='/bibliopocket/client/assets/images/marcador-pendiente.svg' class='marcador'>
+              <img src='/bibliopocket/client/assets/images/marcador-".$libro->getEstado().".svg' class='marcador'>
             </div>
             <div class='datos-libro'>
               <div class='cabecera'>
@@ -108,6 +108,7 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
                 <input type='hidden' name='editorial' value='".$libro->getEditorial()."'>
                 <input type='hidden' name='anhoPublicacion' value='".$libro->getAnhoPublicacion()."'>
                 <input type='hidden' name='enlaceAPI' value='".$libro->getEnlaceAPI()."'>
+                <input type='hidden' name='estado' value='".$libro->getEstado()."'>
               </form>
             </div>
           </div>";

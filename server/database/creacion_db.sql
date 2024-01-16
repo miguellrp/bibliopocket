@@ -25,6 +25,7 @@ CREATE TABLE libros (
   editorial VARCHAR(128),
   anhoPublicacion VARCHAR(4),
   enlaceAPI VARCHAR(255),
+  estado ENUM("Pendiente","Leyendo", "Leido"),
   id_usuario VARCHAR(128) NOT NULL,
   CONSTRAINT fk_LibrosUsuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );

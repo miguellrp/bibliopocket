@@ -74,8 +74,15 @@ function generarFormModificacion (libroVinculado) {
     "autoria": libroVinculado.autoria.value,
     "numPaginas": libroVinculado.numPaginas.value,
     "editorial": libroVinculado.editorial.value,
-    "anhoPublicacion": libroVinculado.anhoPublicacion.value
+    "anhoPublicacion": libroVinculado.anhoPublicacion.value,
+    "enlaceAPI": libroVinculado.enlaceAPI.value,
+    "estado": libroVinculado.estado.value
   };
+
+  // Para comprobar o estado no que se atopa a lectura do libro vinculado:
+  const leidoChecked = (estadoLibro) => { if (estadoLibro === "Leido") return "checked" };
+  const leyendoChecked = (estadoLibro) => { if (estadoLibro === "Leyendo") return "checked" };
+  const pendienteChecked = (estadoLibro) => { if (estadoLibro === "Pendiente") return "checked" };
 
   return /* html */` 
     <h2>Modificar datos del libro ✍️</h2>
@@ -114,11 +121,11 @@ function generarFormModificacion (libroVinculado) {
 
       <label>Estado:</label>
       <div class="grupo-estados-libro">
-        <input type="radio" name="estado" id="leido" value="leido">
+        <input type="radio" name="estado" id="leido" value="leido" ${leidoChecked(datosLibro.estado)}>
         <label for="leido">Leído</label>
-        <input type="radio" name="estado" id="leyendo" value="leyendo">
+        <input type="radio" name="estado" id="leyendo" value="leyendo" ${leyendoChecked(datosLibro.estado)}>
         <label for="leyendo">Leyendo</label>
-        <input type="radio" name="estado" id="pendiente" value="pendiente">
+        <input type="radio" name="estado" id="pendiente" value="pendiente" ${pendienteChecked(datosLibro.estado)}>
         <label for="pendiente">Pendiente</label>
       </div>
 
@@ -128,6 +135,7 @@ function generarFormModificacion (libroVinculado) {
       <input type="submit" value="Guardar cambios" name="modificar-libro">
       <input type="hidden" name="idLibroEstante" value="${datosLibro.id}">
       <input type="hidden" name="portada" value="${datosLibro.portada}">
+      <input type="hidden" name="enlaceAPI" value="${datosLibro.enlaceAPI}">
     </form>
   `;
 }

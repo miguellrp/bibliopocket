@@ -1,8 +1,7 @@
 export class Libro {
   constructor (
-    id, titulo, subtitulo, autoria,
-    descripcion, portada, numPaginas,
-    editorial, anhoPublicacion, enlaceAPI, estado) {
+    id, titulo, subtitulo, autoria, descripcion, portada, numPaginas,
+    editorial, anhoPublicacion, enlaceAPI, estado, fechaAdicion) {
 
     this._id = id;
     this._titulo = capitalizarPrimerCaracter(titulo);
@@ -15,6 +14,7 @@ export class Libro {
     this._anhoPublicacion = getAnhoPublicacion(anhoPublicacion);
     this._enlaceAPI = enlaceAPI;
     this._estado = estado;
+    this._fechaAdicion = fechaAdicion;
   }
 
   get id () { return this._id }
@@ -28,6 +28,7 @@ export class Libro {
   get anhoPublicacion () { return this._anhoPublicacion }
   get enlaceAPI () { return this._enlaceAPI }
   get estado () { return this._estado }
+  get fechaAdicion () { return this._fechaAdicion }
 }
 
 /* Funcións complementarias para formato: */

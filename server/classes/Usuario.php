@@ -173,49 +173,7 @@ class Usuario {
       return $userPicPath;
   }
 
-  
-  function registrarLibro($libro) {
-    try {
-      $query = $this->conexionDB->conn->prepare("INSERT INTO libros
-        VALUES (:id, :titulo, :subtitulo, :autoria,
-        :descripcion, :portada, :numPaginas, :editorial,
-        :anhoPublicacion, :enlaceAPI, :estado, :userID)");
-      
-      $query->execute(array(
-        ":id"               => $libro->getId(),
-        ":titulo"           => $libro->getTitulo(),
-        ":subtitulo"        => $libro->getSubtitulo(),
-        ":autoria"          => $libro->getAutoria(),
-        ":descripcion"      => $libro->getDescripcion(),
-        ":portada"          => $libro->getPortada(),
-        ":numPaginas"       => $libro->getNumPaginas(),
-        ":editorial"        => $libro->getEditorial(),
-        ":anhoPublicacion"  => $libro->getAnhoPublicacion(),
-        ":enlaceAPI"        => $libro->getEnlaceAPI(),
-        ":estado"           => $libro->getEstado(),
-        ":userID"           => $this->getId()
-      ));
-    }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al registrar el libro. ". $exception->getMessage();
-    }
-  }
-
-  function getLibrosIDs() {
-    try {
-      $query = $this->conexionDB->conn->prepare("SELECT id FROM libros
-        WHERE id_usuario = :userID");
-
-      $query->execute(array(":userID" => $this->getId()));
-    }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al cargar la estantería. ". $exception->getMessage();
-    }
-
-    return $query->fetchAll(PDO::FETCH_COLUMN);
-  }
-
-  function libroGuardado($libro) {
+  function esLibroGuardado($libro) {
     try {
       $query = $this->conexionDB->conn->prepare("SELECT * from libros
         WHERE id = :idLibro AND id_usuario = :idUsuario");

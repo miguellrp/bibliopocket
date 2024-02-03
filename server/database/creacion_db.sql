@@ -21,11 +21,12 @@ CREATE TABLE libros (
   autoria VARCHAR(255),
   descripcion TEXT,
   portada VARCHAR(255),
-  numPaginas INTEGER,
+  num_paginas INTEGER,
   editorial VARCHAR(128),
-  anhoPublicacion VARCHAR(4),
-  enlaceAPI VARCHAR(255),
+  anho_publicacion VARCHAR(4),
+  enlace_API VARCHAR(255),
   estado ENUM("Pendiente","Leyendo", "Leido"),
+  fecha_adicion DATETIME NOT NULL,
   id_usuario VARCHAR(128) NOT NULL,
   CONSTRAINT fk_LibrosUsuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );

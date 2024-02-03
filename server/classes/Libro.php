@@ -14,6 +14,7 @@ class Libro {
   private $enlaceAPI;
   private $estado;
   private $categorias;
+  private $fechaAdicion;
   private $conexionDB;
 
   function __construct($id) {
@@ -33,7 +34,8 @@ class Libro {
         "editorial"         => $_POST["editorial"],
         "anhoPublicacion"   => $_POST["anhoPublicacion"],
         "enlaceAPI"         => $_POST["enlaceAPI"],
-        "estado"            => $_POST["estado"] 
+        "estado"            => $_POST["estado"],
+        "fechaAdicion"      => date("Y-m-d H:i:s")
       ];
     // Cuando se crea desde la DB:
     } else {
@@ -48,6 +50,7 @@ class Libro {
       $datosLibro["anhoPublicacion"]  = $camposDB["anhoPublicacionDB"];
       $datosLibro["enlaceAPI"]        = $camposDB["enlaceAPIDB"];
       $datosLibro["estado"]           = $camposDB["estadoDB"];
+      $datosLibro["fechaAdicion"]     = $camposDB["fechaAdicion"];
       foreach($camposDB["categoriasDB"] as $categoriaDB) {
         array_push($datosLibro["categorias"], $categoriaDB);
       }
@@ -62,6 +65,7 @@ class Libro {
     $this->anhoPublicacion  = $datosLibro["anhoPublicacion"];
     $this->enlaceAPI        = $datosLibro["enlaceAPI"];
     $this->estado           = $datosLibro["estado"];
+    $this->fechaAdicion     = $datosLibro["fechaAdicion"];
   }
 
   private function getCamposDB() {
@@ -81,11 +85,12 @@ class Libro {
     $camposDB["autoriaDB"]          = $query["autoria"];
     $camposDB["descripcionDB"]      = $query["descripcion"];
     $camposDB["portadaDB"]          = $query["portada"];
-    $camposDB["numPaginasDB"]       = $query["numPaginas"];
+    $camposDB["numPaginasDB"]       = $query["num_paginas"];
     $camposDB["editorialDB"]        = $query["editorial"];
-    $camposDB["anhoPublicacionDB"]  = $query["anhoPublicacion"];
-    $camposDB["enlaceAPIDB"]        = $query["enlaceAPI"];
+    $camposDB["anhoPublicacionDB"]  = $query["anho_publicacion"];
+    $camposDB["enlaceAPIDB"]        = $query["enlace_API"];
     $camposDB["estadoDB"]           = $query["estado"];
+    $camposDB["fechaAdicion"]       = $query["fecha_adicion"];
     $camposDB["categoriasDB"]       = [];
     foreach($categoriasDB as $categoriaDB) {
       array_push($camposDB["categoriasDB"], $categoriaDB);
@@ -139,6 +144,10 @@ class Libro {
     return $this->estado;
   }
 
+  function getFechaEdicion() {
+    return $this->fechaAdicion;
+  }
+
   function getCategorias() {
     return $this->categorias;
   }
@@ -155,7 +164,8 @@ class Libro {
         numPaginas      = :numPaginas,
         editorial       = :editorial,
         anhoPublicacion = :anhoPublicacion,
-        estado          = :estado
+        estado          = :estado,
+        fechaAdicion    = :fechaAdicion
       WHERE id = :id");
 
       $query->execute(array(
@@ -168,6 +178,7 @@ class Libro {
         ":editorial"        => $this->getEditorial(),
         ":anhoPublicacion"  => $this->getAnhoPublicacion(),
         ":estado"           => $this->getEstado(),
+        ":fechaAdicion"     => $this->getFechaEdicion(),
         ":id"               => $this->getId()
       ));
     }

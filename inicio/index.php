@@ -1,6 +1,11 @@
 <?php
 session_start();
+include_once "../server/classes/Estanteria.php";
+include_once "../server/classes/Libro.php";
 include_once "../server/classes/Usuario.php";
+
+// VARIABLE GLOBAL
+$numLibrosUltimosAnhadidos = 2;
 
 if (isset($_SESSION["nombreUsuario"]) && !isset($_SESSION["usuarioActivo"])) {
   $usuarioID = $conn->getUsuarioActualID($_SESSION["nombreUsuario"]);
@@ -19,6 +24,9 @@ if (isset($_SESSION["nombreUsuario"]) && !isset($_SESSION["usuarioActivo"])) {
 if (isset($_SESSION["usuarioActivo"])) {
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
   $usuarioActivo->setUltimoLoginDB();
+
+  if (!isset($_SESSION["estanteria"]))
+    $_SESSION["estanteria"] = $estanteriaDB;
 }
 ?>
 <!DOCTYPE html>
@@ -46,7 +54,21 @@ if (isset($_SESSION["usuarioActivo"])) {
         <?= $_SESSION["usuarioActivo"]["nombreUsuario"] ?>
       </a>
     </h2>
-    <h3>Tus últimas lecturas</h3>
+    <h3>Tus últimos libros añadidos</h3>
+    <div class="ultimos-libros">
+    <?php
+        $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
+        $ultimosLibrosAnhadidos = $estanteriaUsuario->getUltimasLecturas($numLibrosUltimosAnhadidos);
+
+        foreach($ultimosLibrosAnhadidos as $libro) {
+          echo "<div class='libro'>
+            <div class='portada-container'>
+              <img src='".$libro->getPortada()."' class='portada'>
+            </div>
+          </div>";
+        }
+      ?>
+      </div>
   <?php endif; ?>
   <script src="../client/handlers/themeHandler.js"></script>
 </body>

@@ -70,4 +70,24 @@ class Estanteria {
       echo "Ocurrió un error al registrar el libro. ". $exception->getMessage();
     }
   }
+
+  function ordenarEstanteriaPorFechaAdicion() {
+    usort($this->libros, function($libro1, $libro2) {
+      return strtotime($libro2->getFechaEdicion()) - strtotime($libro1->getFechaEdicion());
+    });
+  }
+
+  function getUltimasLecturas($numLibros) {
+    $ultimosLibrosAnhadidos = [];
+    $this->ordenarEstanteriaPorFechaAdicion();
+    
+    $numLibros = ($numLibros <= count($this->getLibros()))
+      ? $numLibros
+      : count($this->getLibros());
+
+    for ($indiceLibro = 0; $indiceLibro < $numLibros; $indiceLibro++)
+      array_push($ultimosLibrosAnhadidos, $this->getLibros()[$indiceLibro]);
+    
+    return $ultimosLibrosAnhadidos;
+  }
 }

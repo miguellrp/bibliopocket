@@ -16,3 +16,23 @@ h2 {
       }
   }
 }
+
+.ultimos-libros {
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+
+  & .portada {
+    height: 170px;
+    border-radius: 5px;
+    opacity: 0.8;
+    filter: grayscale(0.7);
+    transition: .3s ease;
+
+    &:hover {
+      filter: grayscale(0);
+      opacity: 1;
+      height: 180px;
+    }
+  }
+}

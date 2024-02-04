@@ -161,11 +161,11 @@ class Libro {
         autoria         = :autoria,
         descripcion     = :descripcion,
         portada         = :portada,
-        numPaginas      = :numPaginas,
+        num_paginas      = :numPaginas,
         editorial       = :editorial,
-        anhoPublicacion = :anhoPublicacion,
+        anho_publicacion = :anhoPublicacion,
         estado          = :estado,
-        fechaAdicion    = :fechaAdicion
+        fecha_adicion    = :fechaAdicion
       WHERE id = :id");
 
       $query->execute(array(

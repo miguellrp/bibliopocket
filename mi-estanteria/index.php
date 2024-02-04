@@ -6,23 +6,19 @@ include_once "../server/classes/Usuario.php";
 
 $conn = new Conector;
 
-if (isset($_SESSION["usuarioActivo"])) {
+if (isset($_SESSION["usuarioActivo"])) 
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
-  
-  if (!isset($_SESSION["estanteria"]))
-    $_SESSION["estanteria"] = $estanteriaDB;
-}
-
-if(!isset($estanteriaDB))
-  $estanteriaDB = new Estanteria($usuarioActivo->getId());
-
 
 if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
   $idLibro = isset($_POST["anhadir-libro"]) ? $_POST["id"] : uniqid();
   $nuevoLibro = new Libro($idLibro);
+  $estanteriaDB = new Estanteria($usuarioActivo->getId());
 
   // Si el libro a añadir no está guardado todavía, se añade a su estantería:
-  if (!$usuarioActivo->esLibroGuardado($nuevoLibro)) $estanteriaDB->registrarLibro($nuevoLibro);
+  if (!$usuarioActivo->esLibroGuardado($nuevoLibro))
+    $estanteriaDB->registrarLibro($nuevoLibro);
+  
+  
   header("Location: index.php");
 }
 
@@ -78,6 +74,7 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
     <div class="estanteria">
       <?php
         $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
+        $estanteriaUsuario->ordenarEstanteriaPorFechaAdicion();
 
         foreach($estanteriaUsuario->getLibros() as $libro) {
           echo "<div class='libro'>

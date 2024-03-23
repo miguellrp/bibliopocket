@@ -111,7 +111,7 @@ class Usuario {
         ":nombreUsuario"    => $this->nombreUsuario,
         ":contrasenhaHash"  => $passHasheado,
         ":email"            => $this->email,
-        ":ultimoLogin"      => date('Y-m-d H:i:s')
+        ":ultimoLogin"      => date('d-m-Y H:i:s')
       ));
     }
     catch (PDOException $exception) {

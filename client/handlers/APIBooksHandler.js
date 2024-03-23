@@ -75,24 +75,24 @@ function crearLibroTagAPI (libro) {
 }
 
 function generarForm (libro) {
+  formatearComillasDatos(libro);
+
+
   return `
-    <form action="" method="POST">
-      <div>
-        <input type="submit" value="➕" name="anhadir-libro">
-        <input type="button" value="ℹ">
-      </div>
-      <input type="hidden" name="id" value="${libro["id"]}">
-      <input type="hidden" name="titulo" value="${libro["titulo"]}">
-      <input type="hidden" name="subtitulo" value="${libro["subtitulo"]}">
-      <input type="hidden" name="portada" value="${libro["portada"]}">
-      <input type="hidden" name="autoria" value="${libro["autoria"]}">
-      <input type="hidden" name="descripcion" value="${libro["descripcion"]}">
-      <input type="hidden" name="categorias" value="${libro["categorias"]}">
-      <input type="hidden" name="numPaginas" value="${libro["numPaginas"]}">
-      <input type="hidden" name="editorial" value="${libro["editorial"]}">
-      <input type="hidden" name="anhoPublicacion" value="${libro["anhoPublicacion"]}">
-      <input type="hidden" name="enlaceAPI" value="${libro["enlaceAPI"]}">
-      <input type="hidden" name="estado" value="${libro["estado"]}">
+    <form action='' method='POST'>
+      <input type='submit' name='anhadir-libro' value="Añadir" class='add-btn'>
+      <input type='hidden' name='id' value='${libro["id"]}'>
+      <input type='hidden' name='titulo' value='${libro["titulo"]}'>
+      <input type='hidden' name='subtitulo' value='${libro["subtitulo"]}'>
+      <input type='hidden' name='portada' value='${libro["portada"]}'>
+      <input type='hidden' name='autoria' value='${libro["autoria"]}'>
+      <input type='hidden' name='descripcion' value='${libro["descripcion"]}'>
+      <input type='hidden' name='categorias' value='${libro["categorias"]}'>
+      <input type='hidden' name='numPaginas' value='${libro["numPaginas"]}'>
+      <input type='hidden' name='editorial' value='${libro["editorial"]}'>
+      <input type='hidden' name='anhoPublicacion' value='${libro["anhoPublicacion"]}'>
+      <input type='hidden' name='enlaceAPI' value='${libro["enlaceAPI"]}'>
+      <input type='hidden' name='estado' value='${libro["estado"]}'>
     </form>
   `;
 }
@@ -101,4 +101,11 @@ function generarForm (libro) {
 /* Funcións complementarias */
 function eliminarEspaciosExtra (cadena) {
   return cadena.trim();
+}
+
+function formatearComillasDatos (libro) {
+  for (const dato in libro) {
+    if (typeof libro[dato] == "string")
+      libro[dato] = libro[dato].replaceAll("'", "\"");
+  }
 }

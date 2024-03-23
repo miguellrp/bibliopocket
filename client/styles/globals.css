@@ -1,5 +1,13 @@
 @import url(modal.css);
 
+
+:root {
+  --ancho-portada-libro: 128px;
+  --alto-portada-libro: 192px;
+  --ancho-vista-libro: 180px;
+  --ancho-datos-libro: 170px;
+}
+
 /* Paletas de colores a partir de: https://colorhunt.co */
 /* Tema Claro ☀️ */
 html[data-theme="light"] {
@@ -8,6 +16,7 @@ html[data-theme="light"] {
   --secondary-contrast-color: #ba4050;
   --secondary-lighten-color: #ff9b94;
   --background-color: #ffe3cd;
+  --background-contrast-color: #ba987f;
   --user-invalid-color: #8f2929;
   --user-valid-color: #56ac3c;
 
@@ -23,6 +32,7 @@ html[data-theme="dark"] {
   --secondary-contrast-color: #774360;
   --secondary-lighten-color: #fffdde;
   --background-color: #4c3a51;
+  --background-contrast-color: #685b6c;
   --user-invalid-color: #ba1313;
   --user-valid-color: #46d01c;
 

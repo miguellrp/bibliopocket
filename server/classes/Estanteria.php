@@ -62,7 +62,7 @@ class Estanteria {
         ":anhoPublicacion"  => $libro->getAnhoPublicacion(),
         ":enlaceAPI"        => $libro->getEnlaceAPI(),
         ":estado"           => $libro->getEstado(),
-        ":fechaAdicion"     => $libro->getFechaEdicion(),
+        ":fechaAdicion"     => $libro->getFechaAdicion(),
         ":userID"           => $this->getIdUsuario()
       ));
     }
@@ -73,7 +73,7 @@ class Estanteria {
 
   function ordenarEstanteriaPorFechaAdicion() {
     usort($this->libros, function($libro1, $libro2) {
-      return strtotime($libro2->getFechaEdicion()) - strtotime($libro1->getFechaEdicion());
+      return strtotime($libro2->getFechaAdicion()) - strtotime($libro1->getFechaAdicion());
     });
   }
 

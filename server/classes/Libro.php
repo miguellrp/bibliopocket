@@ -144,7 +144,7 @@ class Libro {
     return $this->estado;
   }
 
-  function getFechaEdicion() {
+  function getFechaAdicion() {
     return $this->fechaAdicion;
   }
 
@@ -178,7 +178,7 @@ class Libro {
         ":editorial"        => $this->getEditorial(),
         ":anhoPublicacion"  => $this->getAnhoPublicacion(),
         ":estado"           => $this->getEstado(),
-        ":fechaAdicion"     => $this->getFechaEdicion(),
+        ":fechaAdicion"     => $this->getFechaAdicion(),
         ":id"               => $this->getId()
       ));
     }

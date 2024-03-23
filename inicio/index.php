@@ -5,7 +5,7 @@ include_once "../server/classes/Libro.php";
 include_once "../server/classes/Usuario.php";
 
 // VARIABLE GLOBAL
-$numLibrosUltimosAnhadidos = 2;
+$numLibrosUltimosAnhadidos = 4;
 
 if (isset($_SESSION["nombreUsuario"]) && !isset($_SESSION["usuarioActivo"])) {
   $usuarioID = $conn->getUsuarioActualID($_SESSION["nombreUsuario"]);
@@ -24,6 +24,7 @@ if (isset($_SESSION["nombreUsuario"]) && !isset($_SESSION["usuarioActivo"])) {
 if (isset($_SESSION["usuarioActivo"])) {
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
   $usuarioActivo->setUltimoLoginDB();
+  $estanteriaDB = new Estanteria($usuarioActivo->getId());
 
   if (!isset($_SESSION["estanteria"]))
     $_SESSION["estanteria"] = $estanteriaDB;
@@ -56,16 +57,19 @@ if (isset($_SESSION["usuarioActivo"])) {
     </h2>
     <h3>Tus últimos libros añadidos</h3>
     <div class="ultimos-libros">
+
     <?php
         $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
         $ultimosLibrosAnhadidos = $estanteriaUsuario->getUltimasLecturas($numLibrosUltimosAnhadidos);
 
         foreach($ultimosLibrosAnhadidos as $libro) {
-          echo "<div class='libro'>
+          echo "<article class='libro'>
             <div class='portada-container'>
               <img src='".$libro->getPortada()."' class='portada'>
             </div>
-          </div>";
+            <strong class='titulo' title='".$libro->getTitulo()."'>".$libro->getTitulo()."</strong>
+            <small>".$libro->getFechaAdicion()."</small>
+          </article>";
         }
       ?>
       </div>

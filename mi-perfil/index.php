@@ -5,7 +5,7 @@ include_once "../server/classes/Usuario.php";
 $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
 
 if (isset($_POST["modificacion-datos-user"])) {
-  if (isset($_FILES["userProfilePic"]["name"])) {
+  if (is_uploaded_file($_FILES["userProfilePic"]["tmp_name"])) {
     $userID = $usuarioActivo->getId();
     $temp = explode(".", $_FILES["userProfilePic"]["name"]);
     $nombreArchivoImagen = $usuarioActivo->getNombreUsuario()."ProfilePic.".end($temp);
@@ -17,13 +17,14 @@ if (isset($_POST["modificacion-datos-user"])) {
   }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es-ES">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bibliopocket 📗 Mi perfil</title>
+  <title>Bibliopocket | Mi perfil</title>
+  <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -36,6 +37,11 @@ if (isset($_POST["modificacion-datos-user"])) {
     </div>
   <?php else: ?>
     <custom-header pagina-activa="mi-perfil"></custom-header>
+    <nav>
+      <input type="button" value="Detalles de la cuenta">
+      <input type="button" value="Configuración">
+    </nav>
+
     <form class="datos-user" action="" method="POST" enctype="multipart/form-data">
       <section class="username-pic">
         <div class="wrap-image-uploader">

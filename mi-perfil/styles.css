@@ -3,10 +3,19 @@
 :root {
   --ancho-profile-pic: 128px;
   --alto-profile-pic: 128px;
+  --section-background-color: #5b4667;
 }
 
 body {
-  align-items: normal;
+  align-items: center;
+}
+
+form, section {
+  display: flex;
+  align-items: center;
+  width: 80vw;
+  padding: 10px;
+  background-color: var(--section-background-color);
 }
 
 .datos-user {
@@ -17,7 +26,7 @@ body {
   & .username-pic {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: center !important;
     column-gap: 30px;
     margin-bottom: 25px;
 

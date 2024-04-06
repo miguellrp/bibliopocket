@@ -105,6 +105,7 @@ if (isset($_POST["confirm-registro-check"]) && $_COOKIE["codigoGenerado"] == $_P
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BiblioPocket</title>
+  <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="client/styles/loginPage.css">
   <script src="client/components/CustomButton.js"></script>
 </head>

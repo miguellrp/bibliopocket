@@ -58,7 +58,7 @@ html[data-theme="dark"] {
       & .marcador {
         position: relative;
         width: 30px;
-        top: -196px;
+        top: -198px;
         left: 3px;
         filter: drop-shadow(1px 1px 1px #2d2c2c);
         border-radius: 6px;
@@ -159,6 +159,20 @@ html[data-theme="dark"] {
   }
 }
 
+.input-buscador.btn {
+  width: -moz-fit-content;
+  width: fit-content;
+
+  color: var(--secondary-lighten-color);
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: .3s ease-in;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--primary-color), black 20%);
+  }
+}
+
 #busqueda-libro-modal {
   width: 80vw;
   height: 65vh;
@@ -190,7 +204,6 @@ html[data-theme="dark"] {
       align-items: center;
 
       width: var(--ancho-vista-libro);
-      height: 370px;
       padding: 10px;
       white-space: nowrap;
 
@@ -355,7 +368,7 @@ html[data-theme="dark"] {
         opacity: 0.4;
       }
       
-      & input[type="radio"]:checked + label {
+      & input[type="radio"][checked="true"]+ label {
         transition: .6s ease;
         opacity: 1;
         filter: brightness(1.25);

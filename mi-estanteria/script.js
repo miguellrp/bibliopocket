@@ -30,6 +30,10 @@ function listenerModalCrearLibro () {
 
     const modalNuevoLibro = generarModalNuevoLibro();
     anhadirCierreModal(modalNuevoLibro);
+
+    const estadosLibroTags = modalNuevoLibro.querySelector(".grupo-estados-libro").querySelectorAll(":scope > input");
+    estadosLibroTags.forEach((estadoLibroTag) => estadoLibroTag.addEventListener("click", listenersEstadosLibro));
+
     modalNuevoLibro.showModal();
   });
 }
@@ -61,10 +65,24 @@ function listenersModalModificarLibro () {
 
       const modalModificacion = modalesLibroCreado.generarModalModificacion(libroVinculado);
       anhadirCierreModal(modalModificacion);
-      modalModificacion.showModal();
       modalModificacion.querySelector("#titulo").blur();
+
+      const estadosLibroTags = modalModificacion.querySelector(".grupo-estados-libro").querySelectorAll(":scope > input");
+      estadosLibroTags.forEach((estadoLibroTag) => estadoLibroTag.addEventListener("click", listenersEstadosLibro));
+
+      modalModificacion.showModal();
     });
   });
+}
+
+function listenersEstadosLibro () {
+  const estadosTags = this.parentNode.querySelectorAll("input[type='radio']");
+
+  this.setAttribute("checked", "true");
+  estadosTags.forEach((estadoTag) => {
+    if (estadoTag != this) estadoTag.setAttribute("checked", "false")
+  });
+
 }
 
 /* --- FUNCIONES COMPLEMENTARIAS --- */

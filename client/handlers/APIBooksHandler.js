@@ -6,12 +6,16 @@ const MAX_RESULTADOS = 15;
 export async function buscarLibroAPI () {
   const buscadorTag = document.getElementById("buscador-libro");
   const terminoBuscado = eliminarEspaciosExtra(buscadorTag.value);
+  const resultadosTag = document.querySelector(".resultados-busqueda");
 
   if (terminoBuscado != "") {
+    resultadosTag.innerHTML = "<img src='/bibliopocket/client/assets/images/loader.svg'>";
+
+    // TODO: diversificar búsqueda por título, autoría, isbn
     let resultadosAPI = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${terminoBuscado}&maxResults=${MAX_RESULTADOS}`);
     let librosEncontrados = await resultadosAPI.json();
 
-    console.log(librosEncontrados)
+    // TODO: catch de Promise
     librosEncontrados = parsearResultadosAPI(librosEncontrados);
     mostrarResultadosAPI(librosEncontrados);
   }
@@ -98,7 +102,7 @@ function generarForm (libro) {
 }
 
 
-/* Funcións complementarias */
+/* Funciones complementarias */
 function eliminarEspaciosExtra (cadena) {
   return cadena.trim();
 }

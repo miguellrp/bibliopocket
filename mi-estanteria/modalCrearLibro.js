@@ -49,11 +49,11 @@ function generarFormNuevoLibro () {
 
       <label>Estado:</label>
       <div class="grupo-estados-libro">
-        <input type="radio" name="estado" id="leido" value="leido">
+        <input type="radio" name="estado" id="leido" value="leido" checked="false">
         <label for="leido">Leído</label>
-        <input type="radio" name="estado" id="leyendo" value="leyendo">
+        <input type="radio" name="estado" id="leyendo" value="leyendo" checked="false">
         <label for="leyendo">Leyendo</label>
-        <input type="radio" name="estado" id="pendiente" value="pendiente">
+        <input type="radio" name="estado" id="pendiente" value="pendiente" checked="true">
         <label for="pendiente">Pendiente</label>
       </div>
 

@@ -31,7 +31,7 @@ export class Libro {
   get fechaAdicion () { return this._fechaAdicion }
 }
 
-/* Funcións complementarias para formato: */
+/* Funciones complementarias para formato: */
 function capitalizarPrimerCaracter (cadena) {
   return cadena.charAt(0).toUpperCase() + cadena.slice(1);
 }

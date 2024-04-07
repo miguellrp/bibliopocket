@@ -39,7 +39,7 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bibliopocket | Mi estantería</title>
+  <title>BiblioPocket | Mi estantería</title>
   <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
@@ -117,10 +117,10 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
 
   <?php endif; ?>
   <script src="./script.js" type="module"></script>
-  <script src="../client/components/CustomHeader.js"></script>
-  <script src="../client/components/CustomButton.js"></script>
-  <script src="../client/handlers/themeHandler.js"></script>
-  <script src="../client/handlers/APIBooksHandler.js" type="module"></script>
+  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
+  <script src="/bibliopocket/client/components/CustomButton.js"></script>
+  <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
+  <script src="/bibliopocket/client/handlers/APIBooksHandler.js" type="module"></script>
 </body>
 
 </html>

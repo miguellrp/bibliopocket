@@ -1,33 +1,132 @@
 @import url(/bibliopocket/client/styles/globals.css);
 
 :root {
-  --ancho-profile-pic: 128px;
-  --alto-profile-pic: 128px;
-  --section-background-color: #5b4667;
+  --ancho-userpic: 128px;
+  --alto-userpic: 128px;
+}
+
+html[data-theme="dark"] {
+  --container-background: #5b4668;
+  
+  --seccion-activa-foreground: var(--secondary-lighten-color);
+  --seccion-activa-background: var(--secondary-color);
+  --seccion-inactiva-foreground: var(--secondary-color);
+  --seccion-inactiva-background: var(--secondary-lighten-color);
+
+  --eliminar-cuenta-color: #ff3550;
+}
+
+html[data-theme="light"] {
+  --container-background: var(--secondary-color);
+
+  --seccion-activa-foreground: var(--secondary-lighten-color);
+  --seccion-activa-background: var(--secondary-contrast-color);
+  --seccion-inactiva-foreground: var(--secondary-contrast-color);
+  --seccion-inactiva-background: var(--secondary-lighten-color);
+
+  --eliminar-cuenta-color: #b80019;
 }
 
 body {
   align-items: center;
 }
 
-form, section {
+.nav-perfil {
   display: flex;
+  column-gap: 20px;
+  margin: 30px 0;
+
+  & input {
+    padding: 10px 30px;
+    font-size: 15px;
+    font-weight: bold;
+
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    color: var(--seccion-inactiva-foreground);
+    background-color: var(--seccion-inactiva-background);
+    box-shadow: 0 0 10px 1px #00000070;
+
+    cursor: pointer;
+    transition: .4s ease;
+  }
+
+  & [active] {
+    color: var(--seccion-activa-foreground);
+    background-color: var(--seccion-activa-background);
+    box-shadow: 0 0 0 transparent;
+  }
+}
+
+.container {
+  display: none;
   align-items: center;
-  width: 80vw;
-  padding: 10px;
-  background-color: var(--section-background-color);
+  padding: 20px;
+
+  background-color: var(--container-background);
+  box-shadow: 0 0 10px 3px #00000035;
+  
+  &[active] {
+    display: flex;
+  }
+}
+
+.detalles-cuenta {
+  flex-direction: column;
+
+  & h2, ul {
+    margin: unset;
+  }
+
+  & .userpic {
+    width: var(--ancho-userpic);
+    max-width: var(--ancho-userpic);
+    height: var(--alto-userpic);
+    max-height: var(--alto-userpic);
+
+    border: 3px solid var(--primary-color);
+    border-radius: 10%;
+    margin: 20px 0;
+  }
+}
+
+.configuracion {
+  flex-direction: column;
+
+  & ul {
+    list-style-type: none;
+    text-align: center;
+    
+    & li {
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    & :first-child {
+      margin-top: unset;
+    }
+
+    & :last-child {
+      margin-top: 40px;
+
+      font-weight: bold;
+      color: var(--eliminar-cuenta-color);
+    }
+  }
 }
 
 .datos-user {
   display: flex;
+  justify-content: space-around;
   flex-direction: column;
-  margin: 30px;
 
-  & .username-pic {
+  & .form-fields {
     display: flex;
     flex-direction: row;
-    align-items: center !important;
-    column-gap: 30px;
+    align-items: start;
+
+    column-gap: 20px;
     margin-bottom: 25px;
 
     & .username {
@@ -44,6 +143,17 @@ form, section {
         box-shadow: 0 0 2px var(--primary-color);
       }
     }
+
+    & .middle {
+      height: var(--alto-userpic);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+    }
+
+    & .icon.darklight {
+      margin: 0;
+    }
   }
 }
 
@@ -58,23 +168,53 @@ label {
   align-items: center;
 }
 
-.icon {
-  margin: 0 10px;
+button[name="modificacion-datos-user"] {
+  display: flex;
+  align-items: center;
+  column-gap: 7px;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 5px 10px;
+
+  outline: none;
+  border: none;
+  border-radius: 10px;
+
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--secondary-lighten-color);
+  background-color: var(--primary-color);
+
+  cursor: pointer;
+  transition: .3s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--primary-color), black 10%);
+  }
+
+  & .disquete.icon {
+    margin: unset;
+    margin-left: -5px;
+    width: 32px;
+    height: 32px;
+    --color: var(--secondary-lighten-color);
+  }
 }
 
-.wrap-image-uploader {
+
+.userpic {
   position: relative;
 
-  width: var(--ancho-profile-pic);
-  max-width: var(--ancho-profile-pic);
-  height: var(--alto-profile-pic);
-  max-height: var(--alto-profile-pic);
+  width: var(--ancho-userpic);
+  max-width: var(--ancho-userpic);
+  height: var(--alto-userpic);
+  max-height: var(--alto-userpic);
 
   & .preview {
-    width: var(--ancho-profile-pic);
-    max-width: var(--ancho-profile-pic);
-    height: var(--alto-profile-pic);
-    max-height: var(--alto-profile-pic);
+    width: var(--ancho-userpic);
+    max-width: var(--ancho-userpic);
+    height: var(--alto-userpic);
+    max-height: var(--alto-userpic);
 
     border: 3px solid var(--primary-color);
     border-radius: 100%;

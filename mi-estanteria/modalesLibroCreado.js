@@ -8,7 +8,9 @@ export function generarModalBusquedaAPI () {
   modalBusquedaAPI.innerHTML = generarBuscadorAPI();
 
   const buscador = modalBusquedaAPI.querySelector("#buscador-libro");
+  const buscadorButton = modalBusquedaAPI.querySelector(".input-buscador.btn");
   buscador.addEventListener("search", buscarLibroAPI);
+  buscadorButton.addEventListener("click", buscarLibroAPI);
 
   document.body.appendChild(modalBusquedaAPI);
   return modalBusquedaAPI;
@@ -42,6 +44,7 @@ function generarBuscadorAPI () {
     <label for="buscador-libro">Buscar por título:
       <input type="search" id="buscador-libro" 
        class="input-buscador" placeholder="Cien años de soledad">
+       <input type="button" class="input-buscador btn" value="Buscar">
     </label>
     <div class="resultados-busqueda">
       <img src="/bibliopocket/client/assets/images/torre-libros.svg">
@@ -79,10 +82,10 @@ function generarFormModificacion (libroVinculado) {
     "estado": libroVinculado.estado.value
   };
 
-  // Para comprobar o estado no que se atopa a lectura do libro vinculado:
-  const leidoChecked = (estadoLibro) => { if (estadoLibro === "Leido") return "checked" };
-  const leyendoChecked = (estadoLibro) => { if (estadoLibro === "Leyendo") return "checked" };
-  const pendienteChecked = (estadoLibro) => { if (estadoLibro === "Pendiente") return "checked" };
+  // Para comprobar el estado en el que se encuentra la lectura del libro vinculado:
+  const leidoChecked = (estadoLibro) => { return (estadoLibro === "Leido") };
+  const leyendoChecked = (estadoLibro) => { return (estadoLibro === "Leyendo") };
+  const pendienteChecked = (estadoLibro) => { return (estadoLibro === "Pendiente") };
 
   return /* html */` 
     <h2>Modificar datos del libro ✍️</h2>
@@ -121,11 +124,11 @@ function generarFormModificacion (libroVinculado) {
 
       <label>Estado:</label>
       <div class="grupo-estados-libro">
-        <input type="radio" name="estado" id="leido" value="leido" ${leidoChecked(datosLibro.estado)}>
+        <input type="radio" name="estado" id="leido" value="leido" checked=${leidoChecked(datosLibro.estado)}>
         <label for="leido">Leído</label>
-        <input type="radio" name="estado" id="leyendo" value="leyendo" ${leyendoChecked(datosLibro.estado)}>
+        <input type="radio" name="estado" id="leyendo" value="leyendo" checked=${leyendoChecked(datosLibro.estado)}>
         <label for="leyendo">Leyendo</label>
-        <input type="radio" name="estado" id="pendiente" value="pendiente" ${pendienteChecked(datosLibro.estado)}>
+        <input type="radio" name="estado" id="pendiente" value="pendiente" checked=${pendienteChecked(datosLibro.estado)}>
         <label for="pendiente">Pendiente</label>
       </div>
 

@@ -165,11 +165,11 @@ class Usuario {
       }
       catch (PDOException $exception) {
         echo "Ocurrió un error al cargar la imagen. ". $exception->getMessage();
-        return "/bibliopocket/client/assets/images/user-pics/placeholder-user-pic.webp";
+        return "/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
       }
       
       // En el caso de que la persona usuaria no facilitase ninguna foto de perfil, se le da un placeholder genérico:
-      if($userPicPath == NULL) $userPicPath = "/bibliopocket/client/assets/images/user-pics/placeholder-user-pic.webp";
+      if($userPicPath == NULL) $userPicPath = "/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
       return $userPicPath;
   }
 
@@ -185,6 +185,37 @@ class Usuario {
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al comprobar si ya existe este libro en la estantería. ". $exception->getMessage();
+    }
+  }
+
+
+  /* Métodos para analíticas */
+  function getCountLibrosPorEstado($estado) {
+    try {
+      $query = $this->conexionDB->conn->prepare("SELECT COUNT(id) from libros
+        WHERE id_usuario = :idUsuario and estado = :estado");
+      $query->execute(array(
+        ":idUsuario"  => $this->getId(),
+        ":estado"     => $estado
+      ));
+      return $query->fetchColumn();
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al recoger el número de libros por estado '$estado'. ". $exception->getMessage();
+    }
+  }
+
+  function getCountLibrosRegistrados() {
+    try {
+      $query = $this->conexionDB->conn->prepare("SELECT COUNT(id) from libros
+        WHERE id_usuario = :idUsuario");
+      $query->execute(array(
+        ":idUsuario"  => $this->getId()
+      ));
+      return $query->fetchColumn();
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al recoger el número de libros registrados '. ". $exception->getMessage();
     }
   }
 }

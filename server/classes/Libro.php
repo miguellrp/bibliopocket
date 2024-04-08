@@ -76,7 +76,7 @@ class Libro {
     $query->execute(array(":id" => $id));
     $query = $query->fetch(PDO::FETCH_ASSOC);
 
-    $querycategorias = $this->conexionDB->conn->prepare("SELECT categoria FROM libros_categorias WHERE id_libro = :id");
+    $querycategorias = $this->conexionDB->conn->prepare("SELECT tc.nombre FROM categorias tc JOIN libros_categorias tlc ON tlc.id_categoria = tc.id WHERE id_libro = :id");
     $querycategorias->execute(array(":id" => $id));
     $categoriasDB = $querycategorias->fetchAll(PDO::FETCH_COLUMN);
 

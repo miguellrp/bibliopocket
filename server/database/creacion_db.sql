@@ -32,14 +32,14 @@ CREATE TABLE libros (
 );
 
 CREATE TABLE categorias (
-  id VARCHAR(128) NOT NULL,
+  id VARCHAR(128) PRIMARY KEY NOT NULL,
   nombre VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE libros_categorias (
   id_libro VARCHAR(128) NOT NULL,
   id_categoria VARCHAR(128) NOT NULL,
-  PRIMARY KEY(id_libro, categoria),
+  PRIMARY KEY(id_libro, id_categoria),
   CONSTRAINT fk_LibrosRelLibCat FOREIGN KEY (id_libro) REFERENCES libros(id),
   CONSTRAINT fk_CategoriasRelLibCat FOREIGN KEY (id_categoria) REFERENCES categorias(id)
 );

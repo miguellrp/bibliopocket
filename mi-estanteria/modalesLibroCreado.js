@@ -55,8 +55,8 @@ function generarBuscadorAPI () {
 function generarFormEliminacion (idLibro) {
   return /* html */`
     <form action="" method="POST">
-      <p>¿Estás seguro de que quieres eliminar este libro de tu estantería?</p>
-      <small>Todos sus datos modificados se perderán</small>
+      <p>¿Estás segur@ de que quieres eliminar este libro de tu estantería?</p>
+      <small>Todos sus datos modificados se perderán.</small>
       <div class="grupo-buttons">
         <input type="submit" name="eliminar" value="Confirmar">
         <input type="button" value="Cancelar">

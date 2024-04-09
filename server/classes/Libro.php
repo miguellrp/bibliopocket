@@ -164,8 +164,7 @@ class Libro {
         num_paginas      = :numPaginas,
         editorial       = :editorial,
         anho_publicacion = :anhoPublicacion,
-        estado          = :estado,
-        fecha_adicion    = :fechaAdicion
+        estado          = :estado
       WHERE id = :id");
 
       $query->execute(array(
@@ -178,7 +177,6 @@ class Libro {
         ":editorial"        => $this->getEditorial(),
         ":anhoPublicacion"  => $this->getAnhoPublicacion(),
         ":estado"           => $this->getEstado(),
-        ":fechaAdicion"     => $this->getFechaAdicion(),
         ":id"               => $this->getId()
       ));
     }

@@ -62,7 +62,7 @@ body {
 .container {
   display: none;
   align-items: center;
-  padding: 20px;
+  padding: 30px;
 
   background-color: var(--container-background);
   box-shadow: 0 0 10px 3px #00000035;
@@ -70,14 +70,24 @@ body {
   &[active] {
     display: flex;
   }
+
+  & h2, ul {
+    margin: unset;
+    padding: unset;
+  }
+
+  & li {
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: unset;
+    }
+  }
 }
 
 .detalles-cuenta {
   flex-direction: column;
-
-  & h2, ul {
-    margin: unset;
-  }
+  padding-inline: 60px;
 
   & .userpic {
     width: var(--ancho-userpic);
@@ -99,19 +109,14 @@ body {
     text-align: center;
     
     & li {
-      margin-top: 10px;
       cursor: pointer;
-    }
 
-    & :first-child {
-      margin-top: unset;
-    }
+      &:last-child {
+        margin-top: 40px;
 
-    & :last-child {
-      margin-top: 40px;
-
-      font-weight: bold;
-      color: var(--eliminar-cuenta-color);
+        font-weight: bold;
+        color: var(--eliminar-cuenta-color);
+      }
     }
   }
 }

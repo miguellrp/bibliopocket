@@ -309,7 +309,7 @@ html[data-theme="dark"] {
   }
 }
 
-#modificar-libro-modal, #nuevo-libro-modal {
+#datos-libro-modal {
   width: 70vw;
   height: 75vh;
   padding: 20px 30px;

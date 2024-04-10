@@ -1,5 +1,4 @@
-import * as modalesLibroCreado from "./modalesLibroCreado.js";
-import { generarModalNuevoLibro } from "./modalCrearLibro.js";
+import * as modalesEstanteria from "/bibliopocket/client/handlers/estanteriaModalsHandler.js";
 
 prepararListenersButtons();
 
@@ -16,8 +15,8 @@ function listenerModalBusquedaAPI () {
   const buscarLibroBtn = document.getElementById("busqueda-button");
 
   buscarLibroBtn.addEventListener("click", () => {
-    const modalBusquedaAPI = modalesLibroCreado.generarModalBusquedaAPI();
-    anhadirCierreModal(modalBusquedaAPI);
+    const modalBusquedaAPI = modalesEstanteria.getModalBusquedaAPI();
+    generarCierreModal(modalBusquedaAPI);
 
     modalBusquedaAPI.showModal()
   });
@@ -27,10 +26,8 @@ function listenerModalCrearLibro () {
   const nuevoLibroBtn = document.getElementById("nuevo-libro-button");
 
   nuevoLibroBtn.addEventListener("click", () => {
-    eliminarModalActivo();
-
-    const modalNuevoLibro = generarModalNuevoLibro();
-    anhadirCierreModal(modalNuevoLibro);
+    const modalNuevoLibro = modalesEstanteria.getModalDatosLibro();
+    generarCierreModal(modalNuevoLibro);
 
     const estadosLibroTags = modalNuevoLibro.querySelector(".grupo-estados-libro").querySelectorAll(":scope > input");
     estadosLibroTags.forEach((estadoLibroTag) => estadoLibroTag.addEventListener("click", listenersEstadosLibro));
@@ -47,10 +44,8 @@ function listenersModalEliminarLibro () {
     const idLibroSeleccionado = datosLibro.id.value;
 
     eliminarButton.addEventListener("click", () => {
-      eliminarModalActivo();
-
-      const modalEliminacion = modalesLibroCreado.generarModalEliminacion(idLibroSeleccionado);
-      anhadirCierreModal(modalEliminacion);
+      const modalEliminacion = modalesEstanteria.getModalEliminacion(idLibroSeleccionado);
+      generarCierreModal(modalEliminacion);
       modalEliminacion.showModal();
     });
   });
@@ -62,10 +57,8 @@ function listenersModalModificarLibro () {
     const libroVinculado = modificarButton.parentNode.parentNode;
 
     modificarButton.addEventListener("click", () => {
-      eliminarModalActivo();
-
-      const modalModificacion = modalesLibroCreado.generarModalModificacion(libroVinculado);
-      anhadirCierreModal(modalModificacion);
+      const modalModificacion = modalesEstanteria.getModalDatosLibro(libroVinculado);
+      generarCierreModal(modalModificacion);
       modalModificacion.querySelector("#titulo").blur();
 
       const estadosLibroTags = modalModificacion.querySelector(".grupo-estados-libro").querySelectorAll(":scope > input");
@@ -87,19 +80,11 @@ function listenersEstadosLibro () {
 }
 
 /* --- FUNCIONES COMPLEMENTARIAS --- */
-function anhadirCierreModal (modal) {
+function generarCierreModal (modal) {
   modal.addEventListener("click", event => {
     let modalBounds = modal.getBoundingClientRect();
     if ((event.clientX < modalBounds.left || event.clientX > modalBounds.right)
       || (event.clientY < modalBounds.top || event.clientY > modalBounds.bottom))
       modal.close();
   });
-}
-
-/* Con la finalidad de que no se vayan almacenando modales en el DOM, cada vez que se
-abre uno, se elimina el anterior que estuviese activo. */
-function eliminarModalActivo () {
-  const modalActivo = document.querySelector(".modal");
-
-  if (modalActivo != null) document.body.removeChild(modalActivo);
 }

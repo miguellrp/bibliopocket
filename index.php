@@ -188,7 +188,7 @@ if (isset($_POST["confirm-registro-check"]) && $_COOKIE["codigoGenerado"] == $_P
   </div>
   <small class="footer-inicio">Icons by: <a href="https://phosphoricons.com/" target="_blank">Phosphor Icons</a></small>
   <script src="client/handlers/registroHandler.js"></script>
-  <script src="client/handlers/modalHandler.js"></script>
+  <script src="client/handlers/landingModalsHandler.js"></script>
   <script src="client/handlers/themeHandler.js"></script>
 </body>
 

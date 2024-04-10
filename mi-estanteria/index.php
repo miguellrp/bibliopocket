@@ -44,7 +44,6 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
 </head>
-
 <body>
   <?php if (!isset($usuarioActivo)): ?>
     <div class="caja-contenido">

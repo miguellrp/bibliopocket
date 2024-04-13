@@ -81,7 +81,7 @@ function listenersEstadosLibro () {
 
 /* --- FUNCIONES COMPLEMENTARIAS --- */
 function generarCierreModal (modal) {
-  modal.addEventListener("click", event => {
+  modal.addEventListener("mousedown", event => {
     let modalBounds = modal.getBoundingClientRect();
     if ((event.clientX < modalBounds.left || event.clientX > modalBounds.right)
       || (event.clientY < modalBounds.top || event.clientY > modalBounds.bottom))

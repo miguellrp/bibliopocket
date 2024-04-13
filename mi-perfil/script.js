@@ -44,14 +44,12 @@ function prepararSeccionActivaListener () {
 }
 
 function prepararCambiarCorreoListener () {
+  const correoUsuario = document.querySelector("input[name='correo']").value;
   const formCambioCorreo = /* html */ `
-    <form name="cambio-correo"=>
-      <label for="correo-antiguo">Correo antigüo: 
-        <input type="text" id="correo-antiguo" name="correo-antiguo">
-      </label>
-      <label for="correo-nuevo">Nuevo correo: 
-        <input type="text" id="correo-nuevo" name="correo-nuevo">
-      </label>
+    <form name="cambio-correo" action="" method="POST">
+      <label for="correo">Correo de la cuenta:</label>
+      <input type="text" id="correo" name="correo-nuevo" value="${correoUsuario}">
+      <input type="submit" name="cambiar-correo" value="Actualizar correo">
     </form>
   `;
 
@@ -63,15 +61,17 @@ function prepararCambiarCorreoListener () {
   });
 }
 
+
 function prepararCambiarContrasenhaListener () {
   const formCambioContrasenha = /* html */ `
-    <form name="cambio-contrasenha">
-      <label for="contrasenha-antigua">Contraseña antigüa: 
-        <input type="text" id="correo-antigua" name="contrasenha-antigua">
-      </label>
-      <label for="contrasenha-nueva">Nueva contraseña: 
-        <input type="text" id="contrasenha-nueva" name="contrasenha-nueva">
-      </label>
+    <form name="cambio-contrasenha" action="" method="POST">
+      <label for="contrasenha-antigua">Contraseña antigüa:</label>
+      <input type="password" id="contrasenha-antigua" name="contrasenha-antigua">
+      <label for="contrasenha-nueva">Nueva contraseña:</label>
+      <input type="password" id="contrasenha-nueva" name="contrasenha-nueva">
+      <label for="contrasenha-nueva-confirmacion">Confirmar nueva contraseña:</label>
+      <input type="password" id="contrasenha-nueva-confirmacion" name="contrasenha-nueva-confirmacion">
+      <input type="submit" name="cambiar-contrasenha" value="Actualizar contraseña">
     </form>
   `;
 
@@ -89,8 +89,14 @@ function prepararRestablecerCuentaListener () {
       <p>¿Estás segur@ de que quieres restablecer tu cuenta?</p>
       <small>Todos los datos relativos a tu estantería se eliminarán.</small>
       <div class="grupo-buttons">
-        <input type="submit" name="Confirm" value="Confirmar">
-        <input type="button" value="Cancelar">
+        <input type="submit" name="restablecer-cuenta" value="Confirmar">
+        <custom-button
+          data-contenido="Cancelar"
+          background-color="var(--seccion-inactiva-background)"
+          font-color="var(--seccion-inactiva-foreground)"
+          with-shadow="false"
+          with-translation="false"
+        >
       </div>
       
     </form>
@@ -98,7 +104,7 @@ function prepararRestablecerCuentaListener () {
 
   opcionesConfiguracionTags[2].addEventListener("click", () => {
     const modalRestablecerCuenta = generarModal(formRestablecerCuenta);
-    const cierreButton = modalRestablecerCuenta.querySelector("input[type='button'");
+    const cierreButton = modalRestablecerCuenta.querySelector("custom-button");
     generarCierreModal(modalRestablecerCuenta, cierreButton);
 
     modalRestablecerCuenta.showModal();
@@ -109,10 +115,21 @@ function prepararEliminarCuentaListener () {
   const formEliminarCuenta = /* html */ `
     <form name="eliminar-cuenta" action="" method="POST">
       <p>¿Estás segur@ de que quieres eliminar tu cuenta?</p>
-      <small>Todos tus datos serán eliminados de la base de datos de <i>BiblioPocket</i>.</small>
+      <small><strong>Todos tus datos</strong> serán eliminados de la base de datos de <i>BiblioPocket</i>.</small>
       <div class="grupo-buttons">
-        <input type="submit" name="Confirm" value="Confirmar">
-        <input type="button" value="Cancelar">
+      <button type="submit" name="eliminar-cuenta" class="delete-button">
+        <svg class="button-icon">
+          <use xlink:href="/bibliopocket/client/assets/images/trash-icon.svg#trash-icon"></use>
+        </svg>
+          Eliminar cuenta
+      </button>
+      <custom-button
+        data-contenido="Cancelar"
+        background-color="var(--seccion-inactiva-background)"
+        font-color="var(--seccion-inactiva-foreground)"
+        with-shadow="false"
+        with-translation="false"
+      >
       </div>
       
     </form>
@@ -120,7 +137,7 @@ function prepararEliminarCuentaListener () {
 
   opcionesConfiguracionTags[3].addEventListener("click", () => {
     const modalEliminarCuenta = generarModal(formEliminarCuenta);
-    const cierreButton = modalEliminarCuenta.querySelector("input[type='button'");
+    const cierreButton = modalEliminarCuenta.querySelector("custom-button");
     generarCierreModal(modalEliminarCuenta, cierreButton);
 
     modalEliminarCuenta.showModal();
@@ -140,7 +157,7 @@ function generarModal (innerHTML) {
 }
 
 function generarCierreModal (modal, cierreButton) {
-  modal.addEventListener("click", event => {
+  modal.addEventListener("mousedown", event => {
     let modalBounds = modal.getBoundingClientRect();
     if ((event.clientX < modalBounds.left || event.clientX > modalBounds.right)
       || (event.clientY < modalBounds.top || event.clientY > modalBounds.bottom))

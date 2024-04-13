@@ -57,7 +57,7 @@ if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_COOKIE["codi
       <form action='".$_SERVER['PHP_SELF']."' method='POST'>
         <label for='codigo'>Introduce el código enviado a tu correo: </label>
         <input type='text' class='input-text' minlength=4 maxlength=4 id='codigo' name='codigo' required>
-        <input type='submit' class='submit-btn' name='confirm-registro-check'>
+        <input type='submit' class='submit-btn' name='confirm-registro-check' value='Enviar'>
         <input type='hidden' name='usuario' value='".$usuario."'>
         <input type='hidden' name='contrasenha' value='".$contrasenha."'>
         <input type='hidden' name='email' value='".$email."'>

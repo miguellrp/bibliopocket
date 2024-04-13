@@ -35,17 +35,23 @@ class Usuario {
   }
 
   private function getCamposDB() {
-    $id = $this->getId();
     $camposDB = [];
 
-    $queryDB = $this->conexionDB->conn->prepare("SELECT * FROM usuarios WHERE id = :id");
-    $queryDB->execute(array(":id" => $id));
-    
-    $camposDB["nombreUsuarioDB"]  = $queryDB->fetchColumn(1);
-    $camposDB["contrasenhaDB"]    = $queryDB->fetchColumn(2);
-    $camposDB["emailDB"]          = $queryDB->fetchColumn(3);
-    $camposDB["userPicDB"]        = $queryDB->fetchColumn(4);
-    $camposDB["ultimoLoginDB"]    = $queryDB->fetchColumn(5);
+    $queryDB = $this->conexionDB->conn->prepare("SELECT
+    nombre_usuario,
+    contrasenha_usuario,
+    email_usuario,
+    user_pic,
+    fecha_ultimo_login
+    FROM usuarios WHERE id = :id");
+    $queryDB->execute(array(":id" => $this->getId()));
+    $row = $queryDB->fetch();
+
+    $camposDB["nombreUsuarioDB"]  = $row[0];
+    $camposDB["contrasenhaDB"]    = $row[1];
+    $camposDB["emailDB"]          = $row[2];
+    $camposDB["userPicDB"]        = $row[3];
+    $camposDB["ultimoLoginDB"]    = $row[4];
 
     return $camposDB;
   }
@@ -88,7 +94,7 @@ class Usuario {
 
       if ($usuarioEncontrado == 1) {
         $passwordDB = $query->fetchColumn(1);
-        return password_verify($this->contrasenha, $passwordDB);
+        return password_verify($this->getContrasenha(), $passwordDB);
       }
     } catch (PDOException $exception) {
       echo "Ocurrió un error durante el login. ". $exception->getMessage();
@@ -99,19 +105,20 @@ class Usuario {
   function registrarUsuarioDB() {
     // ID único "seguro" a partir de: https://stackoverflow.com/questions/29235481/generate-a-readable-random-unique-id
     $idGenerado = join('-', str_split(bin2hex(openssl_random_pseudo_bytes(10)), 5));
-    $passHasheado = password_hash($this->contrasenha, PASSWORD_DEFAULT);
+    $passHasheado = password_hash($this->getContrasenha(), PASSWORD_DEFAULT);
 
     try {
       $query = $this->conexionDB->conn->prepare("INSERT INTO usuarios
-      (id, nombre_usuario, contrasenha_usuario, email_usuario, ultimo_login)
-      VALUES (:id, :nombreUsuario, :contrasenhaHash, :email, :ultimoLogin)");
+      (id, nombre_usuario, contrasenha_usuario, email_usuario, fecha_registro, fecha_ultimo_login)
+      VALUES (:id, :nombreUsuario, :contrasenhaHash, :email, :fechaRegistro, :fechaUltimoLogin)");
   
       $query->execute(array(
         ":id"               => $idGenerado,
-        ":nombreUsuario"    => $this->nombreUsuario,
+        ":nombreUsuario"    => $this->getNombreUsuario(),
         ":contrasenhaHash"  => $passHasheado,
-        ":email"            => $this->email,
-        ":ultimoLogin"      => date('d-m-Y H:i:s')
+        ":email"            => $this->getEmail(),
+        ":fechaRegistro"    => date("Y-m-d H:i:s"),
+        ":fechaUltimoLogin" => date("Y-m-d H:i:s")
       ));
     }
     catch (PDOException $exception) {
@@ -125,10 +132,10 @@ class Usuario {
   function setUltimoLoginDB() {
     try {
       $query = $this->conexionDB->conn->prepare("UPDATE usuarios
-        SET ultimo_login = NOW() WHERE id = :id");
+        SET fecha_ultimo_login = NOW() WHERE id = :id");
 
       $query->execute(array(":id" => $this->id));
-      $this->ultimoLogin = date("Y-m-d H:i:s");
+      $this->ultimoLogin = date("d-m-Y H:i:s");
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al actualizar la fecha del último login. ". $exception->getMessage();
@@ -188,6 +195,82 @@ class Usuario {
     }
   }
 
+  function actualizarNombreUsuario($nuevoNombreUsuario) {
+    try {
+      $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
+        nombre_usuario = :nuevoNombreUsuario
+        WHERE id = :id");
+      $query->execute(array(
+        ":id"  => $this->getId(),
+        ":nuevoNombreUsuario" => $nuevoNombreUsuario
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar actualizar el nombre de usuario. ". $exception->getMessage();
+    }
+  }
+
+  function actualizarCorreo($nuevoEmail) {
+    try {
+      $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
+        email_usuario = :nuevoEmail
+        WHERE id = :id");
+      $query->execute(array(
+        ":id"  => $this->getId(),
+        ":nuevoEmail" => $nuevoEmail
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar actualizar el correo. ". $exception->getMessage();
+    }
+  }
+
+  function actualizarContrasenha($contrasenhaAntigua, $nuevaContrasenha) {
+    try {
+      if (password_verify($contrasenhaAntigua, $this->getContrasenha())) {
+        $nuevaContrasenhaHasheada = password_hash($nuevaContrasenha, PASSWORD_DEFAULT);
+        $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
+        contrasenha_usuario = :nuevaContrasenha
+        WHERE id = :id");
+      $query->execute(array(
+        ":id"  => $this->getId(),
+        ":nuevaContrasenha" => $nuevaContrasenhaHasheada
+      ));
+      } else {
+        throw new Exception("La contraseña antigüa introducida es incorrecta.");
+      }
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar actualizar la contraseña. ". $exception->getMessage();
+    }
+  }
+
+  function restablecerCuenta() {
+    try {
+      $query = $this->conexionDB->conn->prepare("DELETE from libros
+        WHERE id_usuario = :idUsuario");
+      $query->execute(array(
+        ":idUsuario"  => $this->getId()
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al tratar de restablecer la cuenta. ". $exception->getMessage();
+    }
+  }
+
+  function eliminarCuenta() {
+    try {
+      $query = $this->conexionDB->conn->prepare("DELETE from usuarios
+        WHERE id = :id");
+      $query->execute(array(
+        ":id"  => $this->getId()
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al tratar de eliminar la cuenta. ". $exception->getMessage();
+    }
+  }
+
 
   /* Métodos para analíticas */
   function getCountLibrosPorEstado($estado) {
@@ -216,6 +299,20 @@ class Usuario {
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al recoger el número de libros registrados '. ". $exception->getMessage();
+    }
+  }
+
+  function getDiasRegistrado() {
+    try {
+      $query = $this->conexionDB->conn->prepare("SELECT TIMEDIFF(now(), fecha_registro) from usuarios
+        WHERE id = :id");
+      $query->execute(array(
+        ":id"  => $this->getId()
+      ));
+      return $query->fetchColumn();
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al contabilizar el número de días registrado '. ". $exception->getMessage();
     }
   }
 }

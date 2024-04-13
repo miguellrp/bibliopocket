@@ -51,8 +51,6 @@ html[data-theme="dark"] {
   font-family: LTCushion;
 }
 
-
-
 body {
   margin: 0;
   display: flex;
@@ -126,6 +124,22 @@ a {
     &.sun {
       transform: rotate(180deg);
     }
+  }
+}
+
+input[type="text"], input[type="password"] {
+  display: flex;
+  padding: 7px;
+
+  font-size: 15px;
+  outline: none;
+  border: 2px solid var(--primary-color);
+  background-color: color-mix(in srgb, var(--secondary-lighten-color), white 30%);
+
+  transition: .6s ease;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3.5px var(--primary-color);
   }
 }
 

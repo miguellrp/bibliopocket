@@ -8,9 +8,10 @@ CREATE TABLE usuarios (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
   nombre_usuario VARCHAR(128),
   contrasenha_usuario VARCHAR(70),
-  email_usuario VARCHAR(255),
+  email_usuario VARCHAR(255) UNIQUE NOT NULL,
   user_pic VARCHAR(128),
-  ultimo_login DATETIME NOT NULL
+  fecha_registro DATETIME NOT NULL,
+  fecha_ultimo_login DATETIME NOT NULL
 );
 
 -- Libros (personalizados)

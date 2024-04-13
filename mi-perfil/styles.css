@@ -1,8 +1,10 @@
 @import url(/bibliopocket/client/styles/globals.css);
 
 :root {
-  --ancho-userpic: 128px;
-  --alto-userpic: 128px;
+  --ancho-userpic-configuracion: 128px;
+  --alto-userpic-configuracion: 128px;
+  --ancho-userpic-detalles: 156px;
+  --alto-userpic-detalles: 156px;
 }
 
 html[data-theme="dark"] {
@@ -90,19 +92,34 @@ body {
   padding-inline: 60px;
 
   & .userpic {
-    width: var(--ancho-userpic);
-    max-width: var(--ancho-userpic);
-    height: var(--alto-userpic);
-    max-height: var(--alto-userpic);
+    width: var(--ancho-userpic-detalles);
+    max-width: var(--ancho-userpic-detalles);
+    height: var(--alto-userpic-detalles);
+    max-height: var(--alto-userpic-detalles);
 
     border: 3px solid var(--primary-color);
     border-radius: 10%;
     margin: 20px 0;
   }
+
+  & label {
+    &::before {
+      content: "•";
+      margin-right: 7px;
+    }
+  
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .configuracion {
   flex-direction: column;
+
+  & button[type="submit"] {
+    margin-top: 20px;
+  }
 
   & ul {
     list-style-type: none;
@@ -153,6 +170,7 @@ body {
       height: var(--alto-userpic);
       display: flex;
       flex-direction: column;
+      margin-top: 20px;
       justify-content: space-evenly;
     }
 
@@ -162,18 +180,7 @@ body {
   }
 }
 
-label {
-  &::before {
-    content: "•";
-    margin-right: 7px;
-  }
-
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-}
-
-button[name="modificacion-datos-user"] {
+button[name="modificacion-datos-user"], button, input[type="submit"] {
   display: flex;
   align-items: center;
   column-gap: 7px;
@@ -183,7 +190,7 @@ button[name="modificacion-datos-user"] {
 
   outline: none;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
 
   font-weight: bold;
   font-size: 16px;
@@ -193,33 +200,34 @@ button[name="modificacion-datos-user"] {
   cursor: pointer;
   transition: .3s ease;
 
-  &:hover {
-    background-color: color-mix(in srgb, var(--primary-color), black 10%);
-  }
-
-  & .disquete.icon {
+  & .button-icon {
     margin: unset;
     margin-left: -5px;
     width: 32px;
     height: 32px;
     --color: var(--secondary-lighten-color);
   }
+
+  &:active, &:focus-visible {
+    background-color: color-mix(in srgb, var(--primary-color) 75%, black);
+  }
 }
+
 
 
 .userpic {
   position: relative;
 
-  width: var(--ancho-userpic);
-  max-width: var(--ancho-userpic);
-  height: var(--alto-userpic);
-  max-height: var(--alto-userpic);
+  width: var(--ancho-userpic-configuracion);
+  max-width: var(--ancho-userpic-configuracion);
+  height: var(--alto-userpic-configuracion);
+  max-height: var(--alto-userpic-configuracion);
 
   & .preview {
-    width: var(--ancho-userpic);
-    max-width: var(--ancho-userpic);
-    height: var(--alto-userpic);
-    max-height: var(--alto-userpic);
+    width: var(--ancho-userpic-configuracion);
+    max-width: var(--ancho-userpic-configuracion);
+    height: var(--alto-userpic-configuracion);
+    max-height: var(--alto-userpic-configuracion);
 
     border: 3px solid var(--primary-color);
     border-radius: 100%;
@@ -253,3 +261,33 @@ button[name="modificacion-datos-user"] {
     }
   }
 }
+
+.grupo-buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+
+  & button {
+    border-radius: 5px;
+  }
+
+  & .button-icon {
+    height: 24px !important;
+    width: 24px !important;
+  }
+
+  & .delete-button {
+    background-color: var(--eliminar-cuenta-color) !important;
+    transition: .2s ease;
+  
+    &:active, &:focus-visible {
+      background-color: color-mix(in srgb, var(--eliminar-cuenta-color), black 30%) !important;
+    }
+  }
+
+  & .cancel-button {
+    border-radius: 5px;
+    background-color: var(--seccion-inactiva-background);
+  }
+}
+

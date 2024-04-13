@@ -44,7 +44,7 @@ if (isset($_SESSION["usuarioActivo"])) {
 </head>
 
 <body>
-  <?php if (!isset($_SESSION["usuarioActivo"])): ?>
+  <?php if (!isset($usuarioActivo)): ?>
     <div class="caja-contenido">
       <h2>👀 ¿A dónde quieres ir?</h2>
       <h3>Parece que primero tienes que <a href="../index.php">iniciar sesión</a></h3>
@@ -53,7 +53,7 @@ if (isset($_SESSION["usuarioActivo"])) {
     <custom-header pagina-activa="inicio"></custom-header>
     <h2>Bienvenid@ de nuevo,
       <a class="username-title" href="/bibliopocket/mi-perfil">
-        <?= $_SESSION["usuarioActivo"]["nombreUsuario"] ?>
+        <?= $usuarioActivo->getNombreUsuario() ?>
       </a>
     </h2>
     <h3>Tus últimos libros añadidos</h3>

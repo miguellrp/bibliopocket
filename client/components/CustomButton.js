@@ -7,8 +7,12 @@ class CustomButton extends HTMLElement {
   connectedCallback () {
     const contenido = this.getAttribute("data-contenido");
     const backgroundColor = this.getAttribute("background-color") || "transparent";
-    const borderColor = this.getAttribute("border-color") || "var(--primary-color)";
+    const borderColor = this.getAttribute("border-color") || "transparent";
     const fontColor = this.getAttribute("font-color") || "var(--primary-color)";
+    const fontSize = this.getAttribute("font-size") || "14px";
+
+    const withTranslation = (this.getAttribute("with-translation") == "false") ? "none" : "translate(2px, 2px)";
+    const withShadow = (this.getAttribute("with-shadow") == "false") ? "none" : "4px 4px 0 color-mix(in srgb, var(--background-color) 1%, black 55%)";
 
     this.shadowRoot.innerHTML = /* html */`
     <style>
@@ -17,12 +21,12 @@ class CustomButton extends HTMLElement {
         outline: none;
         border: 2px solid ${borderColor};
         border-radius: 5px;
-        box-shadow: 4px 4px 0 color-mix(in srgb, var(--background-color) 1%, black 55%);
+        box-shadow: ${withShadow};
         margin: 0 10px;
         text-shadow: none;
 
         font-family: LTCushion;
-        font-size: 14px;
+        font-size: ${fontSize};
         font-weight: bold;
         color: ${fontColor};
         background-color: ${backgroundColor};
@@ -30,17 +34,10 @@ class CustomButton extends HTMLElement {
         transition: .2s ease;
         cursor: pointer;
 
-        &:active{
-          transform: translate(2px, 2px);
+        &:active, &:focus-visible{
+          transform: ${withTranslation};
           box-shadow:0 0 0 var(--background-color);
-          background-color: color-mix(in srgb, ${backgroundColor} 85%, black);
-        }
-
-        &:focus-visible {
-          transform: translate(2px, 2px);
-          box-shadow:0 0 0 var(--background-color);
-
-          background-color: color-mix(in srgb, ${backgroundColor} 85%, black);
+          background-color: color-mix(in srgb, ${backgroundColor} 80%, black);
         }
       }
     </style>

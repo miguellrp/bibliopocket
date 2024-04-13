@@ -340,23 +340,9 @@ html[data-theme="dark"] {
       text-align: right;
     }
 
-    & input[type="text"] {
-      width: 98%;
-      padding: 7px;
-    
-      font-size: 15px;
-      outline: none;
-      border: 2px solid var(--primary-color);
-      background-color: color-mix(in srgb, var(--secondary-lighten-color), white 30%);
-    
-      transition: .6s ease;
-    
-      &:focus-visible {
-        box-shadow: 0 0 0 3.5px var(--primary-color);
-      }
-    }
-
     & .grupo-estados-libro {
+      display: flex;
+
       & input {
         visibility: hidden;
       }
@@ -394,7 +380,6 @@ html[data-theme="dark"] {
     }
 
     & textarea {
-      width: 98%;
       min-height: 1rem;
       max-height: 14rem;
       height: 4rem;
@@ -464,6 +449,29 @@ html[data-theme="dark"] {
   
     & label::before {
       content: none;
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  #datos-libro-modal > form  {
+    display: flex;
+    flex-direction: column;
+
+    & .datos-cabecera {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+
+      & label {
+        justify-content: center;
+      }
+    }
+
+    & input, textarea {
+      margin: unset;
+      width: 100%;
     }
   }
 }

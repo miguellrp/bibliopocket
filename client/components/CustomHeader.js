@@ -151,7 +151,7 @@ class CustomHeader extends HTMLElement {
         header {
           & .menu-items {
             flex-direction: column;
-            position: absolute;
+            position: fixed;
             margin: 0;
             padding: 0 30px;
             top: 0;
@@ -179,7 +179,7 @@ class CustomHeader extends HTMLElement {
 
           & input[type="checkbox"] {
             display: block;
-            position: absolute;
+            position: fixed;
             top: 25px;
             right: 21px;
             
@@ -192,7 +192,13 @@ class CustomHeader extends HTMLElement {
 
           & .hamburger-icon {
             display: flex;
+            position: fixed;
           }
+        }
+
+        input[type="checkbox"]:not(:checked), input[type="checkbox"]:not(:checked) ~ .hamburger-icon {
+          position: absolute;
+          transition: .3s ease;
         }
       }
   </style>

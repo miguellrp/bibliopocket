@@ -4,7 +4,15 @@ include_once "../server/classes/Estanteria.php";
 include_once "../server/classes/Libro.php";
 include_once "../server/classes/Usuario.php";
 
+
 $conn = new Conector;
+
+// Para controlar feedback en cambios hechos por la persona usuaria:
+if (!isset($_SESSION["showToastOk"])) $_SESSION["showToastOk"] = false;
+if (!isset($_SESSION["showToastError"])) $_SESSION["showToastError"] = false;
+if (!isset($_SESSION["showToastInfo"])) $_SESSION["showToastInfo"] = false;
+
+
 
 if (isset($_SESSION["usuarioActivo"])) 
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
@@ -15,11 +23,14 @@ if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
   $estanteriaDB = new Estanteria($usuarioActivo->getId());
 
   // Si el libro a añadir no está guardado todavía, se añade a su estantería:
-  if (!$usuarioActivo->esLibroGuardado($nuevoLibro))
+  if (!$usuarioActivo->esLibroGuardado($nuevoLibro)) {
     $estanteriaDB->registrarLibro($nuevoLibro);
-  
-  
+    $_SESSION["showToastOk"] = true;
+  } else {
+    $_SESSION["showToastInfo"] = true;
+  }
   header("Location: index.php");
+  session_write_close();
 }
 
 if (isset($_POST["modificar-libro"])) {
@@ -27,11 +38,18 @@ if (isset($_POST["modificar-libro"])) {
   $libroSeleccionado = new Libro($idLibro);
   $libroSeleccionado->modificarLibroDB();
 
+  $_SESSION["showToastOk"] = true;
   header("Location: index.php");
+  session_write_close();
 }
 
-if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
+if (isset($_POST["eliminar"])) {
+  $conn->eliminarLibro($_POST["idLibroEstante"]);
 
+  $_SESSION["showToastOk"] = true;
+  header("Location: index.php");
+  session_write_close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es-ES">
@@ -43,6 +61,9 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
   <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
+  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
+  <script src="/bibliopocket/client/components/CustomButton.js"></script>
+  <script src="/bibliopocket/client/components/CustomToast.js"></script>
 </head>
 <body>
   <?php if (!isset($usuarioActivo)): ?>
@@ -113,13 +134,42 @@ if (isset($_POST["eliminar"])) $conn->eliminarLibro($_POST["idLibroEstante"]);
         }
       ?>
     </div>
-
   <?php endif; ?>
-  <script src="./script.js" type="module"></script>
-  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
-  <script src="/bibliopocket/client/components/CustomButton.js"></script>
+    <custom-toast></custom-toast>
+
+    <?php
+      $toastOk = $_SESSION["showToastOk"];
+      $toastError = $_SESSION["showToastError"];
+      $toastInfo = $_SESSION["showToastInfo"];
+        
+      if ($toastOk || $toastError || $toastInfo) {
+        if ($toastOk) {
+          $mensaje = "Se ha añadido el libro a tu estantería";
+          $mensaje = "Se han actualizado los datos del libro correctamente";
+          $tipo = "ok";
+        } elseif ($toastError) {
+          $mensaje = "No se han podido guardar los cambios";
+          $tipo = "error";
+        } else {
+          $mensaje = "Ya has añadido este libro a tu estantería";
+          $tipo = "info";
+        }
+        
+        echo '<script>
+          const toast = document.querySelector("custom-toast");
+          toast.setMensaje("'.$mensaje.'");
+          toast.setTipo("'.$tipo.'");
+      
+          toast.showToast();
+        </script>';
+      }
+
+      unset($_SESSION["showToastOk"], $_SESSION["showToastError"], $_SESSION["showToastInfo"]);
+    ?>
+
   <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
   <script src="/bibliopocket/client/handlers/APIBooksHandler.js" type="module"></script>
+  <script src="./script.js" type="module"></script>
 </body>
 
 </html>

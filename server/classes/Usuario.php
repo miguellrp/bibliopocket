@@ -153,12 +153,12 @@ class Usuario {
         ":user_pic" => $userPicPath,
         ":id"       => $this->id
       ));
+      return true;
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al guardar la nueva imagen. ". $exception->getMessage();
+      return false;
     }
-  
-    return true;
   }
 
   function getUserPicPathDB() {
@@ -204,9 +204,11 @@ class Usuario {
         ":id"  => $this->getId(),
         ":nuevoNombreUsuario" => $nuevoNombreUsuario
       ));
+      return true;
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al intentar actualizar el nombre de usuario. ". $exception->getMessage();
+      return false;
     }
   }
 
@@ -219,9 +221,12 @@ class Usuario {
         ":id"  => $this->getId(),
         ":nuevoEmail" => $nuevoEmail
       ));
+
+      return true;
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al intentar actualizar el correo. ". $exception->getMessage();
+      return false;
     }
   }
 
@@ -236,8 +241,9 @@ class Usuario {
         ":id"  => $this->getId(),
         ":nuevaContrasenha" => $nuevaContrasenhaHasheada
       ));
+      return true;
       } else {
-        throw new Exception("La contraseña antigüa introducida es incorrecta.");
+        return false;
       }
     }
     catch (PDOException $exception) {

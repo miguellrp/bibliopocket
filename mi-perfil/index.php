@@ -2,7 +2,16 @@
 session_start();
 include_once "../server/classes/Usuario.php";
 
-$seccionActiva = 0;
+// Para conservar la sección activa dentro de "Mi perfil"
+if (!isset($_SESSION["seccionActiva"])) $_SESSION["seccionActiva"] = 0;
+
+if(!isset($toastOk)) $toastOk = false;
+if(!isset($toastError)) $toastError = false;
+
+// Para controlar feedback en cambios hechos por la persona usuaria:
+if (!isset($_SESSION["showToastOk"])) $_SESSION["showToastOk"] = false;
+if (!isset($_SESSION["showToastError"])) $_SESSION["showToastError"] = false;
+
 if (isset($_SESSION["usuarioActivo"]))
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
 
@@ -17,43 +26,68 @@ if (isset($usuarioActivo)) {
       $rutaImagen = "/bibliopocket/client/assets/images/user-pics/" . $nombreArchivoImagen;
   
       move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen);
-      $usuarioActivo->setUserPicPathDB($rutaImagen);
-      header("Location: index.php");
+      if($usuarioActivo->setUserPicPathDB($rutaImagen)) {
+        $_SESSION["showToastOk"] = true;
+      }
     }
 
     if (isset($_POST["username"]) && ($_POST["username"]) != $usuarioActivo->getNombreUsuario()) {
       $usuarioActivo->actualizarNombreUsuario($_POST["username"]);
-      header("Location: index.php");
+      $_SESSION["showToastOk"] = true;
     }
 
-    $seccionActiva = 1;
+    $_SESSION["seccionActiva"] = 1;
+    header("Location: index.php");
+    session_write_close();
   }
 
   if (isset($_POST["cambiar-correo"])) {
-    $usuarioActivo->actualizarCorreo($_POST["correo-nuevo"]);
-    header("Location: index.php");
+    if ($_POST["correo-nuevo"] != $usuarioActivo->getEmail()) {
+      if ($usuarioActivo->actualizarCorreo($_POST["correo-nuevo"])) {
+        $_SESSION["showToastOk"] = true;
+      } else {
+        $_SESSION["showToastError"] = true;
+      }
+  
+      $_SESSION["seccionActiva"] = 1;
+      header("Location: index.php");
+      session_write_close();
+    }
   }
 
   if (isset($_POST["cambiar-contrasenha"])) {
-    if ($_POST["contrasenha-nueva"] === $_POST["contrasenha-nueva-confirmacion"])
-    $contrasenhaAntigua = $_POST["contrasenha-antigua"];
-    $contrasenhaNueva = $_POST["contrasenha-nueva"];
+    if ($_POST["contrasenha-nueva"] === $_POST["contrasenha-nueva-confirmacion"]) {
+      $contrasenhaAntigua = $_POST["contrasenha-antigua"];
+      $contrasenhaNueva = $_POST["contrasenha-nueva"];
 
+      if ($usuarioActivo->actualizarContrasenha($contrasenhaAntigua, $contrasenhaNueva)) {
+        $_SESSION["showToastOk"] = true;
+      } else {
+        $_SESSION["showToastError"] = true;
+      }
 
-    $usuarioActivo->actualizarContrasenha($contrasenhaAntigua, $contrasenhaNueva);
-    header("Location: index.php");
+      $_SESSION["seccionActiva"] = 1;
+      header("Location: index.php");
+      session_write_close();
+    }
   }
   
   if (isset($_POST["restablecer-cuenta"])) {
     $usuarioActivo->restablecerCuenta();
+
+    $_SESSION["showToastOk"] = "true";
+    $_SESSION["seccionActiva"] = 1;
     header("Location: index.php");
+    session_write_close();
   }
 
   
   if (isset($_POST["eliminar-cuenta"])) {
     unset($_SESSION["usuarioActivo"]);
     $usuarioActivo->eliminarCuenta();
+
     header("Location: /bibliopocket/index.php");
+    session_write_close();
   }
 }
 ?>
@@ -67,6 +101,9 @@ if (isset($usuarioActivo)) {
   <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
+  <script src="/bibliopocket/client/components/CustomButton.js"></script>
+  <script src="/bibliopocket/client/components/CustomToast.js"></script>
 </head>
 
 <body>
@@ -78,11 +115,11 @@ if (isset($usuarioActivo)) {
   <?php else: ?>
     <custom-header pagina-activa="mi-perfil"></custom-header>
     <nav class="nav-perfil">
-      <input type="button" value="Detalles de la cuenta" <?= $seccionActiva == 0 ? "active" : null ?>>
-      <input type="button" value="Configuración" <?= $seccionActiva == 1 ? "active" : null ?>>
+      <input type="button" value="Detalles de la cuenta" <?= $_SESSION["seccionActiva"] == 0 ? "active" : null ?>>
+      <input type="button" value="Configuración" <?= $_SESSION["seccionActiva"] == 1 ? "active" : null ?>>
     </nav>
 
-    <section class="detalles-cuenta container" <?= $seccionActiva == 0 ? "active" : null ?> >
+    <section class="detalles-cuenta container" <?= $_SESSION["seccionActiva"] == 0 ? "active" : null ?> >
       <h2>Tus estadísticas</h2>
       <img class="userpic" src="<?= $usuarioActivo->getUserPicPathDB() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
       <ul>
@@ -98,9 +135,8 @@ if (isset($usuarioActivo)) {
       </ul>
     </section>
 
-
-    <section class="configuracion container" <?= $seccionActiva == 1 ? "active" : null ?>>
-      <form class="datos-user" action="" method="POST" enctype="multipart/form-data">
+    <section class="configuracion container" <?= $_SESSION["seccionActiva"] == 1 ? "active" : null ?>>
+      <form class="datos-user" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
         <div class="form-fields">
           <div class="userpic">
             <img src="<?= $usuarioActivo->getUserPicPathDB() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
@@ -132,10 +168,35 @@ if (isset($usuarioActivo)) {
         <li>Eliminar cuenta</li>
       </ul>
     </section>
-
   <?php endif; ?>
-  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
-  <script src="/bibliopocket/client/components/CustomButton.js"></script>
+    <custom-toast></custom-toast>
+
+  <?php
+      $toastOk = $_SESSION["showToastOk"];
+      $toastError = $_SESSION["showToastError"];
+
+      if ($toastOk || $toastError) {
+        if ($toastOk) {
+          $mensaje = "Se han guardado los cambios correctamente";
+          $tipo = "ok";
+        } else {
+          $mensaje = "No se han podido guardar los cambios";
+          $tipo = "error";
+        }
+
+      echo '<script>
+        const toast = document.querySelector("custom-toast");
+        toast.setMensaje("'.$mensaje.'");
+        toast.setTipo("'.$tipo.'");
+
+        toast.showToast();
+      </script>';
+      }
+
+      unset($_SESSION["showToastOk"], $_SESSION["showToastError"]);
+    ?>
+
+
   <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
   <script src="/bibliopocket/client/handlers/previewHandler.js" type="module"></script>
   <script src="script.js" type="module"></script>

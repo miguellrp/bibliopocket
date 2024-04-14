@@ -46,7 +46,7 @@ function prepararSeccionActivaListener () {
 function prepararCambiarCorreoListener () {
   const correoUsuario = document.querySelector("input[name='correo']").value;
   const formCambioCorreo = /* html */ `
-    <form name="cambio-correo" action="" method="POST">
+    <form name="cambio-correo" action="" method="POST" autocomplete="off">
       <label for="correo">Correo de la cuenta:</label>
       <input type="text" id="correo" name="correo-nuevo" value="${correoUsuario}">
       <input type="submit" name="cambiar-correo" value="Actualizar correo">
@@ -64,7 +64,7 @@ function prepararCambiarCorreoListener () {
 
 function prepararCambiarContrasenhaListener () {
   const formCambioContrasenha = /* html */ `
-    <form name="cambio-contrasenha" action="" method="POST">
+    <form name="cambio-contrasenha" action="" method="POST" autocomplete="off">
       <label for="contrasenha-antigua">Contraseña antigüa:</label>
       <input type="password" id="contrasenha-antigua" name="contrasenha-antigua">
       <label for="contrasenha-nueva">Nueva contraseña:</label>

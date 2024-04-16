@@ -43,7 +43,7 @@ if (isset($_POST["modificar-libro"])) {
   session_write_close();
 }
 
-if (isset($_POST["eliminar"])) {
+if (isset($_POST["eliminar-libro"])) {
   $conn->eliminarLibro($_POST["idLibroEstante"]);
 
   $_SESSION["showToastOk"] = true;

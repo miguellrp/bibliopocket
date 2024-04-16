@@ -72,9 +72,9 @@ function listenersModalModificarLibro () {
 function listenersEstadosLibro () {
   const estadosTags = this.parentNode.querySelectorAll("input[type='radio']");
 
-  this.setAttribute("checked", "true");
+  this.setAttribute("checked", "");
   estadosTags.forEach((estadoTag) => {
-    if (estadoTag != this) estadoTag.setAttribute("checked", "false")
+    if (estadoTag != this) estadoTag.removeAttribute("checked");
   });
 
 }

@@ -354,8 +354,11 @@ html[data-theme="dark"] {
         opacity: 0.4;
       }
       
-      & input[type="radio"][checked="true"]+ label {
+      & input[type="radio"] + label {
         transition: .6s ease;
+      }
+      
+      & input[type="radio"]:checked+ label {
         opacity: 1;
         filter: brightness(1.25);
       }

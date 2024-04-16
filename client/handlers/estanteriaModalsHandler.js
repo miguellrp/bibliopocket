@@ -136,7 +136,7 @@ function generarFormEliminacion () {
       <p>¿Estás segur@ de que quieres eliminar este libro de tu estantería?</p>
       <small>Todos sus datos modificados se perderán.</small>
       <div class="grupo-buttons">
-        <input type="submit" name="eliminar" value="Confirmar">
+        <input type="submit" name="eliminar-libro" value="Confirmar">
         <input type="button" value="Cancelar">
       </div>
     </form>
@@ -225,9 +225,9 @@ function actualizarDataForm (tipoForm, libro) {
   camposForm.editorial.value = dataForm.editorialLibro;
   camposForm.anhoPublicacion.value = dataForm.anhoPublicacionLibro;
 
-  camposForm.estadoLeido.setAttribute("checked", dataForm.estadoLibro === "Leido");
-  camposForm.estadoLeyendo.setAttribute("checked", dataForm.estadoLibro === "Leyendo");
-  camposForm.estadoPendiente.setAttribute("checked", dataForm.estadoLibro === "Pendiente");
+  if (dataForm.estadoLibro === "Leido") camposForm.estadoLeido.setAttribute("checked", "");
+  if (dataForm.estadoLibro === "Leyendo") camposForm.estadoLeyendo.setAttribute("checked", "");
+  if (dataForm.estadoLibro === "Pendiente") camposForm.estadoPendiente.setAttribute("checked", "");
 
   // TODO: Categorias libro
   getSubmitButtonForm();

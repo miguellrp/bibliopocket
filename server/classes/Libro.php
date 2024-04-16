@@ -50,7 +50,7 @@ class Libro {
       $datosLibro["anhoPublicacion"]  = $camposDB["anhoPublicacionDB"];
       $datosLibro["enlaceAPI"]        = $camposDB["enlaceAPIDB"];
       $datosLibro["estado"]           = $camposDB["estadoDB"];
-      $datosLibro["fechaAdicion"]     = $camposDB["fechaAdicion"];
+      $datosLibro["fechaAdicion"]     = $camposDB["fechaAdicionDB"];
       foreach($camposDB["categoriasDB"] as $categoriaDB) {
         array_push($datosLibro["categorias"], $categoriaDB);
       }
@@ -90,7 +90,7 @@ class Libro {
     $camposDB["anhoPublicacionDB"]  = $query["anho_publicacion"];
     $camposDB["enlaceAPIDB"]        = $query["enlace_API"];
     $camposDB["estadoDB"]           = $query["estado"];
-    $camposDB["fechaAdicion"]       = $query["fecha_adicion"];
+    $camposDB["fechaAdicionDB"]     = $query["fecha_adicion"];
     $camposDB["categoriasDB"]       = [];
     foreach($categoriasDB as $categoriaDB) {
       array_push($camposDB["categoriasDB"], $categoriaDB);
@@ -156,15 +156,15 @@ class Libro {
   function modificarLibroDB() {
     try {
       $query = $this->conexionDB->conn->prepare("UPDATE libros SET
-        titulo          = :titulo,
-        subtitulo       = :subtitulo,
-        autoria         = :autoria,
-        descripcion     = :descripcion,
-        portada         = :portada,
-        num_paginas      = :numPaginas,
-        editorial       = :editorial,
-        anho_publicacion = :anhoPublicacion,
-        estado          = :estado
+        titulo            = :titulo,
+        subtitulo         = :subtitulo,
+        autoria           = :autoria,
+        descripcion       = :descripcion,
+        portada           = :portada,
+        num_paginas       = :numPaginas,
+        editorial         = :editorial,
+        anho_publicacion  = :anhoPublicacion,
+        estado            = :estado
       WHERE id = :id");
 
       $query->execute(array(

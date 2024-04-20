@@ -124,7 +124,7 @@ if (isset($usuarioActivo)) {
       <img class="userpic" src="<?= $usuarioActivo->getUserPicPathDB() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
       <ul>
         <li>Total de libros leídos:
-          <span class="detalle-user"><?= $usuarioActivo->getCountLibrosPorEstado("Leido") ?></span>
+          <span class="detalle-user"><?= $usuarioActivo->getCountLibrosPorEstado(2) ?></span>
         </li>
         <li>Total de libros añadidos a la estantería:
           <span class="detalle-user"><?= $usuarioActivo->getCountLibrosRegistrados() ?></span>

@@ -85,7 +85,6 @@ function generarForm (libro) {
   return `
     <form action='' method='POST'>
       <input type='submit' name='anhadir-libro' value="Añadir" class='add-btn'>
-      <input type='hidden' name='id' value='${libro["id"]}'>
       <input type='hidden' name='titulo' value='${libro["titulo"]}'>
       <input type='hidden' name='subtitulo' value='${libro["subtitulo"]}'>
       <input type='hidden' name='portada' value='${libro["portada"]}'>

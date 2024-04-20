@@ -63,6 +63,10 @@ body {
   transition: all .2s ease;
 }
 
+.hidden {
+  display: none;
+}
+
 h1 {
   font-size: 45px;
   letter-spacing: -1px;

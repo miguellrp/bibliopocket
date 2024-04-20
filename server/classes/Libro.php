@@ -1,5 +1,6 @@
 <?php
-include_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/handlers/Util.php");
 
 class Libro {
   private $id;
@@ -13,14 +14,13 @@ class Libro {
   private $anhoPublicacion;
   private $enlaceAPI;
   private $estado;
-  private $categorias;
   private $fechaAdicion;
   private $conexionDB;
 
   function __construct($id) {
     $this->conexionDB = new Conector;
-    $this->id         = $id;
-    $datosLibro = [];
+    $this->id         = $id??Util::generarId();
+    $datosLibro       = [];
 
     // Cuando se crea desde un form (Google API, libro desde 0...):
     if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"]) || isset($_POST["modificar-libro"])) {
@@ -51,9 +51,6 @@ class Libro {
       $datosLibro["enlaceAPI"]        = $camposDB["enlaceAPIDB"];
       $datosLibro["estado"]           = $camposDB["estadoDB"];
       $datosLibro["fechaAdicion"]     = $camposDB["fechaAdicionDB"];
-      foreach($camposDB["categoriasDB"] as $categoriaDB) {
-        array_push($datosLibro["categorias"], $categoriaDB);
-      }
     }
     $this->titulo           = $datosLibro["titulo"];
     $this->subtitulo        = $datosLibro["subtitulo"];
@@ -76,10 +73,6 @@ class Libro {
     $query->execute(array(":id" => $id));
     $query = $query->fetch(PDO::FETCH_ASSOC);
 
-    $querycategorias = $this->conexionDB->conn->prepare("SELECT tc.nombre FROM categorias tc JOIN libros_categorias tlc ON tlc.id_categoria = tc.id WHERE id_libro = :id");
-    $querycategorias->execute(array(":id" => $id));
-    $categoriasDB = $querycategorias->fetchAll(PDO::FETCH_COLUMN);
-
     $camposDB["tituloDB"]           = $query["titulo"];
     $camposDB["subtituloDB"]        = $query["subtitulo"];
     $camposDB["autoriaDB"]          = $query["autoria"];
@@ -91,10 +84,6 @@ class Libro {
     $camposDB["enlaceAPIDB"]        = $query["enlace_API"];
     $camposDB["estadoDB"]           = $query["estado"];
     $camposDB["fechaAdicionDB"]     = $query["fecha_adicion"];
-    $camposDB["categoriasDB"]       = [];
-    foreach($categoriasDB as $categoriaDB) {
-      array_push($camposDB["categoriasDB"], $categoriaDB);
-    }
 
     return $camposDB;
   }
@@ -148,10 +137,6 @@ class Libro {
     return $this->fechaAdicion;
   }
 
-  function getCategorias() {
-    return $this->categorias;
-  }
-
   /* MÉTODOS DE LA CLASE CONECTORES CON DB */
   function modificarLibroDB() {
     try {
@@ -183,5 +168,22 @@ class Libro {
     catch (PDOException $exception) {
       echo "Ocurrió un error al actualizar los datos del libro. ". $exception->getMessage();
     }
+  }
+
+
+  // --- Métodos complementarios ---
+  function getEstadoTexto() {
+    switch ($this->estado) {
+      case 0:
+        $estadoTexto = "Pendiente";
+        break;
+      case 1:
+        $estadoTexto = "Leyendo";
+        break;
+      case 2:
+        $estadoTexto = "Leído";
+    }
+
+    return $estadoTexto;
   }
 }

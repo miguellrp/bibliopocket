@@ -81,7 +81,7 @@ function generarBuscadorAPI () {
 
 function generarFormDatosLibro () {
   return /* html */ ` 
-    <form action="" method="POST">
+    <form action="" method="POST" enctype=multipart/form-data>
       <div class="wrap-portada">
         <img class="portada">
         <div class="portada-upload">
@@ -116,16 +116,16 @@ function generarFormDatosLibro () {
 
       <label>Estado:</label>
       <div class="grupo-estados-libro">
-        <input type="radio" name="estado" id="leido" value="leido">
-        <label for="leido">Leído</label>
-        <input type="radio" name="estado" id="leyendo" value="leyendo">
-        <label for="leyendo">Leyendo</label>
-        <input type="radio" name="estado" id="pendiente" value="pendiente">
+        <input type="radio" name="estado" id="pendiente" value="0">
         <label for="pendiente">Pendiente</label>
+        <input type="radio" name="estado" id="leyendo" value="1">
+        <label for="leyendo">Leyendo</label>
+        <input type="radio" name="estado" id="leido" value="2">
+        <label for="leido">Leído</label>
       </div>
 
       <label for="categorias">Categorías:</label>
-      <input type="text" id="categorias">
+      <custom-tagify data-id="categorias" data-name="categorias"></custom-tagify>
     </form>
   `;
 }
@@ -157,8 +157,13 @@ function vincularFormEliminacion (modalEliminacion, idLibro) {
 }
 
 function getDataLibro (libro) {
+  const categoriasData = libro.querySelectorAll("form[name=categorias-hidden] > input");
   libro = libro.querySelector("form").elements;
-  const dataLibro = {
+
+  let categorias = [];
+  categoriasData.forEach((categoriaTag) => categorias.push(categoriaTag.value));
+
+  let dataLibro = {
     "id": libro.id.value,
     "titulo": libro.titulo.value,
     "subtitulo": libro.subtitulo.value,
@@ -169,7 +174,8 @@ function getDataLibro (libro) {
     "editorial": libro.editorial.value,
     "anhoPublicacion": libro.anhoPublicacion.value,
     "enlaceAPI": libro.enlaceAPI.value,
-    "estado": libro.estado.value
+    "estado": libro.estado.value,
+    "categorias": categorias
   };
 
   return dataLibro;
@@ -192,13 +198,14 @@ function getDataForm (tipoForm, libro) {
     "numPaginasLibro": (tipoForm == 0) ? "" : dataModificacionForm.numPaginas,
     "editorialLibro": (tipoForm == 0) ? "" : dataModificacionForm.editorial,
     "anhoPublicacionLibro": (tipoForm == 0) ? "" : dataModificacionForm.anhoPublicacion,
-    "estadoLibro": (tipoForm == 0) ? "" : dataModificacionForm.estado,
+    "estadoLibro": (tipoForm == 0) ? 0 : dataModificacionForm.estado,
     "submitButtonText": (tipoForm == 0) ? "Añadir libro" : "Guardar cambios",
     "submitButtonName": (tipoForm == 0) ? "anhadir-nuevo-libro" : "modificar-libro",
 
     // Input hidden fields:
     "idLibro": (tipoForm == 0) ? null : dataModificacionForm.id,
-    "enlaceAPI": (tipoForm == 0) ? null : dataModificacionForm.enlaceAPI
+    "enlaceAPI": (tipoForm == 0) ? null : dataModificacionForm.enlaceAPI,
+    "categorias": (tipoForm == 0) ? null : dataModificacionForm.categorias
   };
 
   return dataForm;
@@ -225,13 +232,14 @@ function actualizarDataForm (tipoForm, libro) {
   camposForm.editorial.value = dataForm.editorialLibro;
   camposForm.anhoPublicacion.value = dataForm.anhoPublicacionLibro;
 
-  if (dataForm.estadoLibro === "Leido") camposForm.estadoLeido.setAttribute("checked", "");
-  if (dataForm.estadoLibro === "Leyendo") camposForm.estadoLeyendo.setAttribute("checked", "");
-  if (dataForm.estadoLibro === "Pendiente") camposForm.estadoPendiente.setAttribute("checked", "");
+  if (dataForm.estadoLibro == 0) camposForm.estadoPendiente.setAttribute("checked", "");
+  if (dataForm.estadoLibro == 1) camposForm.estadoLeyendo.setAttribute("checked", "");
+  if (dataForm.estadoLibro == 2) camposForm.estadoLeido.setAttribute("checked", "");
 
-  // TODO: Categorias libro
   getSubmitButtonForm();
   getInputHiddenFields();
+  getCategorias();
+
 
   // --- FUNCIONES INTERNAS PARA ACTUALIZAR LOS DATOS DEL FORM (creación / modificación de libro) ---
   function getTitleForm () {
@@ -273,7 +281,21 @@ function actualizarDataForm (tipoForm, libro) {
       hiddenDataTags.childNodes[0].value = dataForm.idLibro;
       hiddenDataTags.childNodes[1].value = dataForm.portadaLibro;
       hiddenDataTags.childNodes[2].value = dataForm.enlaceAPI;
+      hiddenDataTags.childNodes[3].value = dataForm.categoriasLibro;
     }
+  }
+
+  function getCategorias () {
+    const categoriasHiddenGroup = form.querySelector(".categorias-tagify");
+
+    dataForm.categorias.forEach((categoria) => {
+      const categoriaHidden = document.createElement("input");
+      categoriaHidden.name = "categorias-tagify[]";
+      categoriaHidden.type = "hidden";
+      categoriaHidden.value = categoria;
+
+      categoriasHiddenGroup.append(categoriaHidden);
+    });
   }
 
   function generarInputHiddenFields () {
@@ -292,7 +314,11 @@ function actualizarDataForm (tipoForm, libro) {
     enlaceAPILibroTag.name = "enlaceAPI";
     enlaceAPILibroTag.value = dataForm.enlaceAPI;
 
-    return [idLibroTag, portadaTag, enlaceAPILibroTag];
+    const categoriasLibro = document.createElement("div");
+    categoriasLibro.className = "categorias-tagify";
+    categoriasLibro.style.display = "none";
+
+    return [idLibroTag, portadaTag, enlaceAPILibroTag, categoriasLibro];
   }
 }
 
@@ -308,9 +334,8 @@ function getCamposForm () {
     "numPaginas": camposForm.querySelector("#num-paginas"),
     "editorial": camposForm.querySelector("#editorial"),
     "anhoPublicacion": camposForm.querySelector("#anho-publicacion"),
-    "estadoLeido": camposForm.querySelector(".grupo-estados-libro > #leido"),
-    "estadoLeyendo": camposForm.querySelector(".grupo-estados-libro > #leyendo"),
     "estadoPendiente": camposForm.querySelector(".grupo-estados-libro > #pendiente"),
-    "categorias": camposForm.querySelector("#categorias")
+    "estadoLeyendo": camposForm.querySelector(".grupo-estados-libro > #leyendo"),
+    "estadoLeido": camposForm.querySelector(".grupo-estados-libro > #leido")
   };
 }

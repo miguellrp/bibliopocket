@@ -3,6 +3,7 @@ session_start();
 include_once "../server/classes/Estanteria.php";
 include_once "../server/classes/Libro.php";
 include_once "../server/classes/Usuario.php";
+include_once "../server/classes/Categoria.php";
 
 
 $conn = new Conector;
@@ -38,6 +39,27 @@ if (isset($_POST["modificar-libro"])) {
   $libroSeleccionado = new Libro($idLibro);
   $libroSeleccionado->modificarLibroDB();
 
+  $categoriasDB = Categoria::getCategoriasDe($idLibro);
+  if (isset($_POST["categorias-tagify"])) {
+    $categorias = $_POST["categorias-tagify"];
+
+    foreach($categorias as $nombreCategoria) {
+      $categoria = new Categoria($nombreCategoria);
+      
+      if ($categoria->sinAsociarEn($idLibro)) $categoria->asociarA($idLibro);
+    }
+
+    foreach($categoriasDB as $nombreCategoriaDB) {
+      if (!in_array($nombreCategoriaDB, $categorias)) {
+        $categoriaDB = new Categoria($nombreCategoriaDB);
+        $categoriaDB->eliminarCategoriaDe($idLibro);
+      }
+    }
+  } else {
+    Categoria::vaciarCategoriasDe($idLibro);
+  }
+  
+
   $_SESSION["showToastOk"] = true;
   header("Location: index.php");
   session_write_close();
@@ -64,6 +86,7 @@ if (isset($_POST["eliminar-libro"])) {
   <script src="/bibliopocket/client/components/CustomHeader.js"></script>
   <script src="/bibliopocket/client/components/CustomButton.js"></script>
   <script src="/bibliopocket/client/components/CustomToast.js"></script>
+  <script src="/bibliopocket/client/components/CustomTagify.js"></script>
 </head>
 <body>
   <?php if (!isset($usuarioActivo)): ?>
@@ -98,10 +121,17 @@ if (isset($_POST["eliminar-libro"])) {
         $estanteriaUsuario->ordenarEstanteriaPorFechaAdicion();
 
         foreach($estanteriaUsuario->getLibros() as $libro) {
+          $categoriasLibroDB = Categoria::getCategoriasDe($libro->getId());
+          $categoriasLibroTags = "";
+          
+          foreach($categoriasLibroDB as $categoriaDB) {
+            $categoriasLibroTags .= "<input type='hidden' name='categorias[]' value='".$categoriaDB."'>";
+          }
+
           echo "<div class='libro'>
             <div class='portada-container'>
               <img src='".$libro->getPortada()."' class='portada'>
-              <img src='/bibliopocket/client/assets/images/marcador-".$libro->getEstado().".svg' class='marcador'>
+              <img src='/bibliopocket/client/assets/images/marcador-".strtolower($libro->getEstadoTexto()).".svg' class='marcador'>
             </div>
             <div class='datos-libro'>
               <div class='cabecera'>
@@ -116,7 +146,7 @@ if (isset($_POST["eliminar-libro"])) {
                 <svg xmlns='http://www.w3.org/2000/svg' class='icon eliminar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM112,168a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm0-120H96V40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8Z'></path></svg>
                 <svg xmlns='http://www.w3.org/2000/svg' class='icon modificar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160l90.35-90.35,16.68,16.69L68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188l90.35-90.35h0l16.68,16.69Z'></path></svg>
               </div>
-              <form name='datosLibro'>
+              <form name='datosLibro' class='hidden'>
                 <input type='hidden' name='id' value='".$libro->getId()."'>
                 <input type='hidden' name='titulo' value='".$libro->getTitulo()."'>
                 <input type='hidden' name='subtitulo' value='".$libro->getSubtitulo()."'>
@@ -128,6 +158,9 @@ if (isset($_POST["eliminar-libro"])) {
                 <input type='hidden' name='anhoPublicacion' value='".$libro->getAnhoPublicacion()."'>
                 <input type='hidden' name='enlaceAPI' value='".$libro->getEnlaceAPI()."'>
                 <input type='hidden' name='estado' value='".$libro->getEstado()."'>
+              </form>
+              <form name='categorias-hidden' class='hidden'>
+                $categoriasLibroTags
               </form>
             </div>
           </div>";

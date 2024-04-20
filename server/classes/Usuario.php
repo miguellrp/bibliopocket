@@ -1,5 +1,6 @@
 <?php
-include_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/handlers/Util.php");
 
 class Usuario {
   private $id;
@@ -103,8 +104,7 @@ class Usuario {
   }
 
   function registrarUsuarioDB() {
-    // ID único "seguro" a partir de: https://stackoverflow.com/questions/29235481/generate-a-readable-random-unique-id
-    $idGenerado = join('-', str_split(bin2hex(openssl_random_pseudo_bytes(10)), 5));
+    $idGenerado = Util::generarId();
     $passHasheado = password_hash($this->getContrasenha(), PASSWORD_DEFAULT);
 
     try {

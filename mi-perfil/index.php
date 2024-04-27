@@ -5,12 +5,8 @@ include_once "../server/classes/Usuario.php";
 // Para conservar la sección activa dentro de "Mi perfil"
 if (!isset($_SESSION["seccionActiva"])) $_SESSION["seccionActiva"] = 0;
 
-if(!isset($toastOk)) $toastOk = false;
-if(!isset($toastError)) $toastError = false;
-
 // Para controlar feedback en cambios hechos por la persona usuaria:
-if (!isset($_SESSION["showToastOk"])) $_SESSION["showToastOk"] = false;
-if (!isset($_SESSION["showToastError"])) $_SESSION["showToastError"] = false;
+if (!isset($_SESSION["toast"])) $_SESSION["toast"]["showToast"] = false;
 
 if (isset($_SESSION["usuarioActivo"]))
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
@@ -25,15 +21,25 @@ if (isset($usuarioActivo)) {
       $nombreArchivoImagen = $usuarioActivo->getNombreUsuario()."ProfilePic.".end($temp);
       $rutaImagen = "/bibliopocket/client/assets/images/user-pics/" . $nombreArchivoImagen;
   
-      move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen);
-      if($usuarioActivo->setUserPicPathDB($rutaImagen)) {
-        $_SESSION["showToastOk"] = true;
+      if (move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen)) {
+        if($usuarioActivo->setUserPicPathDB($rutaImagen)) {
+
+          $_SESSION["toast"]["tipo"] = "ok";
+          $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
+        }
+      } else {
+        $_SESSION["toast"]["tipo"] = "error";
+        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un problema al intentar actualizar tu perfil";
       }
+      $_SESSION["toast"]["showToast"] = true;
     }
 
     if (isset($_POST["username"]) && ($_POST["username"]) != $usuarioActivo->getNombreUsuario()) {
       $usuarioActivo->actualizarNombreUsuario($_POST["username"]);
-      $_SESSION["showToastOk"] = true;
+
+      $_SESSION["toast"]["showToast"] = true;
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
     }
 
     $_SESSION["seccionActiva"] = 1;
@@ -44,11 +50,16 @@ if (isset($usuarioActivo)) {
   if (isset($_POST["cambiar-correo"])) {
     if ($_POST["correo-nuevo"] != $usuarioActivo->getEmail()) {
       if ($usuarioActivo->actualizarCorreo($_POST["correo-nuevo"])) {
-        $_SESSION["showToastOk"] = true;
+        $_SESSION["toast"]["tipo"] = "ok";
+        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu correo correctamente";
+
       } else {
-        $_SESSION["showToastError"] = true;
+        $_SESSION["toast"]["tipo"] = "error";
+        $_SESSION["toast"]["mensaje"] = "No se ha podido actualizar tu correo";
       }
   
+      $_SESSION["toast"]["showToast"] = true;
+
       $_SESSION["seccionActiva"] = 1;
       header("Location: index.php");
       session_write_close();
@@ -61,11 +72,14 @@ if (isset($usuarioActivo)) {
       $contrasenhaNueva = $_POST["contrasenha-nueva"];
 
       if ($usuarioActivo->actualizarContrasenha($contrasenhaAntigua, $contrasenhaNueva)) {
-        $_SESSION["showToastOk"] = true;
+        $_SESSION["toast"]["tipo"] = "ok";
+        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu contraseña correctamente";
       } else {
-        $_SESSION["showToastError"] = true;
+        $_SESSION["toast"]["tipo"] = "error";
+        $_SESSION["toast"]["mensaje"] = "No se ha podido actualizar tu contraseña";
       }
 
+      $_SESSION["toast"]["showToast"] = true;
       $_SESSION["seccionActiva"] = 1;
       header("Location: index.php");
       session_write_close();
@@ -75,7 +89,10 @@ if (isset($usuarioActivo)) {
   if (isset($_POST["restablecer-cuenta"])) {
     $usuarioActivo->restablecerCuenta();
 
-    $_SESSION["showToastOk"] = "true";
+    $_SESSION["toast"]["showToast"] = true;
+    $_SESSION["toast"]["tipo"] = "ok";
+    $_SESSION["toast"]["mensaje"] = "Se han restablecido los datos de tu cuenta correctamente";
+
     $_SESSION["seccionActiva"] = 1;
     header("Location: index.php");
     session_write_close();
@@ -83,8 +100,10 @@ if (isset($usuarioActivo)) {
 
   
   if (isset($_POST["eliminar-cuenta"])) {
-    unset($_SESSION["usuarioActivo"]);
+    // Primero se eliminan todos los libros asociados a su cuenta para no violar la constraint de la relación Libros<->Usuario
+    $usuarioActivo->restablecerCuenta();
     $usuarioActivo->eliminarCuenta();
+    unset($_SESSION["usuarioActivo"]);
 
     header("Location: /bibliopocket/index.php");
     session_write_close();
@@ -172,17 +191,11 @@ if (isset($usuarioActivo)) {
     <custom-toast></custom-toast>
 
   <?php
-      $toastOk = $_SESSION["showToastOk"];
-      $toastError = $_SESSION["showToastError"];
+      $showToast = $_SESSION["toast"]["showToast"];
 
-      if ($toastOk || $toastError) {
-        if ($toastOk) {
-          $mensaje = "Se han guardado los cambios correctamente";
-          $tipo = "ok";
-        } else {
-          $mensaje = "No se han podido guardar los cambios";
-          $tipo = "error";
-        }
+      if ($showToast) {
+        $tipo = $_SESSION["toast"]["tipo"];
+        $mensaje = $_SESSION["toast"]["mensaje"];
 
       echo '<script>
         const toast = document.querySelector("custom-toast");
@@ -193,7 +206,7 @@ if (isset($usuarioActivo)) {
       </script>';
       }
 
-      unset($_SESSION["showToastOk"], $_SESSION["showToastError"]);
+      unset($_SESSION["toast"]);
     ?>
 
 

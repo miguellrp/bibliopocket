@@ -9,10 +9,7 @@ include_once "../server/classes/Categoria.php";
 $conn = new Conector;
 
 // Para controlar feedback en cambios hechos por la persona usuaria:
-if (!isset($_SESSION["showToastOk"])) $_SESSION["showToastOk"] = false;
-if (!isset($_SESSION["showToastError"])) $_SESSION["showToastError"] = false;
-if (!isset($_SESSION["showToastInfo"])) $_SESSION["showToastInfo"] = false;
-
+if (!isset($_SESSION["toast"])) $_SESSION["toast"]["showToast"] = false;
 
 
 if (isset($_SESSION["usuarioActivo"])) 
@@ -26,10 +23,24 @@ if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
   // Si el libro a añadir no está guardado todavía, se añade a su estantería:
   if (!$usuarioActivo->esLibroGuardado($nuevoLibro)) {
     $estanteriaDB->registrarLibro($nuevoLibro);
-    $_SESSION["showToastOk"] = true;
+
+    if (isset($_POST["categorias-tagify-nuevo-libro"])) {
+      $categorias = $_POST["categorias-tagify-nuevo-libro"];
+  
+      foreach($categorias as $nombreCategoria) {
+        $categoria = new Categoria($nombreCategoria);
+        
+        if ($categoria->sinAsociarEn($idLibro)) $categoria->asociarA($idLibro);
+      }
+    }
+    $_SESSION["toast"]["tipo"] = "ok";
+    $_SESSION["toast"]["mensaje"] = "Se ha añadido el libro a tu estantería";
   } else {
-    $_SESSION["showToastInfo"] = true;
+    $_SESSION["toast"]["tipo"] = "info";
+    $_SESSION["toast"]["mensaje"] = "Ya has añadido este libro a tu estantería";
   }
+  $_SESSION["toast"]["showToast"] = true;
+
   header("Location: index.php");
   session_write_close();
 }
@@ -58,9 +69,11 @@ if (isset($_POST["modificar-libro"])) {
   } else {
     Categoria::vaciarCategoriasDe($idLibro);
   }
-  
 
-  $_SESSION["showToastOk"] = true;
+  $_SESSION["toast"]["tipo"] = "ok";
+  $_SESSION["toast"]["mensaje"] = "Se han actualizado los datos del libro correctamente.";
+  $_SESSION["toast"]["showToast"] = true;
+
   header("Location: index.php");
   session_write_close();
 }
@@ -68,7 +81,11 @@ if (isset($_POST["modificar-libro"])) {
 if (isset($_POST["eliminar-libro"])) {
   $conn->eliminarLibro($_POST["idLibroEstante"]);
 
-  $_SESSION["showToastOk"] = true;
+  $_SESSION["toast"]["tipo"] = "ok";
+  $_SESSION["toast"]["mensaje"] = "Se ha eliminado el libro de tu estantería";
+  $_SESSION["toast"]["showToast"] = true;
+
+
   header("Location: index.php");
   session_write_close();
 }
@@ -121,7 +138,7 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
     </div>
     <main>
     <?php if (!empty($idsLibrosEstanteria)): ?>
-      <details class="filtros" open>
+      <details class="filtros">
         <summary>Filtrar por:</summary>
         <div class="grupo-filtros">
           <label>Filtrar por estado:
@@ -224,7 +241,6 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
               <small>No hay libros en tu estantería con los filtros aplicados</small>
             </div>";
           }
-
         ?>
       </section>
     </main>
@@ -233,23 +249,12 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
     <custom-toast></custom-toast>
 
     <?php
-      $toastOk = $_SESSION["showToastOk"];
-      $toastError = $_SESSION["showToastError"];
-      $toastInfo = $_SESSION["showToastInfo"];
+      $showToast = $_SESSION["toast"]["showToast"];
         
-      if ($toastOk || $toastError || $toastInfo) {
-        if ($toastOk) {
-          $mensaje = "Se ha añadido el libro a tu estantería";
-          $mensaje = "Se han actualizado los datos del libro correctamente";
-          $tipo = "ok";
-        } elseif ($toastError) {
-          $mensaje = "No se han podido guardar los cambios";
-          $tipo = "error";
-        } else {
-          $mensaje = "Ya has añadido este libro a tu estantería";
-          $tipo = "info";
-        }
-        
+      if ($showToast) {
+        $tipo = $_SESSION["toast"]["tipo"];
+        $mensaje = $_SESSION["toast"]["mensaje"];
+
         echo '<script>
           const toast = document.querySelector("custom-toast");
           toast.setMensaje("'.$mensaje.'");
@@ -258,13 +263,14 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
           toast.showToast();
         </script>';
       }
-
-      unset($_SESSION["showToastOk"], $_SESSION["showToastError"], $_SESSION["showToastInfo"]);
+      unset($_SESSION["toast"]);
     ?>
 
-  <script src="/bibliopocket/client/handlers/filtradorEstanteriaHandler.js"></script>
-  <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
+
   <script src="/bibliopocket/client/handlers/APIBooksHandler.js" type="module"></script>
+  <script src="/bibliopocket/client/handlers/filtradorEstanteriaHandler.js"></script>
+  <script src="/bibliopocket/client/handlers/previewHandler.js" type="module"></script>
+  <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
   <script src="./script.js" type="module"></script>
 </body>
 

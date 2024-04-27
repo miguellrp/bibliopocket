@@ -9,7 +9,6 @@ class CustomTagify extends HTMLElement {
     const name = this.getAttribute("data-name");
     const idLibroAsociado = this.getAttribute("id-libro");
     const tipoFiltro = this.getAttribute("tipo-filtro") == "true" ? true : false;
-    const categoriasFiltradas = this.getAttribute("categorias-filtradas");
 
     this.shadowRoot.innerHTML = /* html */`
     <style>
@@ -129,7 +128,7 @@ class CustomTagify extends HTMLElement {
     `;
 
     this.setListenerGenerarNuevaTag(idLibroAsociado, tipoFiltro);
-    if (!tipoFiltro) this.getCategorias(idLibroAsociado, tipoFiltro);
+    if (idLibroAsociado != null) this.getCategorias(idLibroAsociado, tipoFiltro);
   }
 
   setListenerGenerarNuevaTag (idLibroAsociado, tipoFiltro) {
@@ -210,7 +209,7 @@ function generarTag (value) {
 
 function generarHiddenTag (value, idLibro) {
   const hiddenTag = document.createElement("input");
-  hiddenTag.name = `categorias-tagify-${idLibro}[]`;
+  hiddenTag.name = `categorias-tagify-${idLibro ?? "nuevo-libro"}[]`;
   hiddenTag.type = "hidden";
   hiddenTag.value = value;
 

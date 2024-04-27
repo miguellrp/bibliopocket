@@ -220,7 +220,7 @@ main {
 }
 
 .empty-bookshelf {
-  display: flex;
+  opacity: 1;
 }
 
 .input-buscador {

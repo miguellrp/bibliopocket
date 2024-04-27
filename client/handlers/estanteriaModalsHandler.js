@@ -286,30 +286,24 @@ function actualizarDataForm (tipoForm, libro) {
 
   function getCategorias () {
     const datosLibroModal = document.querySelector("#datos-libro-modal");
-    let customTagifyTag = datosLibroModal.querySelector("custom-tagify");
+    const customTagifyTag = crearCustomTagify();
+    if (dataForm.idLibro != null) customTagifyTag.setAttribute("id-libro", dataForm.idLibro);
+    datosLibroModal.append(customTagifyTag);
 
-    if (customTagifyTag != null) {
-      customTagifyTag.remove();
-    }
-
-    customTagifyTag = document.createElement("custom-tagify");
-    customTagifyTag.setAttribute("data-id", "categorias");
-    customTagifyTag.setAttribute("data-name", "categorias");
-    customTagifyTag.setAttribute("id-libro", dataForm.idLibro);
-
-    const submitButton = form.querySelector("input[type=submit]");
-    form.insertBefore(customTagifyTag, submitButton);
+    anhadirUltimoElementoForm(customTagifyTag);
 
     const categoriasHiddenGroup = form.querySelector(".categorias-tagify");
 
-    dataForm.categorias.forEach((categoria) => {
-      const categoriaHidden = document.createElement("input");
-      categoriaHidden.name = `categorias-tagify-${dataForm.idLibro}[]`;
-      categoriaHidden.type = "hidden";
-      categoriaHidden.value = categoria;
+    if (dataForm.categorias != null) {
+      dataForm.categorias.forEach((categoria) => {
+        const categoriaHidden = document.createElement("input");
+        categoriaHidden.name = `categorias-tagify-${dataForm.idLibro}[]`;
+        categoriaHidden.type = "hidden";
+        categoriaHidden.value = categoria;
 
-      categoriasHiddenGroup.append(categoriaHidden);
-    });
+        categoriasHiddenGroup.append(categoriaHidden);
+      });
+    }
   }
 
   function generarInputHiddenFields () {
@@ -334,6 +328,17 @@ function actualizarDataForm (tipoForm, libro) {
 
     return [idLibroTag, portadaTag, enlaceAPILibroTag, categoriasLibro];
   }
+
+  function getCategoriasHiddenGroup () {
+    console.log(modalDatosLibro);
+  }
+
+  function anhadirUltimoElementoForm (ultimoElementoForm) {
+    const submitButton = form.querySelector("input[type=submit]");
+
+    // Se inserta el último elemento del form inmediatamante anterior al submit button:
+    form.insertBefore(ultimoElementoForm, submitButton);
+  }
 }
 
 function getCamposForm () {
@@ -352,4 +357,18 @@ function getCamposForm () {
     "estadoLeyendo": camposForm.querySelector(".grupo-estados-libro > #leyendo"),
     "estadoLeido": camposForm.querySelector(".grupo-estados-libro > #leido")
   };
+}
+
+function crearCustomTagify () {
+  const datosLibroModal = document.querySelector("#datos-libro-modal");
+  let customTagifyTag = datosLibroModal.querySelector("custom-tagify");
+
+  if (customTagifyTag != null) {
+    customTagifyTag.remove();
+  }
+
+  customTagifyTag = document.createElement("custom-tagify");
+  customTagifyTag.setAttribute("data-id", "categorias");
+  customTagifyTag.setAttribute("data-name", "categorias");
+  return customTagifyTag;
 }

@@ -1,5 +1,3 @@
-import { previsualizarNuevaImagen } from "/bibliopocket/client/handlers/previewHandler.js";
-
 const navButtons = document.querySelectorAll(".nav-perfil input");
 const opcionesConfiguracionTags = document.querySelectorAll(".configuracion.container li");
 
@@ -10,19 +8,10 @@ prepararListeners();
 function prepararListeners () {
   navButtons.forEach((button) => button.addEventListener("click", prepararSeccionActivaListener));
 
-  prepararListenerImageUploader();
   prepararCambiarCorreoListener();
   prepararCambiarContrasenhaListener();
   prepararRestablecerCuentaListener();
   prepararEliminarCuentaListener();
-}
-
-
-function prepararListenerImageUploader () {
-  const uploader = document.querySelector("#uploader-input");
-  const previewer = document.querySelector(".preview");
-
-  uploader.addEventListener("change", () => previsualizarNuevaImagen(uploader, previewer));
 }
 
 function prepararSeccionActivaListener () {

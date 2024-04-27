@@ -33,6 +33,8 @@ class CustomToast extends HTMLElement {
 
           color: white;
           font-size: 13px;
+          text-align: center;
+          text-wrap: balance;
 
           &::selection {
             background-color: #5b3e13ba;
@@ -52,8 +54,6 @@ class CustomToast extends HTMLElement {
           
           & p {
             margin-top: 5px;
-            text-align: center;
-            text-wrap: balance;
           }
         }
       }

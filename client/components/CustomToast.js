@@ -52,7 +52,8 @@ class CustomToast extends HTMLElement {
           
           & p {
             margin-top: 5px;
-            text-align: center
+            text-align: center;
+            text-wrap: balance;
           }
         }
       }

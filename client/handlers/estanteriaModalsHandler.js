@@ -125,7 +125,6 @@ function generarFormDatosLibro () {
       </div>
 
       <label for="categorias">Categorías:</label>
-      <custom-tagify data-id="categorias" data-name="categorias"></custom-tagify>
     </form>
   `;
 }
@@ -286,11 +285,26 @@ function actualizarDataForm (tipoForm, libro) {
   }
 
   function getCategorias () {
+    const datosLibroModal = document.querySelector("#datos-libro-modal");
+    let customTagifyTag = datosLibroModal.querySelector("custom-tagify");
+
+    if (customTagifyTag != null) {
+      customTagifyTag.remove();
+    }
+
+    customTagifyTag = document.createElement("custom-tagify");
+    customTagifyTag.setAttribute("data-id", "categorias");
+    customTagifyTag.setAttribute("data-name", "categorias");
+    customTagifyTag.setAttribute("id-libro", dataForm.idLibro);
+
+    const submitButton = form.querySelector("input[type=submit]");
+    form.insertBefore(customTagifyTag, submitButton);
+
     const categoriasHiddenGroup = form.querySelector(".categorias-tagify");
 
     dataForm.categorias.forEach((categoria) => {
       const categoriaHidden = document.createElement("input");
-      categoriaHidden.name = "categorias-tagify[]";
+      categoriaHidden.name = `categorias-tagify-${dataForm.idLibro}[]`;
       categoriaHidden.type = "hidden";
       categoriaHidden.value = categoria;
 

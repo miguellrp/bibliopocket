@@ -12,10 +12,6 @@ class Estanteria {
 
     $this->idUsuario = $idUsuario;
     $this->libros = [];
-
-    foreach($this->getLibrosIDs() as $libroID) {
-      array_push($this->libros, new Libro($libroID));
-    }
   }
 
   // --- GETTERS ---
@@ -29,15 +25,19 @@ class Estanteria {
 
 
    /* MÉTODOS DE LA CLASE CONECTORES CON DB */
-   private function getLibrosIDs() {
+  function getLibrosIds($limite = 10) {
     try {
       $query = $this->conexionDB->conn->prepare("SELECT id FROM libros
-        WHERE id_usuario = :userID");
+        WHERE id_usuario = :idUsuario
+        ORDER BY fecha_adicion DESC LIMIT :limite");
+      
+      $query->bindParam(":idUsuario", $this->idUsuario, PDO::PARAM_STR);
+      $query->bindParam(":limite", $limite, PDO::PARAM_INT);
 
-      $query->execute(array(":userID" => $this->getIdUsuario()));
+      $query->execute();
     }
     catch (PDOException $exception) {
-      echo "Ocurrió un error al cargar la estantería. ". $exception->getMessage();
+      echo "Ocurrió un error al cargar los libros filtrados. ". $exception->getMessage();
     }
 
     return $query->fetchAll(PDO::FETCH_COLUMN);
@@ -71,23 +71,20 @@ class Estanteria {
     }
   }
 
-  function ordenarEstanteriaPorFechaAdicion() {
-    usort($this->libros, function($libro1, $libro2) {
-      return strtotime($libro2->getFechaAdicion()) - strtotime($libro1->getFechaAdicion());
-    });
-  }
+  function getUltimosLibrosAnhadidos($numLibros) {
+    try {
+      $query = $this->conexionDB->conn->prepare("SELECT id FROM libros
+        WHERE id_usuario = :idUsuario ORDER BY fecha_adicion ASC LIMIT :numLibros");
+      
+      $query->bindParam(":idUsuario", $this->idUsuario, PDO::PARAM_STR);
+      $query->bindParam(":numLibros", $numLibros, PDO::PARAM_INT);
 
-  function getUltimasLecturas($numLibros) {
-    $ultimosLibrosAnhadidos = [];
-    $this->ordenarEstanteriaPorFechaAdicion();
-    
-    $numLibros = ($numLibros <= count($this->getLibros()))
-      ? $numLibros
-      : count($this->getLibros());
+      $query->execute();
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al cargar los últimos $numLibros añadidos. ". $exception->getMessage();
+    }
 
-    for ($indiceLibro = 0; $indiceLibro < $numLibros; $indiceLibro++)
-      array_push($ultimosLibrosAnhadidos, $this->getLibros()[$indiceLibro]);
-    
-    return $ultimosLibrosAnhadidos;
+    return $query->fetchAll(PDO::FETCH_COLUMN);
   }
 }

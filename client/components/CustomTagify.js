@@ -7,6 +7,9 @@ class CustomTagify extends HTMLElement {
   connectedCallback () {
     const id = this.getAttribute("data-id");
     const name = this.getAttribute("data-name");
+    const idLibroAsociado = this.getAttribute("id-libro");
+    const tipoFiltro = this.getAttribute("tipo-filtro") == "true" ? true : false;
+    const categoriasFiltradas = this.getAttribute("categorias-filtradas");
 
     this.shadowRoot.innerHTML = /* html */`
     <style>
@@ -125,33 +128,35 @@ class CustomTagify extends HTMLElement {
     </div>
     `;
 
-    this.setListenerGenerarNuevaTag();
-    this.getCategorias();
+    this.setListenerGenerarNuevaTag(idLibroAsociado, tipoFiltro);
+    if (!tipoFiltro) this.getCategorias(idLibroAsociado, tipoFiltro);
   }
 
-  setListenerGenerarNuevaTag () {
+  setListenerGenerarNuevaTag (idLibroAsociado, tipoFiltro) {
     const tagifyInput = this.shadowRoot.querySelector(".input-main");
     const tags = this.shadowRoot.querySelector(".tags-group");
 
     tagifyInput.addEventListener("keypress", (key) => {
       if ((key.code == "Enter" || key.code == "Comma") && tagifyInput.value != "") {
-        const categoriasGroup = document.querySelector("#datos-libro-modal > form > .datos-libro > .categorias-tagify");
         const nuevaTag = generarTag(tagifyInput.value);
+        if (tipoFiltro) nuevaTag.setAttribute("value", tagifyInput.value);
 
-        const nuevaHiddenTag = generarHiddenTag(tagifyInput.value);
-
-        this.setListenerEliminarTag(nuevaTag);
-
+        this.setListenerEliminarTag(nuevaTag, tipoFiltro);
         tags.style.display = "flex";
         tags.append(nuevaTag);
-        categoriasGroup.append(nuevaHiddenTag);
+
+        if (!tipoFiltro) {
+          const categoriasGroup = document.querySelector("#datos-libro-modal > form > .datos-libro > .categorias-tagify");
+          const nuevaHiddenTag = generarHiddenTag(tagifyInput.value, idLibroAsociado);
+          categoriasGroup.append(nuevaHiddenTag);
+        }
 
         setTimeout(() => { tagifyInput.value = "" }, 1);
       }
     });
   }
 
-  setListenerEliminarTag (tag) {
+  setListenerEliminarTag (tag, tipoFiltro) {
     const tags = this.shadowRoot.querySelector(".tags-group");
     const eliminarInput = document.createElement("button");
     const eliminarSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -164,9 +169,11 @@ class CustomTagify extends HTMLElement {
 
     // Se eliminan tanto la tag mostrada como la oculta asociada a ésta
     eliminarInput.addEventListener("click", () => {
-      const hiddenTag = document.querySelector(`.categorias-tagify > input[value='${tag.textContent}']`);
+      if (!tipoFiltro) {
+        const hiddenTag = document.querySelector(`.categorias-tagify > input[value='${tag.textContent}']`);
+        hiddenTag.remove();
+      }
 
-      hiddenTag.remove();
       tag.remove();
 
       if (!tags.hasChildNodes()) tags.style.display = "none";
@@ -174,14 +181,16 @@ class CustomTagify extends HTMLElement {
     tag.append(eliminarInput);
   }
 
-  getCategorias () {
+  getCategorias (idLibroAsociado, tipoFiltro) {
     const tags = this.shadowRoot.querySelector(".tags-group");
-    const categoriasLibroInputs = document.querySelectorAll("input[name='categorias[]']");
+    const idLibroHidden = document.querySelector(`form > input[name='id'][value='${idLibroAsociado}']`);
+    const libroVinculado = idLibroHidden.parentNode.parentNode;
+    const categoriasLibroInputs = libroVinculado.querySelectorAll("input[name='categorias[]']");
 
     categoriasLibroInputs.forEach((inputHiddenCategoria) => {
       const tag = generarTag(inputHiddenCategoria.value);
 
-      this.setListenerEliminarTag(tag);
+      this.setListenerEliminarTag(tag, tipoFiltro);
       tags.append(tag);
     });
   }
@@ -199,9 +208,9 @@ function generarTag (value) {
   return tag;
 }
 
-function generarHiddenTag (value) {
+function generarHiddenTag (value, idLibro) {
   const hiddenTag = document.createElement("input");
-  hiddenTag.name = "categorias-tagify[]";
+  hiddenTag.name = `categorias-tagify-${idLibro}[]`;
   hiddenTag.type = "hidden";
   hiddenTag.value = value;
 

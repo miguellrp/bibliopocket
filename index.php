@@ -186,7 +186,12 @@ if (isset($_POST["confirm-registro-check"]) && $_COOKIE["codigoGenerado"] == $_P
       font-color="var(--primary-color)">
     </custom-button>
   </div>
-  <small class="footer-inicio">Icons by: <a href="https://phosphoricons.com/" target="_blank">Phosphor Icons</a></small>
+   
+  <footer>
+    <small>Icons by: <a href="https://phosphoricons.com/" target="_blank">Phosphor Icons</a></small>
+    <small>Illustrations by: <a href="https://undraw.co/" target="_blank">UnDraw</a></small>
+  </footer>
+
   <script src="client/handlers/registroHandler.js"></script>
   <script src="client/handlers/landingModalsHandler.js"></script>
   <script src="client/handlers/themeHandler.js"></script>

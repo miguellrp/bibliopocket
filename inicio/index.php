@@ -4,8 +4,6 @@ include_once "../server/classes/Estanteria.php";
 include_once "../server/classes/Libro.php";
 include_once "../server/classes/Usuario.php";
 
-// VARIABLE GLOBAL
-$numLibrosUltimosAnhadidos = 4;
 
 if (isset($_SESSION["nombreUsuario"]) && !isset($_SESSION["usuarioActivo"])) {
   $usuarioID = $conn->getUsuarioActualID($_SESSION["nombreUsuario"]);
@@ -51,19 +49,20 @@ if (isset($_SESSION["usuarioActivo"])) {
     </div>
   <?php else: ?>
     <custom-header pagina-activa="inicio"></custom-header>
-    <h2>Bienvenid@ de nuevo,
+    <h2>👋 Bienvenid@ de nuevo,
       <a class="username-title" href="/bibliopocket/mi-perfil">
         <?= $usuarioActivo->getNombreUsuario() ?>
       </a>
-    </h2>
+      </h2>
     <h3>Tus últimos libros añadidos</h3>
     <div class="ultimos-libros">
 
     <?php
         $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
-        $ultimosLibrosAnhadidos = $estanteriaUsuario->getUltimasLecturas($numLibrosUltimosAnhadidos);
+        $ultimosLibros = $estanteriaUsuario->getUltimosLibrosAnhadidos(5);
 
-        foreach($ultimosLibrosAnhadidos as $libro) {
+        foreach($ultimosLibros as $idLibro) {
+          $libro = new Libro($idLibro);
           echo "<article class='libro'>
             <div class='portada-container'>
               <img src='".$libro->getPortada()."' class='portada'>

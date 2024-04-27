@@ -61,6 +61,8 @@ body {
   color: var(--primary-color);
   background-color: var(--background-color);
   transition: all .2s ease;
+
+  scroll-behavior: smooth;
 }
 
 .hidden {
@@ -224,9 +226,13 @@ input[type="text"], input[type="password"] {
   line-height: 30px;
 }
 
-.footer-inicio {
+footer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
 }
 
 html[data-theme = "dark"] {

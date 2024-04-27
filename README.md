@@ -8,12 +8,13 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
 |:---:|:---:|:---:|
 | _Landing_ | La persona usuaria puede crear una cuenta e iniciar sesión | ✅ |
 | _Landing_ | La persona usuaria, al crear una cuenta, recibirá un correo con el código de verificación que será requerido para darse de alta | ❌ |
+| _Landing_ | La persona usuaria, cuando quiere iniciar sesión pero se ha olvidado su contraseña, se le enviará un código de recuperación | ❌ |
 | Inicio | La persona usuaria puede visualizar sus últimos libros añadidos | ✅ |
 | Mi estantería | La persona usuaria puede buscar un libro a través de la API de _Google Books_ y añadirlo a su estantería | ✅ |
 | Mi estantería | La persona usuaria puede crear un nuevo libro desde 0 y añadirlo a su estantería | ✅ |
 | Mi estantería | La persona usuaria puede consultar los libros añadidos a su estantería | ✅ |
 | Mi estantería | La persona usuaria puede modificar los datos de sus libros o eliminarlos de su estantería | ✅ |
-| Mi estantería | La persona usuaria puede consultar en base a determinados filtros los libros de su estantería | ❌ |
+| Mi estantería | La persona usuaria puede consultar en base a determinados filtros los libros de su estantería | ✅ |
 | Mi estantería | La persona usuaria puede compartir una valoración (numérica [⭐] + reseña) de un libro leído | ❌ |
 | Mi estantería | La persona usuaria puede guardar anotaciones asociadas a cualquier libro de su estantería | ❌ |
 | Mi perfil | La persona usuaria puede modificar datos relativos a su cuenta personal y darse de baja | ✅ |

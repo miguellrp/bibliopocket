@@ -21,26 +21,107 @@ html[data-theme="dark"] {
 }
 
 .grupo-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+main {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+}
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  height: fit-content;
+  padding: 25px;
+  margin: 0 0 15px 30px;
+  
+  border: 3px solid var(--secondary-contrast-color);
+  border-radius: 10px;
+  background-color: var(--background-vista-libro);
+  box-shadow: 0 0 12px 2px #00000060;
+
+  transition: .3s ease;
+
+  & summary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--secondary-color);
+
+    cursor: pointer;
+    transition: .3s ease;
+
+    &::before {
+      margin-right: 5px;
+      content: "▶ ";
+
+      transition: .3s ease;
+    }
+  }
+
+  & .grupo-filtros {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    & label {
+      display: flex;
+      flex-direction: column;
+      row-gap: 7px;
+    }
+  
+    & .grupo-estados-libro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+.filtros[open] {
+  & summary {
+    margin-bottom: 20px;
+
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.filtros:not([open]) {
+  position: absolute;
+  transform: translateY(-90px);
 }
 
 .estanteria {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
 
   & .libro {
     display: flex;
     column-gap: 10px;
+    width: 90%;
 
-    width: 80vw;
     min-height: 180px;
     max-height: min-content;
     padding: 12px;
 
-    margin: 10px auto;
+    margin: 10px 15px;
     box-shadow: 1px 1px 2px 1px var(--primary-color);
 
     background-color: var(--background-vista-libro);
+    transition: .3s ease;
 
     & .portada-container {
       margin: auto;
@@ -99,7 +180,7 @@ html[data-theme="dark"] {
         color: var(--color-autoria-libro);
       }
 
-      & .grupo-buttons {
+      & .grupo-buttons-libro {
         text-align: end;
         margin: 50px auto 0 auto;
 
@@ -116,6 +197,30 @@ html[data-theme="dark"] {
       }
     }
   }
+}
+
+.filters-not-found, .empty-bookshelf {
+  display: flex;
+  opacity: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 45px auto;
+  row-gap: 20px;
+  transition: .3s ease;
+
+  & img {
+    width: 350px;
+  }
+
+  & small {
+    opacity: 0.8;
+    font-style: italic;
+  }
+}
+
+.empty-bookshelf {
+  display: flex;
 }
 
 .input-buscador {
@@ -340,48 +445,6 @@ html[data-theme="dark"] {
       text-align: right;
     }
 
-    & .grupo-estados-libro {
-      display: flex;
-
-      & input {
-        visibility: hidden;
-      }
-
-      & label {
-        border: 2px solid;
-        padding: 5px;
-        cursor: pointer;
-        opacity: 0.4;
-      }
-      
-      & input[type="radio"] + label {
-        transition: .6s ease;
-      }
-      
-      & input[type="radio"]:checked+ label {
-        opacity: 1;
-        filter: brightness(1.25);
-      }
-
-      & label[for=leido] {
-        color: var(--estado-leido);
-        border-color: var(--estado-leido);
-        background-color: color-mix(in srgb, var(--background-color) 5%, var(--estado-leido) 20%);
-      }
-      
-      & label[for=leyendo] {
-        color: var(--estado-leyendo);
-        border-color: var(--estado-leyendo);
-        background-color: color-mix(in srgb, var(--background-color) 5%, var(--estado-leyendo) 20%);
-      }
-      
-      & label[for=pendiente] {
-        color: var(--estado-pendiente);
-        border-color: var(--estado-pendiente);
-        background-color: color-mix(in srgb, var(--background-color) 5%, var(--estado-pendiente) 20%);
-      }
-    }
-
     & textarea {
       min-height: 1rem;
       max-height: 14rem;
@@ -400,7 +463,15 @@ html[data-theme="dark"] {
         box-shadow: 0 0 0 3.5px var(--primary-color);
       }
     }
+
+    & .grupo-estados-libro {
+      & label {
+        text-align: center;
+      }
+    }
   }
+
+
 
   &::-webkit-scrollbar {
     width: 11px;
@@ -416,6 +487,56 @@ html[data-theme="dark"] {
 
   &::-webkit-scrollbar-corner {
     background: transparent;
+  }
+}
+
+.grupo-estados-libro {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
+
+  & input {
+    display: none;
+  }
+
+  & label {
+    width: 80px;
+
+    border: 2px solid;
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0.4;
+
+    text-align: center;
+  }
+  
+  & input + label, & label:has(input[type="checkbox"]) {
+    transition: .6s ease;
+  }
+  
+  & input[type="radio"]:checked + label,
+  & label:has(input[type="checkbox"]:checked) {
+    opacity: 1;
+    filter: brightness(1.25);
+  }
+
+  & label[for=leido], & label[for=leido-filtro] {
+    color: var(--estado-leido);
+    border-color: var(--estado-leido);
+    background-color: color-mix(in srgb, var(--background-color) 5%, var(--estado-leido) 20%);
+  }
+  
+  & label[for=leyendo], & label[for=leyendo-filtro] {
+    color: var(--estado-leyendo);
+    border-color: var(--estado-leyendo);
+    background-color: color-mix(in srgb, var(--background-color) 5%, var(--estado-leyendo) 20%);
+  }
+  
+  & label[for=pendiente], & label[for=pendiente-filtro] {
+    color: var(--estado-pendiente);
+    border-color: var(--estado-pendiente);
+    background-color: color-mix(in srgb, var(--background-color) 5%, var(--estado-pendiente) 20%);
   }
 }
 
@@ -457,6 +578,22 @@ html[data-theme="dark"] {
 }
 
 @media (max-width: 760px) {
+  main {
+    flex-direction: column;
+
+    & .filtros {
+      margin: 10px;
+
+      & .grupo-filtros {
+        & .grupo-estados-libro {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
   #datos-libro-modal > form  {
     display: flex;
     flex-direction: column;
@@ -479,6 +616,31 @@ html[data-theme="dark"] {
 
     & custom-tagify {
       margin-left: -17px;
+    }
+  }
+
+  .filters-not-found, .empty-bookshelf {
+    & img {
+      width: 48vw;
+      min-width: 275px;
+    }
+  
+    & small {
+      opacity: 0.8;
+      font-style: italic;
+
+      text-wrap: balance;
+      text-align: center;
+    }
+  }
+
+  .filtros:not([open]) {
+    position: sticky;
+    transform: translateY(0);
+  
+    & summary::before {
+      margin-right: 5px;
+      content: "▶ ";
     }
   }
 }

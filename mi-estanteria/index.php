@@ -40,8 +40,8 @@ if (isset($_POST["modificar-libro"])) {
   $libroSeleccionado->modificarLibroDB();
 
   $categoriasDB = Categoria::getCategoriasDe($idLibro);
-  if (isset($_POST["categorias-tagify"])) {
-    $categorias = $_POST["categorias-tagify"];
+  if (isset($_POST["categorias-tagify-$idLibro"])) {
+    $categorias = $_POST["categorias-tagify-$idLibro"];
 
     foreach($categorias as $nombreCategoria) {
       $categoria = new Categoria($nombreCategoria);
@@ -72,6 +72,10 @@ if (isset($_POST["eliminar-libro"])) {
   header("Location: index.php");
   session_write_close();
 }
+
+
+$estanteriaUsuario = new Estanteria($usuarioActivo->getId());
+$idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
 ?>
 <!DOCTYPE html>
 <html lang="es-ES">
@@ -115,58 +119,116 @@ if (isset($_POST["eliminar-libro"])) {
       >
       </custom-button>
     </div>
-    <div class="estanteria">
-      <?php
-        $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
-        $estanteriaUsuario->ordenarEstanteriaPorFechaAdicion();
+    <main>
+    <?php if (!empty($idsLibrosEstanteria)): ?>
+      <details class="filtros" open>
+        <summary>Filtrar por:</summary>
+        <div class="grupo-filtros">
+          <label>Filtrar por estado:
+            <div class="grupo-estados-libro">
+              <label for="pendiente-filtro">
+                <input type="checkbox" id="pendiente-filtro" name="estados-filtro[]" value="0" checked>
+                Pendiente
+              </label>
+              <label for="leyendo-filtro">
+                <input type="checkbox" id="leyendo-filtro" name="estados-filtro[]" value="1" checked>
+                Leyendo
+              </label>
+              <label for="leido-filtro">
+                <input type="checkbox" id="leido-filtro" name="estados-filtro[]" value="2" checked>
+                Leído
+              </label>
+            </div>
+          </label>
 
-        foreach($estanteriaUsuario->getLibros() as $libro) {
-          $categoriasLibroDB = Categoria::getCategoriasDe($libro->getId());
-          $categoriasLibroTags = "";
+          <label for="sub-titulo-filtro">Título/subtítulo:
+            <input type="text" id="sub-titulo-filtro" name="sub-titulo-filtro">
+          </label>
           
-          foreach($categoriasLibroDB as $categoriaDB) {
-            $categoriasLibroTags .= "<input type='hidden' name='categorias[]' value='".$categoriaDB."'>";
+          <label for="autoria-filtro">Autoría:
+            <input type="text" id="autoria-filtro" name="autoria-filtro">
+          </label>
+          
+          <label for="editorial-filtro">Editorial:
+            <input type="text" id="editorial-filtro" name="editorial-filtro">
+          </label>
+
+          <label for="anho-publicacion-filtro">Año de publicación:
+            <input type="text" id="anho-publicacion-filtro" name="anho-publicacion-filtro">
+          </label>
+
+          <label>Categorías:
+            <custom-tagify tipo-filtro="true"></custom-tagify>
+            <div class="categorias-tags"></div>
+          </label>
+        </div>
+      </details>
+      <?php endif; ?>
+      <section class="estanteria">
+        <?php
+          if (empty($idsLibrosEstanteria)) {
+            echo "<div class='empty-bookshelf'>
+              <img src='/bibliopocket/client/assets/images/empty-bookshelf.svg' alt='Una persona agarrando un libro cerca de una estantería de libros parcialmente vacía.'>
+              <small>Tu estantería está vacía, ¡añade libros buscándolos en Google Books o creándolos desde 0!</small>
+            </div>";
+          } else {
+            foreach($idsLibrosEstanteria as $idLibro) {
+              $libro = new Libro($idLibro);
+              $categoriasLibroDB = Categoria::getCategoriasDe($libro->getId());
+              $categoriasLibroTags = "";
+              
+              
+              foreach($categoriasLibroDB as $categoriaDB) {
+                $categoriasLibroTags .= "<input type='hidden' name='categorias[]' value='".$categoriaDB."'>";
+              }
+  
+              echo "<div class='libro'>
+                <div class='portada-container'>
+                  <img src='".$libro->getPortada()."' class='portada'>
+                  <img src='/bibliopocket/client/assets/images/marcador-".strtolower($libro->getEstadoTexto()).".svg' class='marcador'>
+                </div>
+                <div class='datos-libro'>
+                  <div class='cabecera'>
+                    <p class='titulo'>".$libro->getTitulo()."</p>
+                    <p class='subtitulo'>".$libro->getSubtitulo()."</p>
+                  </div>
+                  <hr>
+                  <p class='autoria'>".$libro->getAutoria()."</p>
+                  <p class='editorial'>".$libro->getEditorial()."</p>
+                  <p class='anho-publicacion'>".$libro->getAnhoPublicacion()."</p>
+                  <div class='grupo-buttons-libro'>
+                    <svg xmlns='http://www.w3.org/2000/svg' class='icon eliminar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM112,168a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm0-120H96V40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8Z'></path></svg>
+                    <svg xmlns='http://www.w3.org/2000/svg' class='icon modificar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160l90.35-90.35,16.68,16.69L68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188l90.35-90.35h0l16.68,16.69Z'></path></svg>
+                  </div>
+                  <form name='datosLibro' class='hidden'>
+                    <input type='hidden' name='id' value='".$libro->getId()."'>
+                    <input type='hidden' name='titulo' value='".$libro->getTitulo()."'>
+                    <input type='hidden' name='subtitulo' value='".$libro->getSubtitulo()."'>
+                    <input type='hidden' name='descripcion' value='".$libro->getDescripcion()."'>
+                    <input type='hidden' name='portada' value='".$libro->getPortada()."'>
+                    <input type='hidden' name='autoria' value='".$libro->getAutoria()."'>
+                    <input type='hidden' name='numPaginas' value='".$libro->getNumPaginas()."'>
+                    <input type='hidden' name='editorial' value='".$libro->getEditorial()."'>
+                    <input type='hidden' name='anhoPublicacion' value='".$libro->getAnhoPublicacion()."'>
+                    <input type='hidden' name='enlaceAPI' value='".$libro->getEnlaceAPI()."'>
+                    <input type='hidden' name='estado' value='".$libro->getEstado()."'>
+                  </form>
+                  <form name='categorias-hidden' class='hidden'>
+                    $categoriasLibroTags
+                  </form>
+                </div>
+              </div>";
+            }
+            echo "<div class='filters-not-found'>
+              <img src='/bibliopocket/client/assets/images/filters-not-found.svg' alt='Una persona buscando entre diferentes opciones que le salen en una pantalla.'>
+              <small>No hay libros en tu estantería con los filtros aplicados</small>
+            </div>";
           }
 
-          echo "<div class='libro'>
-            <div class='portada-container'>
-              <img src='".$libro->getPortada()."' class='portada'>
-              <img src='/bibliopocket/client/assets/images/marcador-".strtolower($libro->getEstadoTexto()).".svg' class='marcador'>
-            </div>
-            <div class='datos-libro'>
-              <div class='cabecera'>
-                <p class='titulo'>".$libro->getTitulo()."</p>
-                <p class='subtitulo'>".$libro->getSubtitulo()."</p>
-              </div>
-              <hr>
-              <p class='autoria'>".$libro->getAutoria()."</p>
-              <p class='editorial'>".$libro->getEditorial()."</p>
-              <p class='anho-publicacion'>".$libro->getAnhoPublicacion()."</p>
-              <div class='grupo-buttons'>
-                <svg xmlns='http://www.w3.org/2000/svg' class='icon eliminar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM112,168a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm0-120H96V40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8Z'></path></svg>
-                <svg xmlns='http://www.w3.org/2000/svg' class='icon modificar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160l90.35-90.35,16.68,16.69L68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188l90.35-90.35h0l16.68,16.69Z'></path></svg>
-              </div>
-              <form name='datosLibro' class='hidden'>
-                <input type='hidden' name='id' value='".$libro->getId()."'>
-                <input type='hidden' name='titulo' value='".$libro->getTitulo()."'>
-                <input type='hidden' name='subtitulo' value='".$libro->getSubtitulo()."'>
-                <input type='hidden' name='descripcion' value='".$libro->getDescripcion()."'>
-                <input type='hidden' name='portada' value='".$libro->getPortada()."'>
-                <input type='hidden' name='autoria' value='".$libro->getAutoria()."'>
-                <input type='hidden' name='numPaginas' value='".$libro->getNumPaginas()."'>
-                <input type='hidden' name='editorial' value='".$libro->getEditorial()."'>
-                <input type='hidden' name='anhoPublicacion' value='".$libro->getAnhoPublicacion()."'>
-                <input type='hidden' name='enlaceAPI' value='".$libro->getEnlaceAPI()."'>
-                <input type='hidden' name='estado' value='".$libro->getEstado()."'>
-              </form>
-              <form name='categorias-hidden' class='hidden'>
-                $categoriasLibroTags
-              </form>
-            </div>
-          </div>";
-        }
-      ?>
-    </div>
+        ?>
+      </section>
+    </main>
+
   <?php endif; ?>
     <custom-toast></custom-toast>
 
@@ -200,6 +262,7 @@ if (isset($_POST["eliminar-libro"])) {
       unset($_SESSION["showToastOk"], $_SESSION["showToastError"], $_SESSION["showToastInfo"]);
     ?>
 
+  <script src="/bibliopocket/client/handlers/filtradorEstanteriaHandler.js"></script>
   <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
   <script src="/bibliopocket/client/handlers/APIBooksHandler.js" type="module"></script>
   <script src="./script.js" type="module"></script>

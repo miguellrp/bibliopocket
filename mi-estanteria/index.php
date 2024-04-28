@@ -33,6 +33,7 @@ if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
         if ($categoria->sinAsociarEn($idLibro)) $categoria->asociarA($idLibro);
       }
     }
+
     $_SESSION["toast"]["tipo"] = "ok";
     $_SESSION["toast"]["mensaje"] = "Se ha añadido el libro a tu estantería";
   } else {
@@ -104,10 +105,11 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
   <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
-  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
   <script src="/bibliopocket/client/components/CustomButton.js"></script>
-  <script src="/bibliopocket/client/components/CustomToast.js"></script>
+  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
+  <script src="/bibliopocket/client/components/CustomImageUploader.js"></script>
   <script src="/bibliopocket/client/components/CustomTagify.js"></script>
+  <script src="/bibliopocket/client/components/CustomToast.js"></script>
 </head>
 <body>
   <?php if (!isset($usuarioActivo)): ?>
@@ -194,7 +196,6 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
               $categoriasLibroDB = Categoria::getCategoriasDe($libro->getId());
               $categoriasLibroTags = "";
               
-              
               foreach($categoriasLibroDB as $categoriaDB) {
                 $categoriasLibroTags .= "<input type='hidden' name='categorias[]' value='".$categoriaDB."'>";
               }
@@ -269,7 +270,6 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
 
   <script src="/bibliopocket/client/handlers/APIBooksHandler.js" type="module"></script>
   <script src="/bibliopocket/client/handlers/filtradorEstanteriaHandler.js"></script>
-  <script src="/bibliopocket/client/handlers/previewHandler.js" type="module"></script>
   <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
   <script src="./script.js" type="module"></script>
 </body>

@@ -1,8 +1,6 @@
 @import url(/bibliopocket/client/styles/globals.css);
 
 :root {
-  --ancho-userpic-configuracion: 128px;
-  --alto-userpic-configuracion: 128px;
   --ancho-userpic-detalles: 156px;
   --alto-userpic-detalles: 156px;
 }
@@ -91,17 +89,6 @@ body {
   flex-direction: column;
   padding-inline: 60px;
 
-  & .userpic {
-    width: var(--ancho-userpic-detalles);
-    max-width: var(--ancho-userpic-detalles);
-    height: var(--alto-userpic-detalles);
-    max-height: var(--alto-userpic-detalles);
-
-    border: 3px solid var(--primary-color);
-    border-radius: 10%;
-    margin: 20px 0;
-  }
-
   & label {
     &::before {
       content: "•";
@@ -111,6 +98,18 @@ body {
     font-size: 18px;
     display: flex;
     align-items: center;
+  }
+
+  & img {
+    width: var(--ancho-userpic-detalles);
+    max-width: var(--ancho-userpic-detalles);
+    height: var(--alto-userpic-detalles);
+    max-height: var(--alto-userpic-detalles);
+    margin: 15px auto;
+
+    border: 2px solid var(--primary-color);
+    border-radius: 10%;
+    box-shadow: 0 0 12px 2px #00000080;
   }
 }
 

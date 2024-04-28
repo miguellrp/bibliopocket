@@ -200,8 +200,7 @@ main {
 }
 
 .filters-not-found, .empty-bookshelf {
-  display: flex;
-  opacity: 0;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -220,7 +219,7 @@ main {
 }
 
 .empty-bookshelf {
-  opacity: 1;
+  display: flex;
 }
 
 .input-buscador {

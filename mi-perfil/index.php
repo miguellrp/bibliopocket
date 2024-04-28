@@ -13,20 +13,10 @@ if (isset($_SESSION["usuarioActivo"]))
 
 if (isset($usuarioActivo)) {
   if (isset($_POST["modificacion-datos-user"])) {
-    if (is_uploaded_file($_FILES["userProfilePic"]["tmp_name"])) {
-      $userID = $usuarioActivo->getId();
-      $temp = explode(".", $_FILES["userProfilePic"]["name"]);
-      
-      // TODO: comprobar que no se está almacenando otra userpic con distinto formato (png, jpg...) para eliminarla previamente a subir la nueva
-      $nombreArchivoImagen = $usuarioActivo->getNombreUsuario()."ProfilePic.".end($temp);
-      $rutaImagen = "/bibliopocket/client/assets/images/user-pics/" . $nombreArchivoImagen;
-  
-      if (move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen)) {
-        if($usuarioActivo->setUserPicPathDB($rutaImagen)) {
-
-          $_SESSION["toast"]["tipo"] = "ok";
-          $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
-        }
+    if (isset($_FILES["userProfilePic"]) && is_uploaded_file($_FILES["userProfilePic"]["tmp_name"])) {
+      if ($usuarioActivo->actualizarUserPic()) {
+        $_SESSION["toast"]["tipo"] = "ok";
+        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
       } else {
         $_SESSION["toast"]["tipo"] = "error";
         $_SESSION["toast"]["mensaje"] = "Ha ocurrido un problema al intentar actualizar tu perfil";
@@ -41,7 +31,7 @@ if (isset($usuarioActivo)) {
       $_SESSION["toast"]["tipo"] = "ok";
       $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
     }
-
+    
     $_SESSION["seccionActiva"] = 1;
     header("Location: index.php");
     session_write_close();
@@ -120,8 +110,9 @@ if (isset($usuarioActivo)) {
   <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
   <link rel="stylesheet" href="styles.css">
-  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
   <script src="/bibliopocket/client/components/CustomButton.js"></script>
+  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
+  <script src="/bibliopocket/client/components/CustomImageUploader.js"></script>
   <script src="/bibliopocket/client/components/CustomToast.js"></script>
 </head>
 
@@ -140,7 +131,7 @@ if (isset($usuarioActivo)) {
 
     <section class="detalles-cuenta container" <?= $_SESSION["seccionActiva"] == 0 ? "active" : null ?> >
       <h2>Tus estadísticas</h2>
-      <img class="userpic" src="<?= $usuarioActivo->getUserPicPathDB() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
+      <img class="userpic" src="<?= $usuarioActivo->getUserPic() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
       <ul>
         <li>Total de libros leídos:
           <span class="detalle-user"><?= $usuarioActivo->getCountLibrosPorEstado(2) ?></span>
@@ -157,15 +148,7 @@ if (isset($usuarioActivo)) {
     <section class="configuracion container" <?= $_SESSION["seccionActiva"] == 1 ? "active" : null ?>>
       <form class="datos-user" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
         <div class="form-fields">
-          <div class="userpic">
-            <img src="<?= $usuarioActivo->getUserPicPathDB() ?>" class="preview" alt="Foto de perfil de <?= $usuarioActivo->getNombreUsuario() ?>" >
-            <div class="wrap-uploader" >
-              <label for="uploader-input">
-                <img src="/bibliopocket/client/assets/images/pencil-icon.png" class="lapiz-icon">
-              </label>
-              <input id="uploader-input" type="file" accept="image/*" name="userProfilePic" />
-            </div>
-          </div>
+          <custom-image-uploader data-src=<?= $usuarioActivo->getUserPic()?>></custom-image-uploader>
           <div class="middle">
             <input type="text" class="username" name="username" value="<?= $usuarioActivo->getNombreUsuario() ?>">
             <button type="submit" name="modificacion-datos-user">
@@ -211,7 +194,6 @@ if (isset($usuarioActivo)) {
 
 
   <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
-  <script src="/bibliopocket/client/handlers/previewHandler.js" type="module"></script>
   <script src="script.js" type="module"></script>
 </body>
 

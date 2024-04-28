@@ -81,16 +81,15 @@ function generarBuscadorAPI () {
 
 function generarFormDatosLibro () {
   return /* html */ ` 
-    <form action="" method="POST" enctype=multipart/form-data>
-      <div class="wrap-portada">
-        <img class="portada">
-        <div class="portada-upload">
-          <label for="portada-input">
-            <img src="/bibliopocket/client/assets/images/pencil-icon.png" class="lapiz-icon">
-          </label>
-          <input id="portada-input" type="file" accept="image/*" name="portada" />
-        </div>   
-      </div>
+    <form action="" method="POST" name="libroModalForm" enctype=multipart/form-data>
+      <custom-image-uploader
+        width-preview="128px"
+        height-preview="192px"
+        border-type="2px dashed var(--primary-color)"
+        border-radius="5%"
+        data-name="portadaLibro"
+        data-form="libroModalForm">
+      </custom-image-uploader>  
       <div class="datos-cabecera">
         <label for="titulo">Título:</label>
         <input type="text" id="titulo" class="input-txt" name="titulo" >
@@ -329,10 +328,6 @@ function actualizarDataForm (tipoForm, libro) {
     return [idLibroTag, portadaTag, enlaceAPILibroTag, categoriasLibro];
   }
 
-  function getCategoriasHiddenGroup () {
-    console.log(modalDatosLibro);
-  }
-
   function anhadirUltimoElementoForm (ultimoElementoForm) {
     const submitButton = form.querySelector("input[type=submit]");
 
@@ -345,7 +340,7 @@ function getCamposForm () {
   const camposForm = document.querySelector("#datos-libro-modal > form");
 
   return {
-    "portada": camposForm.querySelector(".portada"),
+    "portada": camposForm.querySelector("custom-image-uploader"),
     "titulo": camposForm.querySelector("#titulo"),
     "subtitulo": camposForm.querySelector("#subtitulo"),
     "descripcion": camposForm.querySelector("#descripcion"),

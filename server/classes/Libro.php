@@ -29,7 +29,7 @@ class Libro {
         "subtitulo"         => $_POST["subtitulo"],
         "autoria"           => $_POST["autoria"],
         "descripcion"       => $_POST["descripcion"],
-        "portada"           => $_POST["portada"],
+        "portada"           => $_POST["portada"]??null,
         "numPaginas"        => $_POST["numPaginas"],
         "editorial"         => $_POST["editorial"],
         "anhoPublicacion"   => $_POST["anhoPublicacion"],
@@ -63,6 +63,22 @@ class Libro {
     $this->enlaceAPI        = $datosLibro["enlaceAPI"];
     $this->estado           = $datosLibro["estado"];
     $this->fechaAdicion     = $datosLibro["fechaAdicion"];
+
+    
+    if (isset($_FILES["portadaLibro"]) && is_uploaded_file($_FILES["portadaLibro"]["tmp_name"])) {
+      $extension = explode(".", $_FILES["portadaLibro"]["name"]);
+      $extension = end($extension);
+      
+      $nombreArchivoImagen = $this->getId().".".$extension;
+      $rutaImagen = dirname(__DIR__, 2)."/client/assets/images/portadas/" . $nombreArchivoImagen;
+      $rutaSinExtension = explode(".", $rutaImagen);
+      $rutaSinExtension = glob($rutaSinExtension[0].".*");
+      
+      if (!empty($rutaSinExtension)) unlink($rutaSinExtension[0]);
+
+      move_uploaded_file($_FILES["portadaLibro"]["tmp_name"], $rutaImagen);
+      $this->portada = "http://localhost/bibliopocket/client/assets/images/portadas/" . $nombreArchivoImagen;
+    }
   }
 
   private function getCamposDB() {

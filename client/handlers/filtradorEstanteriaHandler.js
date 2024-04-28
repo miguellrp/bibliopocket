@@ -51,7 +51,7 @@ function actualizarLibrosFiltrados () {
 
 
     if (tituloOk && autoriaOk && editorialOk && anhoPublicacionOk && estadoOk && categoriasOk) {
-      setTimeout(() => { libroDOM.style.display = "flex" }, 150); // Mostrar el libro si cumple con ambos filtros
+      libroDOM.style.display = "flex"; // Mostrar el libro si cumple con ambos filtros
     } else {
       libroDOM.style.display = "none"; // Ocultar el libro si no cumple con algún filtro
       librosOcultados += 1;
@@ -124,12 +124,7 @@ function setFiltroTagifyListener (tagifyFiltro) {
 function mostrarPlaceholder (mostrar) {
   const placeholderEstanteria = document.querySelector(".filters-not-found");
 
-  if (mostrar) {
-    setTimeout(() => {
-      placeholderEstanteria.style.opacity = 1;
-    }, 300);
-  }
-
-  else placeholderEstanteria.style.opacity = 0;
+  if (mostrar) placeholderEstanteria.style.display = "flex";
+  else placeholderEstanteria.style.display = "none";
 
 }

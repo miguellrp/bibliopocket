@@ -75,7 +75,7 @@ class Usuario {
   }
 
   function getUserPic() {
-    return $this->userPic;
+    return $this->userPic??"/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
   }
 
   function getUltimoLogin() {
@@ -161,25 +161,6 @@ class Usuario {
     }
   }
 
-  function getUserPicPathDB() {
-      try {
-        $query = $this->conexionDB->conn->prepare("SELECT user_pic FROM usuarios
-          WHERE id LIKE :id");
-    
-        $query->bindParam(":id", $this->id, PDO::PARAM_STR);
-        $query->execute();
-        $userPicPath = $query->fetchColumn();
-      }
-      catch (PDOException $exception) {
-        echo "Ocurrió un error al cargar la imagen. ". $exception->getMessage();
-        return "/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
-      }
-      
-      // En el caso de que la persona usuaria no facilitase ninguna foto de perfil, se le da un placeholder genérico:
-      if($userPicPath == NULL) $userPicPath = "/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
-      return $userPicPath;
-  }
-
   function esLibroGuardado($libro) {
     try {
       $query = $this->conexionDB->conn->prepare("SELECT * from libros
@@ -210,6 +191,39 @@ class Usuario {
       echo "Ocurrió un error al intentar actualizar el nombre de usuario. ". $exception->getMessage();
       return false;
     }
+  }
+
+  function actualizarUserPic() {
+    $extension = explode(".", $_FILES["userProfilePic"]["name"]);
+    $extension = end($extension);
+    $subidaOk = false;
+    
+    $nombreArchivoImagen = $this->getId().".".$extension;
+    $rutaImagen = dirname(__DIR__, 2)."/client/assets/images/user-pics/" . $nombreArchivoImagen;
+    $rutaSinExtension = explode(".", $rutaImagen);
+    $rutaSinExtension = glob($rutaSinExtension[0].".*");
+    
+    if (!empty($rutaSinExtension)) unlink($rutaSinExtension[0]);
+
+    if (move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen))
+    $this->userPic = "http://localhost/bibliopocket/client/assets/images/user-pics/" . $nombreArchivoImagen;
+
+    try {
+      $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
+        user_pic = :nuevaPic
+        WHERE id = :id");
+      $query->execute(array(
+        ":id"  => $this->getId(),
+        ":nuevaPic" => $this->getUserPic()
+      ));
+
+      $subidaOk = true;
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar actualizar la foto de perfil. ". $exception->getMessage();
+    }
+
+    return $subidaOk;
   }
 
   function actualizarCorreo($nuevoEmail) {

@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/handlers/Util.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
 class Usuario {
   private $id;
@@ -75,7 +75,7 @@ class Usuario {
   }
 
   function getUserPic() {
-    return $this->userPic??"/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
+    return $this->userPic??"/client/assets/images/user-pics/placeholderUserPic.webp";
   }
 
   function getUltimoLogin() {
@@ -206,7 +206,7 @@ class Usuario {
     if (!empty($rutaSinExtension)) unlink($rutaSinExtension[0]);
 
     if (move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen))
-    $this->userPic = "http://localhost/bibliopocket/client/assets/images/user-pics/" . $nombreArchivoImagen;
+    $this->userPic = "http://localhost/client/assets/images/user-pics/" . $nombreArchivoImagen;
 
     try {
       $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET

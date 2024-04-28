@@ -100,22 +100,22 @@ class CustomToast extends HTMLElement {
     switch (tipo.toLowerCase()) {
       case "warning":
         backgroundColor = "#ea9737";
-        icon = "/bibliopocket/client/assets/images/warning-icon.svg#warning-icon";
+        icon = "/client/assets/images/warning-icon.svg#warning-icon";
         break;
 
       case "ok":
         backgroundColor = "#19ce0a";
-        icon = "/bibliopocket/client/assets/images/ok-icon.svg#ok-icon";
+        icon = "/client/assets/images/ok-icon.svg#ok-icon";
         break;
 
       case "error":
         backgroundColor = "#d53737";
-        icon = "/bibliopocket/client/assets/images/error-icon.svg#error-icon";
+        icon = "/client/assets/images/error-icon.svg#error-icon";
         break;
 
       default:
         backgroundColor = "#8f9cff";
-        icon = "/bibliopocket/client/assets/images/info-icon.svg#info-icon";
+        icon = "/client/assets/images/info-icon.svg#info-icon";
     }
 
     toast.style.backgroundColor = backgroundColor;

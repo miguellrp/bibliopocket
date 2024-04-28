@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/handlers/Util.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
 class Libro {
   private $id;
@@ -77,7 +77,7 @@ class Libro {
       if (!empty($rutaSinExtension)) unlink($rutaSinExtension[0]);
 
       move_uploaded_file($_FILES["portadaLibro"]["tmp_name"], $rutaImagen);
-      $this->portada = "http://localhost/bibliopocket/client/assets/images/portadas/" . $nombreArchivoImagen;
+      $this->portada = "http://localhost/client/assets/images/portadas/" . $nombreArchivoImagen;
     }
   }
 

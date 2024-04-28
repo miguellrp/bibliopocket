@@ -9,7 +9,7 @@ export async function buscarLibroAPI () {
   const resultadosTag = document.querySelector(".resultados-busqueda");
 
   if (terminoBuscado != "") {
-    resultadosTag.innerHTML = "<img src='/bibliopocket/client/assets/images/loader.svg'>";
+    resultadosTag.innerHTML = "<img src='/client/assets/images/loader.svg'>";
 
     // TODO: diversificar búsqueda por título, autoría, isbn
     let resultadosAPI = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${terminoBuscado}&maxResults=${MAX_RESULTADOS}`);
@@ -27,7 +27,7 @@ function parsearResultadosAPI (librosJSON) {
   librosJSON.items.forEach(item => {
     const dataLibro = item["volumeInfo"];
     const portadaLibro = dataLibro["imageLinks"] === undefined
-      ? "/bibliopocket/client/assets/images/portadas/placeholder-portada-libro.webp"
+      ? "/client/assets/images/portadas/placeholder-portada-libro.webp"
       : dataLibro["imageLinks"]["thumbnail"];
 
     librosItems.push(new Libro(
@@ -41,7 +41,7 @@ function parsearResultadosAPI (librosJSON) {
       dataLibro["publisher"] || "Editorial no disponible",
       dataLibro["publishedDate"],
       dataLibro["infoLink"],
-      "Pendiente"
+      0
     ))
   });
 

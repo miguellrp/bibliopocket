@@ -203,7 +203,7 @@ class CustomHeader extends HTMLElement {
       }
   </style>
     <header>
-    <h1><a href="/bibliopocket/inicio">BiblioPocket 📚</a></h1>
+    <h1><a href="/inicio">BiblioPocket 📚</a></h1>
       <input type="checkbox">
       <div class="hamburger-icon">
         <span class="line line1"></span>
@@ -212,16 +212,16 @@ class CustomHeader extends HTMLElement {
       </div>
       <ul class="menu-items">
         <li class="${paginaActiva === 'inicio' ? 'pagina-activa' : ''}">
-          <a href="/bibliopocket/inicio">INICIO</a>
+          <a href="/inicio">INICIO</a>
         </li>
         <li class="${paginaActiva === 'mi-estanteria' ? 'pagina-activa' : ''}">
-          <a href="/bibliopocket/mi-estanteria">MI ESTANTERÍA</a>
+          <a href="/mi-estanteria">MI ESTANTERÍA</a>
         </li>
         <li class="${paginaActiva === 'mi-perfil' ? 'pagina-activa' : ''}">
-          <a href="/bibliopocket/mi-perfil">MI PERFIL</a>
+          <a href="/mi-perfil">MI PERFIL</a>
         </li>
         <li>
-          <form action="/bibliopocket/index.php" method="POST">
+          <form action="/index.php" method="POST">
             <input type="submit" value="SALIR" name="log-out">
           </form>
         </li>

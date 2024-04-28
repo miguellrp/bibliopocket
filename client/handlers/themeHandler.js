@@ -3,12 +3,12 @@ const toggleIcon = document.querySelector(".darklight");
 
 const propiedadesIcono = {
   light: {
-    src: "/bibliopocket/client/assets/images/moon-icon.png",
+    src: "/client/assets/images/moon-icon.png",
     alt: "Símbolo de una media luna (menguante) para representar el modo oscuro de la web",
     classList: "icon darklight moon"
   },
   dark: {
-    src: "/bibliopocket/client/assets/images/sun-icon.png",
+    src: "/client/assets/images/sun-icon.png",
     alt: "Símbolo de un sol para representar el modo claro de la web",
     classList: "icon darklight sun"
   }

@@ -252,8 +252,8 @@ main {
     width: 16px;
     right: 0;
     
-    -webkit-mask-image: url("/bibliopocket/client/assets/images/x-circle-icon.svg");
-    mask-image: url("/bibliopocket/client/assets/images/x-circle-icon.svg");
+    -webkit-mask-image: url("/client/assets/images/x-circle-icon.svg");
+    mask-image: url("/client/assets/images/x-circle-icon.svg");
     -webkit-mask-size: contain;
     mask-size: contain;
     background-color: var(--primary-color);
@@ -371,7 +371,7 @@ main {
         0px 2px 2px 0px rgba(0, 0, 0, 0.14),
         0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 
-      background-image: url(/bibliopocket/client/assets/images/plus-icon.png);
+      background-image: url(/client/assets/images/plus-icon.png);
       background-color: var(--secondary-contrast-color);
       background-position-x: 3px;
       background-position-y: center;

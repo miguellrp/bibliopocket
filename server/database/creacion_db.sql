@@ -47,3 +47,15 @@ CREATE TABLE valoraciones (
   id_usuario VARCHAR(128) NOT NULL,
   CONSTRAINT fk_ValoracionesUsuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
+
+
+-- Creación de usuario para testing
+INSERT INTO usuarios VALUES(
+  UUID(),
+  "testing",
+  "$2y$10$X6E8.2fofYExDpAVmzDrzeEAeKdfCCXMizPGOnyYeRk24vmlh1ksG",
+  "test@test.test",
+  NULL,
+  NOW(),
+  NOW()
+);

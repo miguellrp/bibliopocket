@@ -95,7 +95,7 @@ if (isset($usuarioActivo)) {
     $usuarioActivo->eliminarCuenta();
     unset($_SESSION["usuarioActivo"]);
 
-    header("Location: /bibliopocket/index.php");
+    header("Location: /index.php");
     session_write_close();
   }
 }
@@ -107,13 +107,13 @@ if (isset($usuarioActivo)) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BiblioPocket | Mi perfil</title>
-  <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
-  <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
+  <link rel="icon" type="image/png" href="/client/assets/images/favicon.png">
+  <link rel="stylesheet" href="/client/styles/globals.css">
   <link rel="stylesheet" href="styles.css">
-  <script src="/bibliopocket/client/components/CustomButton.js"></script>
-  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
-  <script src="/bibliopocket/client/components/CustomImageUploader.js"></script>
-  <script src="/bibliopocket/client/components/CustomToast.js"></script>
+  <script src="/client/components/CustomButton.js"></script>
+  <script src="/client/components/CustomHeader.js"></script>
+  <script src="/client/components/CustomImageUploader.js"></script>
+  <script src="/client/components/CustomToast.js"></script>
 </head>
 
 <body>
@@ -153,12 +153,12 @@ if (isset($usuarioActivo)) {
             <input type="text" class="username" name="username" value="<?= $usuarioActivo->getNombreUsuario() ?>">
             <button type="submit" name="modificacion-datos-user">
               <svg class="button-icon">
-                <use xlink:href="/bibliopocket/client/assets/images/floppy-disk-icon.svg#floppy-disk"></use>
+                <use xlink:href="/client/assets/images/floppy-disk-icon.svg#floppy-disk"></use>
               </svg>
                 Guardar cambios
             </button>
           </div>
-          <img src="/bibliopocket/client/assets/images/moon-icon.png" class="icon darklight sun" tabindex="1"
+          <img src="/client/assets/images/moon-icon.png" class="icon darklight sun" tabindex="1"
             alt="Símbolo de una media luna (menguante) para representar el modo oscuro de la web">
         </div>
         <input type="hidden" name="correo" value="<?= $usuarioActivo->getEmail() ?>">
@@ -193,7 +193,7 @@ if (isset($usuarioActivo)) {
     ?>
 
 
-  <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
+  <script src="/client/handlers/themeHandler.js"></script>
   <script src="script.js" type="module"></script>
 </body>
 

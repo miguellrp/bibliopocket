@@ -108,7 +108,7 @@ function prepararEliminarCuentaListener () {
       <div class="grupo-buttons">
       <button type="submit" name="eliminar-cuenta" class="delete-button">
         <svg class="button-icon">
-          <use xlink:href="/bibliopocket/client/assets/images/trash-icon.svg#trash-icon"></use>
+          <use xlink:href="/client/assets/images/trash-icon.svg#trash-icon"></use>
         </svg>
           Eliminar cuenta
       </button>

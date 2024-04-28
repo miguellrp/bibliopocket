@@ -10,7 +10,7 @@ class CustomImageUploader extends HTMLElement {
   }
 
   render () {
-    const imagenPreview = this.getAttribute("data-src") ?? "/bibliopocket/client/assets/images/user-pics/placeholderUserPic.webp";
+    const imagenPreview = this.getAttribute("data-src") ?? "/client/assets/images/user-pics/placeholderUserPic.webp";
     const nameInputTag = this.getAttribute("data-name") ?? "userProfilePic";
 
     const anchoPreview = this.getAttribute("width-preview") ?? "128px";
@@ -18,7 +18,7 @@ class CustomImageUploader extends HTMLElement {
     const borderType = this.getAttribute("border-type") ?? "3px solid var(--primary-color)";
     const borderRadius = this.getAttribute("border-radius") ?? "50%";
 
-    const lapizIcon = "/bibliopocket/client/assets/images/pencil-icon.png";
+    const lapizIcon = "/client/assets/images/pencil-icon.png";
 
     this.shadowRoot.innerHTML = /* html */ `
     <style>

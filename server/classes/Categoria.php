@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/handlers/Util.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/database/Conector.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
 class Categoria {
   private $id;

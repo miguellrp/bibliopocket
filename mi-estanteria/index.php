@@ -102,14 +102,14 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BiblioPocket | Mi estantería</title>
-  <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
-  <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
+  <link rel="icon" type="image/png" href="/client/assets/images/favicon.png">
+  <link rel="stylesheet" href="/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
-  <script src="/bibliopocket/client/components/CustomButton.js"></script>
-  <script src="/bibliopocket/client/components/CustomHeader.js"></script>
-  <script src="/bibliopocket/client/components/CustomImageUploader.js"></script>
-  <script src="/bibliopocket/client/components/CustomTagify.js"></script>
-  <script src="/bibliopocket/client/components/CustomToast.js"></script>
+  <script src="/client/components/CustomButton.js"></script>
+  <script src="/client/components/CustomHeader.js"></script>
+  <script src="/client/components/CustomImageUploader.js"></script>
+  <script src="/client/components/CustomTagify.js"></script>
+  <script src="/client/components/CustomToast.js"></script>
 </head>
 <body>
   <?php if (!isset($usuarioActivo)): ?>
@@ -187,7 +187,7 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
         <?php
           if (empty($idsLibrosEstanteria)) {
             echo "<div class='empty-bookshelf'>
-              <img src='/bibliopocket/client/assets/images/empty-bookshelf.svg' alt='Una persona agarrando un libro cerca de una estantería de libros parcialmente vacía.'>
+              <img src='/client/assets/images/empty-bookshelf.svg' alt='Una persona agarrando un libro cerca de una estantería de libros parcialmente vacía.'>
               <small>Tu estantería está vacía, ¡añade libros buscándolos en Google Books o creándolos desde 0!</small>
             </div>";
           } else {
@@ -203,7 +203,7 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
               echo "<div class='libro'>
                 <div class='portada-container'>
                   <img src='".$libro->getPortada()."' class='portada'>
-                  <img src='/bibliopocket/client/assets/images/marcador-".strtolower($libro->getEstadoTexto()).".svg' class='marcador'>
+                  <img src='/client/assets/images/marcador-".strtolower($libro->getEstadoTexto()).".svg' class='marcador'>
                 </div>
                 <div class='datos-libro'>
                   <div class='cabecera'>
@@ -238,7 +238,7 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
               </div>";
             }
             echo "<div class='filters-not-found'>
-              <img src='/bibliopocket/client/assets/images/filters-not-found.svg' alt='Una persona buscando entre diferentes opciones que le salen en una pantalla.'>
+              <img src='/client/assets/images/filters-not-found.svg' alt='Una persona buscando entre diferentes opciones que le salen en una pantalla.'>
               <small>No hay libros en tu estantería con los filtros aplicados</small>
             </div>";
           }
@@ -268,9 +268,9 @@ $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds();
     ?>
 
 
-  <script src="/bibliopocket/client/handlers/APIBooksHandler.js" type="module"></script>
-  <script src="/bibliopocket/client/handlers/filtradorEstanteriaHandler.js"></script>
-  <script src="/bibliopocket/client/handlers/themeHandler.js"></script>
+  <script src="/client/handlers/APIBooksHandler.js" type="module"></script>
+  <script src="/client/handlers/filtradorEstanteriaHandler.js"></script>
+  <script src="/client/handlers/themeHandler.js"></script>
   <script src="./script.js" type="module"></script>
 </body>
 

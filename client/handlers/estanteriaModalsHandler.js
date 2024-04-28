@@ -1,4 +1,4 @@
-import { buscarLibroAPI } from "/bibliopocket/client/handlers/APIBooksHandler.js";
+import { buscarLibroAPI } from "/client/handlers/APIBooksHandler.js";
 
 // --- FUNCIONES PARA MOSTRAR MODAL ---
 export function getModalBusquedaAPI () {
@@ -74,7 +74,7 @@ function generarBuscadorAPI () {
        <input type="button" class="input-buscador btn" value="Buscar">
     </label>
     <div class="resultados-busqueda">
-      <img src="/bibliopocket/client/assets/images/torre-libros.svg">
+      <img src="/client/assets/images/torre-libros.svg">
     </div>
   `;
 }
@@ -187,7 +187,7 @@ function getDataForm (tipoForm, libro) {
 
   const dataForm = {
     "titleForm": (tipoForm == 0) ? "Añadir nuevo libro desde 0 📖" : "Modificar datos del libro ✍️",
-    "portadaLibro": (tipoForm == 0) ? "/bibliopocket/client/assets/images/portadas/placeholder-portada-libro.webp" : dataModificacionForm.portada,
+    "portadaLibro": (tipoForm == 0) ? "/client/assets/images/portadas/placeholder-portada-libro.webp" : dataModificacionForm.portada,
     "altPortadaLibro": (tipoForm == 0) ? "Portada del nuevo libro" : `Portada de ${dataModificacionForm.titulo}`,
     "tituloLibro": (tipoForm == 0) ? "" : dataModificacionForm.titulo,
     "subtituloLibro": (tipoForm == 0) ? "" : dataModificacionForm.subtitulo,

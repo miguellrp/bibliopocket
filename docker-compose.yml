@@ -1,0 +1,24 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=bibliopocketDB
+      - MYSQL_USER=adminBP
+      - MYSQL_PASSWORD=passBP
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+      - "./server/database:/docker-entrypoint-initdb.d"
+  www:
+    build: .
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ".:/var/www/html"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8001:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306

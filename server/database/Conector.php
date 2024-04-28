@@ -8,9 +8,9 @@ class Conector {
 
 
     function __construct() {
-        $this->servername = "localhost";
-        $this->username = "probaBiblio";
-        $this->password = "pass1234";
+        $this->servername = "db";
+        $this->username = "adminBP";
+        $this->password = "passBP";
         $this->dbname = "bibliopocketDB";
 
         try {

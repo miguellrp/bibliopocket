@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER["DOCUMENT_ROOT"]."/bibliopocket/server/database/Conector.php");
+include_once($_SERVER["DOCUMENT_ROOT"]."/server/database/Conector.php");
 
 class Estanteria {
   private $idUsuario;

@@ -162,7 +162,7 @@ class CustomTagify extends HTMLElement {
     const iconCruz = document.createElementNS("http://www.w3.org/2000/svg", "use");
 
     eliminarSVG.setAttribute("class", "icon");
-    iconCruz.setAttribute("href", "/bibliopocket/client/assets/images/x-icon.svg#x-icon");
+    iconCruz.setAttribute("href", "/client/assets/images/x-icon.svg#x-icon");
     eliminarSVG.append(iconCruz);
     eliminarInput.append(eliminarSVG);
 

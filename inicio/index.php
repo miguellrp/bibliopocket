@@ -35,8 +35,8 @@ if (isset($_SESSION["usuarioActivo"])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BiblioPocket | Inicio</title>
-  <link rel="icon" type="image/png" href="/bibliopocket/client/assets/images/favicon.png">
-  <link rel="stylesheet" href="/bibliopocket/client/styles/globals.css">
+  <link rel="icon" type="image/png" href="/client/assets/images/favicon.png">
+  <link rel="stylesheet" href="/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
   <script src="../client/components/CustomHeader.js"></script>
 </head>
@@ -50,7 +50,7 @@ if (isset($_SESSION["usuarioActivo"])) {
   <?php else: ?>
     <custom-header pagina-activa="inicio"></custom-header>
     <h2>👋 Bienvenid@ de nuevo,
-      <a class="username-title" href="/bibliopocket/mi-perfil">
+      <a class="username-title" href="/mi-perfil">
         <?= $usuarioActivo->getNombreUsuario() ?>
       </a>
       </h2>

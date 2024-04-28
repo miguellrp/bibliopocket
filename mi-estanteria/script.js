@@ -1,4 +1,4 @@
-import * as modalesEstanteria from "/bibliopocket/client/handlers/estanteriaModalsHandler.js";
+import * as modalesEstanteria from "/client/handlers/estanteriaModalsHandler.js";
 
 prepararListenersButtons();
 

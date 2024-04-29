@@ -4,20 +4,20 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
 <img src="demo/demo_pantalla_inicial.png" alt="Captura de pantalla de la vista inicial de BiblioPocket 📚" >
 
 ## 🚀 Desplegar demo:
-**1.** Descargar Docker Desktop desde su [página oficial](https://www.docker.com/products/docker-desktop/) (necesario para obtener las herramientas necesarias para la _dockerización_ de la aplicación).
-**2.** Descargar el respositorio como ZIP (_Code > Download ZIP_) o abrir la terminal en el directorio deseado y clonarlo directamente con ```git clone https://github.com/miguellrp/bibliopocket.git```.
-**3.** Una vez instalado Docker Desktop y con éste abierto (será necesario reiniciar el equipo), acceder al directorio raíz del repositorio clonado (``` /bibliopocket ```) y abrir la terminal desde allí.
-**4.** Introducir el comando ```docker compose up --build``` (importante incluír el parámetro ```--build``` para que al _dockerizar_ tenga en cuenta la instalación de la extensión de la clase conectora PDO de PHP con la base de datos).
-**5.** Finalmente, se podrá acceder a la demo de la aplicación en http://localhost:80 y a la base de datos a través de phpMyAdmin en http://localhost:8001.
+1. Descargar Docker Desktop desde su [página oficial](https://www.docker.com/products/docker-desktop/) (necesario para obtener las herramientas necesarias para la _dockerización_ de la aplicación).
+2. Descargar el respositorio como ZIP (_Code > Download ZIP_) o abrir la terminal en el directorio deseado y clonarlo directamente con ```git clone https://github.com/miguellrp/bibliopocket.git```.
+3. Una vez instalado Docker Desktop y con éste abierto (será necesario reiniciar el equipo), acceder al directorio raíz del repositorio clonado (``` /bibliopocket ```) y abrir la terminal desde allí.
+4. Introducir el comando ```docker compose up --build``` (importante incluír el parámetro ```--build``` para que al _dockerizar_ tenga en cuenta la instalación de la extensión de la clase conectora PDO de PHP con la base de datos).
+5. Finalmente, se podrá acceder a la demo de la aplicación en http://localhost:80 y a la base de datos a través de phpMyAdmin en http://localhost:8001.
 
 Debido a que el proceso de registro de una persona usuaria todavía está en construcción (queda por implementar el envío de un mensaje con el código generado para confirmar el correo aportado), se ha creado <a href="#credenciales">un perfil</a> para testear la aplicación.
 
 Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_:
-**1.** En la terminal abierta, presionar CTRL + C para detener el _docker_ y, a continuación, introducir el comando ```docker compose down``` para eliminar los contenedores generados.
-**2.** Desde la aplicación gráfica de Docker Desktop, eliminar las imágenes y volúmenes creados.
+1. En la terminal abierta, presionar CTRL + C para detener el _docker_ y, a continuación, introducir el comando ```docker compose down``` para eliminar los contenedores generados.
+2. Desde la aplicación gráfica de Docker Desktop, eliminar las imágenes y volúmenes creados.
 
 
-#### Credenciales:
+### Credenciales:
 | Contenedor | Nombre de usuario | Contraseña | Puerto |
 |:---:|:---:|:---:|:---:|
 | _BiblioPocket_ | testing | passtesting | :80 |

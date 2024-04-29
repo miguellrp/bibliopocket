@@ -18,10 +18,10 @@ Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_
 
 
 #### Credenciales:
-| Contenedor | Nombre de usuario | Contraseña |
-|:---:|:---:|:---:|
-| _BiblioPocket_ (web) ~[:80]~ | testing | passtesting |
-| _phpMyAdmin_ (gestión BD) ~[:8001]~ | adminBP | passBP |
+| Contenedor | Nombre de usuario | Contraseña | Puerto |
+|:---:|:---:|:---:|:---:|
+| _BiblioPocket_ | testing | passtesting | :80 |
+| _phpMyAdmin_ | adminBP | passBP | :8001 |
 
 
 ## ✍️ TO-DO:

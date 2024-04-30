@@ -10,7 +10,7 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
 4. Introducir el comando ```docker compose up --build``` (importante incluír el parámetro ```--build``` para que al _dockerizar_ tenga en cuenta la instalación de la extensión de la clase conectora PDO de PHP con la base de datos).
 5. Finalmente, se podrá acceder a la demo de la aplicación en http://localhost:80 y a la base de datos a través de phpMyAdmin en http://localhost:8001.
 
-Debido a que el proceso de registro de una persona usuaria todavía está en construcción (queda por implementar el envío de un mensaje con el código generado para confirmar el correo aportado), se ha creado <a href="#credenciales">un perfil</a> para testear la aplicación.
+Se ha creado <a href="#credenciales">un perfil</a> para testear la aplicación sin necesidad de realizar el proceso de registro.
 
 Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_:
 1. En la terminal abierta, presionar CTRL + C para detener el _docker_ y, a continuación, introducir el comando ```docker compose down``` para eliminar los contenedores generados.

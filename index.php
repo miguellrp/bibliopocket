@@ -1,5 +1,6 @@
 <?php
-include_once "server/classes/Usuario.php";
+require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Usuario.php';
+require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Email.php';
 session_start();
 
 $conn = new Conector();
@@ -37,47 +38,41 @@ if (isset($_POST["login-check"])) {
 }
 
 // Comprobación registro
-if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_COOKIE["codigoGenerado"] != $_POST["codigo"]) {
+if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["codigoRegistro"] != $_POST["codigo"]) {
   $codigoGenerado = rand(1000, 9999);
   $tiempoExpiracionCodigo = time() + 300;
-  setcookie("codigoGenerado", $codigoGenerado, $tiempoExpiracionCodigo);
+  $_SESSION["codigoRegistro"] = $codigoGenerado;
 
-  if (isset($_POST["registro-check"])) {
-    $usuario = $_POST["nombre-usuario-reg"];
-    $contrasenha = $_POST["contrasenha-reg"];
-    $email = $_POST["email-usuario-reg"];
+  $emailUsuarioRegistro = $_POST["email-usuario-reg"] ?? $_POST["email"];
+  $nombreUsuarioRegistro = $_POST["nombre-usuario-reg"] ?? $_POST["usuario"];
+  $contrasenhaUsuarioRegistro = $_POST["contrasenha-reg"] ?? $_POST["email"];
+
+  $emailConfirmacion = new Email($emailUsuarioRegistro, $nombreUsuarioRegistro, 0, $_SESSION["codigoRegistro"]);
+  if ($emailConfirmacion->sendMail()) {
+    echo "
+      <dialog class='modal' id='confirmacion-registro' open>
+        <form action='".$_SERVER['PHP_SELF']."' method='POST'>
+          <label for='codigo'>Introduce el código enviado a tu correo: </label>
+          <input type='text' class='input-text' minlength=4 maxlength=4 id='codigo' name='codigo' required>
+          <input type='submit' class='submit-btn' name='confirm-registro-check' value='Enviar'>
+          <input type='hidden' name='usuario' value='".$nombreUsuarioRegistro."'>
+          <input type='hidden' name='contrasenha' value='".$contrasenhaUsuarioRegistro."'>
+          <input type='hidden' name='email' value='".$emailUsuarioRegistro."'>
+        </form>
+      </dialog>
+    ";
   } else {
-    $usuario = $_POST["usuario"];
-    $contrasenha = $_POST["contrasenha"];
-    $email = $_POST["email"];
+    echo "
+      <dialog class='modal' id='confirmacion-registro' open>
+        <h3>Parece que hubo un problema en el envío del correo...</h3>
+        <p>Introduce de nuevo tu correo y, si vuelve a ocurrir, vuelve a intentarlo más tarde</p>
+      </dialog>
+    ";
   }
-
-  echo "
-    <dialog class='modal' id='confirmacion-registro' open>
-      <form action='".$_SERVER['PHP_SELF']."' method='POST'>
-        <label for='codigo'>Introduce el código enviado a tu correo: </label>
-        <input type='text' class='input-text' minlength=4 maxlength=4 id='codigo' name='codigo' required>
-        <input type='submit' class='submit-btn' name='confirm-registro-check' value='Enviar'>
-        <input type='hidden' name='usuario' value='".$usuario."'>
-        <input type='hidden' name='contrasenha' value='".$contrasenha."'>
-        <input type='hidden' name='email' value='".$email."'>
-      </form>
-    </dialog>
-  ";
-
-  // TO-DO: Configuración CORREO ✉️
-  // $para      = $email;
-  // $titulo    = "BiblioPocket 📚 Correo de confirmación";
-  // $mensaje   = "Hola, ".$usuario."!\r\nAquí está tu código de confirmación: ".$codigoGenerado;
-  // $cabeceras = 'From: bibliopocket@correo.com' . "\r\n" .
-  //     'Reply-To: bibliopocket@correo.com' . "\r\n" .
-  //     'X-Mailer: PHP/' . phpversion();
-
-  // mail($para, $titulo, $mensaje, $cabeceras);
 }
 
 // Confirmación registro (email válido)
-if (isset($_POST["confirm-registro-check"]) && $_COOKIE["codigoGenerado"] == $_POST["codigo"]) {
+if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_POST["codigo"]) {
   $nombreUsuario = $_POST["usuario"];
   $contrasenha = $_POST["contrasenha"];
   $email = $_POST["email"];

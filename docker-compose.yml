@@ -22,3 +22,11 @@ services:
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
+  mail:
+    image: bytemark/smtp
+    restart: always
+    environment:
+      RELAY_HOST: smtp.gmail.com
+      RELAY_PORT: 587
+      RELAY_USERNAME: bibliopocketinfo@gmail.com
+      RELAY_PASSWORD: testingBP

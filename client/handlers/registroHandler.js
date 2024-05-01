@@ -63,6 +63,7 @@ contrasenhaConfirmTag.addEventListener("keyup", extensionContrasenhaValida);
 formRegistro.addEventListener("keyup", () => {
   if (camposValidos() && camposCubiertos() && (extensionContrasenhaValida() && confirmacionValida())) {
     notificacionRegistro.style.opacity = 0;
+    notificacionRegistro.style.transition = ".3s ease";
     registroSubmit.disabled = false;
   }
   else {
@@ -73,7 +74,7 @@ formRegistro.addEventListener("keyup", () => {
       notificacionRegistro.textContent = "⚠️ Ambas contraseñas deben coincidir.";
     else {
       notificacionRegistro.textContent = "Faltan campos requeridos por cubrir (*)";
-      notificacionRegistro.style.opacity = 1;
     }
+    notificacionRegistro.style.opacity = 1;
   }
 });

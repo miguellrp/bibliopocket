@@ -1,7 +1,6 @@
 .modal {
-  width: -moz-fit-content;
-  width: fit-content;
-  padding: 70px;
+  width: 400px;
+  padding: 30px 0;
 
   border-image-slice: 1;
   border-width: 5px;
@@ -9,15 +8,6 @@
   color: var(--primary-color);
   background-color: var(--background-color);
   animation: fade-slide-in .4s ease;
-
-
-  &#registro {
-    width: 300px;
-
-    & .input-text {
-      width: 220px;
-    }
-  }
 
   & form {
     display: flex;
@@ -28,6 +18,19 @@
     & .input-text {
       text-align: center;
       font-size: 17px;
+    }
+
+    & .warning {
+      width: 95%;
+      color: #ffb02e;
+      text-align: center;
+      text-wrap: balance;
+      line-height: 20px;
+      margin: unset;
+
+      &::before {
+        content: "⚠️ ";
+      }
     }
   }
 
@@ -51,16 +54,38 @@
       border-color: var(--secondary-contrast-color);
       background-color: var(--secondary-color);
     }
-
-    & h3, p {
-      text-align: center;
-    }
   }
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.447);
   }
 }
+
+#login {
+  & small {
+    color: var(--secondary-lighten-color);
+    cursor: pointer;
+  }
+}
+
+.input-text {
+  min-width: 290px;
+}
+
+#error-mail {
+  padding: 19px;
+  z-index: 5;
+  margin-top: 190px;
+
+  border-image-source: linear-gradient(to right, #af0909, #8b3d3d);
+  background-color: #e25858;
+  color: white;
+
+  & h3, p {
+    text-align: center;
+  }
+}
+
 
 @keyframes fade-slide-in {
   from {

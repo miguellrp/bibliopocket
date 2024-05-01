@@ -6,6 +6,8 @@ session_start();
 $conn = new Conector();
 $loginValido = true;
 
+// Para controlar feedback en cambios hechos por la persona usuaria:
+if (!isset($_SESSION["toast"])) $_SESSION["toast"]["showToast"] = false;
 
 if (isset($_POST["log-out"]))
   session_destroy();
@@ -17,7 +19,7 @@ if (isset($_POST["login-check"])) {
   $usuarioTemp = new Usuario("idTemporal",$nombreUsuario, $contrasenha);
 
 
-  if ($usuarioTemp->loginDB()) {
+  if ($usuarioTemp->loginDB() || Usuario::loginTemporal($nombreUsuario, $contrasenha)) {
     $usuarioID = $conn->getUsuarioActualID($usuarioTemp->getNombreUsuario());
     $usuarioActivo = new Usuario($usuarioID);
     $_SESSION["usuarioActivo"] = array(
@@ -61,13 +63,6 @@ if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["cod
         </form>
       </dialog>
     ";
-  } else {
-    echo "
-      <dialog class='modal' id='confirmacion-registro' open>
-        <h3>Parece que hubo un problema en el envío del correo...</h3>
-        <p>Introduce de nuevo tu correo y, si vuelve a ocurrir, vuelve a intentarlo más tarde</p>
-      </dialog>
-    ";
   }
 }
 
@@ -91,6 +86,29 @@ if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_
     header("location: inicio/");
   }
 }
+
+// TODO: implementar otra alternativa con mayor seguridad para recuperación de cuentas (p.ej.: requerir previamente pregunta secreta)
+if (isset($_POST["recuperacion-contrasenha"])) {
+  $correoUsuario = $_POST["correo-recuperacion"];
+  $nombreUsuario = Usuario::getNombreUsuarioDe($correoUsuario);
+
+  if ($nombreUsuario != null) {
+    // Random password by: Dave Vogt [https://stackoverflow.com/questions/1837432/how-to-generate-random-password-with-php]
+    $contrasenhaTemporal = base64_encode(random_bytes(12));
+
+    $emailRecuperacion = new Email($correoUsuario, $nombreUsuario, 1, $contrasenhaTemporal);
+    if ($emailRecuperacion->sendMail()) {
+      Usuario::setContrasenhaTemporalDe($correoUsuario, $contrasenhaTemporal);
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha enviado el correo correctamente";
+    }
+  } else {
+    $_SESSION["toast"]["tipo"] = "warning";
+    $_SESSION["toast"]["mensaje"] = "El correo electrónico introducido no está registrado en BiblioPocket";
+  }
+
+  $_SESSION["toast"]["showToast"] = true;
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +120,8 @@ if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_
   <title>BiblioPocket</title>
   <link rel="icon" type="image/png" href="/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/client/styles/loginPage.css">
-  <script src="client/components/CustomButton.js"></script>
+  <script src="/client/components/CustomButton.js"></script>
+  <script src="/client/components/CustomToast.js"></script>
 </head>
 
 <body>
@@ -181,11 +200,32 @@ if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_
       font-color="var(--primary-color)">
     </custom-button>
   </div>
+
+  <custom-toast></custom-toast>
    
   <footer>
     <small>Icons by: <a href="https://phosphoricons.com/" target="_blank">Phosphor Icons</a></small>
     <small>Illustrations by: <a href="https://undraw.co/" target="_blank">UnDraw</a></small>
   </footer>
+
+  <?php
+    $showToast = $_SESSION["toast"]["showToast"];
+
+    if ($showToast) {
+      $tipo = $_SESSION["toast"]["tipo"];
+      $mensaje = $_SESSION["toast"]["mensaje"];
+
+    echo '<script>
+      const toast = document.querySelector("custom-toast");
+      toast.setMensaje("'.$mensaje.'");
+      toast.setTipo("'.$tipo.'");
+
+      toast.showToast();
+    </script>';
+    }
+
+    unset($_SESSION["toast"]);
+  ?>
 
   <script src="client/handlers/registroHandler.js"></script>
   <script src="client/handlers/landingModalsHandler.js"></script>

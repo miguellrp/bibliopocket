@@ -28,8 +28,8 @@ Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_
 | Sección | Caso de uso | Operativo |
 |:---:|:---:|:---:|
 | _Landing_ | La persona usuaria puede crear una cuenta e iniciar sesión | ✅ |
-| _Landing_ | La persona usuaria, al crear una cuenta, recibirá un correo con el código de verificación que será requerido para darse de alta | ❌ |
-| _Landing_ | La persona usuaria, cuando quiere iniciar sesión pero se ha olvidado su contraseña, se le enviará un código de recuperación | ❌ |
+| _Landing_ | La persona usuaria, al crear una cuenta, recibirá un correo con el código de verificación que será requerido para darse de alta | ✅ |
+| _Landing_ | La persona usuaria, cuando quiere iniciar sesión pero se ha olvidado su contraseña, se le enviará un código de recuperación | ✅ |
 | Inicio | La persona usuaria puede visualizar sus últimos libros añadidos | ✅ |
 | Mi estantería | La persona usuaria puede buscar un libro a través de la API de _Google Books_ y añadirlo a su estantería | ✅ |
 | Mi estantería | La persona usuaria puede crear un nuevo libro desde 0 y añadirlo a su estantería | ✅ |

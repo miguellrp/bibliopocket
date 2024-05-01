@@ -45,16 +45,31 @@ class Email {
     $mail->AddEmbeddedImage($_SERVER['DOCUMENT_ROOT'].'/client/assets/images/mails/heading_mail.png', 'heading_email');
     // Template by: Envato Tuts [https://codepen.io/tutsplus/pen/aboBgLX]
     $mail->MsgHTML($this->getBodyMail());
-    return $mail->Send().$mail->ErrorInfo;
+
+    if (!$mail->Send()) {
+      echo "
+        <dialog class='modal' id='error-mail' open>
+          <h3>Parece que hubo un problema en el envío del correo...</h3>
+          <p>Comprueba que has introducido bien tu correo y, si vuelve a ocurrir, vuelve a intentarlo más tarde.</p>
+        </dialog>
+      ";
+      return false;
+    }
+
+    return true;
   }
 
   private function getSubjectMail() {
     $subjectMail = "";
 
     switch($this->type) {
-      // Registro de nueva cuenta (código de confirmación):
+      // Registro de nueva cuenta (código de confirmación)
       case 0:
         $subjectMail = "Código de confirmación";
+        break;
+      // Recuperación de la cuenta (contraseña olvidada)
+      case 1:
+        $subjectMail = "Recuperación de cuenta";
         break;
     }
 
@@ -62,12 +77,20 @@ class Email {
   }
 
   private function getBodyMail() {
-    $bodyMessage = "";
-
     switch($this->type) {
-      // Registro de nueva cuenta (código de confirmación):
+      // Registro de nueva cuenta (código de confirmación)
       case 0:
-        $bodyMessage = "
+        $titleMail = "Confirmación de registro";
+        $messageMail = "Aquí tienes tu código para confirmar tu cuenta y comenzar a añadir libros a tu estantería virtual:";
+        break;
+      // Recuperación de la cuenta (contraseña olvidada)
+      case 1:
+        $titleMail = "Contraseña temporal";
+        $messageMail = "Aquí tienes una contraseña temporal para iniciar sesión con tu correo. Esta contraseña se borrará dentro de 15 minutos. <strong>¡No te olvides de cambiar la contraseña al entrar en tu cuenta!</strong>";
+        break;
+    }
+
+    $bodyMessage = "
           <body style='margin:0;padding:0;'>
             <table style='width:100%;border-collapse:collapse;border:none;border-spacing:0;'>
               <tr>
@@ -83,9 +106,9 @@ class Email {
                         <table style='width:100%;border-collapse:collapse;border:0;border-spacing:0;'>
                           <tr>
                             <td style='padding:0 0 0 0;color:#153643;'>
-                              <h1 style='font-size:24px;margin:0 0 20px 0;'>Confirmación de registro</h1>
-                              <p style='margin:0 0 12px 0;font-size:16px;line-height:24px;'>Aquí tienes tu código para confirmar tu cuenta y comenzar a añadir libros a tu estantería virtual:</p>
-                              <p style='margin:0;font-size:20px;font-weight:bold;border:2px solid #774360;color:#774360;background-color:#fffdde;padding:10px;width: 90px;margin:auto;text-align:center;'>".$this->customData."</p>
+                              <h1 style='font-size:24px;margin:0 0 20px 0;'>".$titleMail."</h1>
+                              <p style='margin:0 0 12px 0;font-size:16px;line-height:24px;'>".$messageMail."</p>
+                              <p style='margin:0;font-size:20px;font-weight:bold;border:2px solid #774360;color:#774360;background-color:#fffdde;padding:10px;width: fit-content;margin:auto;text-align:center;'>".$this->customData."</p>
                             </td>
                           </tr>
                         </table>
@@ -123,9 +146,6 @@ class Email {
             </table>
           </body>
         ";
-        break;
-
-    }
 
     return $bodyMessage;
   }

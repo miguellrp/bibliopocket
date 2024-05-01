@@ -13,6 +13,15 @@ CREATE TABLE usuarios (
   fecha_ultimo_login DATETIME NOT NULL
 );
 
+/* Tabla para almacenar contraseñas temporales cuando la persona usuaria olvida su contraseña */
+CREATE TABLE contrasenhas_temporales (
+  id VARCHAR(128) PRIMARY KEY NOT NULL,
+  email_usuario VARCHAR(256) NOT NULL,
+  contrasenha_temporal VARCHAR(70) NOT NULL,
+  fecha_expiracion TIMESTAMP NOT NULL,
+  CONSTRAINT fk_contrasenhasTemporalesUsuarios FOREIGN KEY (email_usuario) REFERENCES usuarios(email_usuario) ON DELETE CASCADE
+);
+
 CREATE TABLE libros (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
   titulo VARCHAR(256) NOT NULL,
@@ -59,3 +68,11 @@ INSERT INTO usuarios VALUES(
   NOW(),
   NOW()
 );
+
+/* Se activa la programación de eventos */
+SET GLOBAL event_scheduler = ON;
+
+-- Para eliminar aquellas contraseñas temporales cuya fecha de expiración haya pasado
+CREATE EVENT delete_contrasenhas_temporales
+ON SCHEDULE EVERY 1 MINUTE
+DO DELETE FROM contrasenhas_temporales WHERE fecha_expiracion <= CURRENT_TIMESTAMP();

@@ -335,4 +335,66 @@ class Usuario {
       echo "Ocurrió un error al contabilizar el número de días registrado '. ". $exception->getMessage();
     }
   }
+
+  // Funciones estáticas utilizadas para cuando una persona usuaria olvidó su contraseña
+  static function getNombreUsuarioDe($emailUsuario) {
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("SELECT nombre_usuario from usuarios
+        WHERE email_usuario = :emailUsuario");
+      $query->execute(array(
+        ":emailUsuario"  => $emailUsuario
+      ));
+      return $query->fetchColumn();
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al tratar de recuperar el nombre de usuario con el correo $emailUsuario '. ". $exception->getMessage();
+    }
+  }
+
+  static function setContrasenhaTemporalDe($emailUsuario, $contrasenhaTemporal) {
+    $idGenerado = Util::generarId();
+    $fechaActual = new DateTime();
+    $fechaActual->add(new DateInterval('PT15M'));
+    $fechaExpiracion = $fechaActual->format('Y-m-d H:i:s');
+
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("INSERT INTO contrasenhas_temporales
+        VALUES (:id, :emailUsuario, :contrasenhaTemporal, :fechaExpiracion)");
+      $query->execute(array(
+        ":id"                   => $idGenerado,
+        ":emailUsuario"         => $emailUsuario,
+        ":contrasenhaTemporal"  => $contrasenhaTemporal,
+        ":fechaExpiracion"      => $fechaExpiracion
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar asignar una contraseña temporal. ". $exception->getMessage();
+      return false;
+    }
+    
+    return true;
+  }
+  
+  static function loginTemporal($nombreUsuario, $contrasenhaTemporal) {
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("SELECT nombre_usuario
+      FROM usuarios tu
+      JOIN contrasenhas_temporales tct ON tct.email_usuario = tu.email_usuario
+      WHERE tu.nombre_usuario = :nombreUsuario AND tct.contrasenha_temporal = :contrasenhaTemporal");
+      
+      $query->execute(array(
+        ":nombreUsuario"          => $nombreUsuario,
+        ":contrasenhaTemporal"    => $contrasenhaTemporal
+      ));
+  
+      return $query->rowCount() == 1;
+
+    } catch (PDOException $exception) {
+      echo "Ocurrió un error durante el login con contraseña temporal. ". $exception->getMessage();
+      return false;
+    }
+  }
 }

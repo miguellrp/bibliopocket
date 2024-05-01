@@ -6,6 +6,7 @@ services:
       - MYSQL_USER=adminBP
       - MYSQL_PASSWORD=passBP
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - TZ=Europe/Madrid
     volumes:
       - "./server/database:/docker-entrypoint-initdb.d"
   www:

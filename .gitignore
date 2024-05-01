@@ -1,2 +1,7 @@
 ## UserPics files
-client/assets/images/user-pics/*ProfilePic.*
+/client/assets/images/user-pics/*
+!/client/assets/images/user-pics/placeholderUserPic.webp
+
+## Portadas files
+/client/assets/images/portadas/*
+!/client/assets/images/portadas/placeholder-portada-libro.webp

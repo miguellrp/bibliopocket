@@ -25,13 +25,14 @@ class Estanteria {
 
 
    /* MÉTODOS DE LA CLASE CONECTORES CON DB */
-  function getLibrosIds($limite = 10) {
+  function getLibrosIds($inicioRango, $limite = 10) {
     try {
       $query = $this->conexionDB->conn->prepare("SELECT id FROM libros
         WHERE id_usuario = :idUsuario
-        ORDER BY fecha_adicion DESC LIMIT :limite");
+        ORDER BY fecha_adicion DESC LIMIT :inicioRango, :limite");
       
       $query->bindParam(":idUsuario", $this->idUsuario, PDO::PARAM_STR);
+      $query->bindParam(":inicioRango", $inicioRango, PDO::PARAM_INT);
       $query->bindParam(":limite", $limite, PDO::PARAM_INT);
 
       $query->execute();
@@ -74,7 +75,7 @@ class Estanteria {
   function getUltimosLibrosAnhadidos($numLibros) {
     try {
       $query = $this->conexionDB->conn->prepare("SELECT id FROM libros
-        WHERE id_usuario = :idUsuario ORDER BY fecha_adicion ASC LIMIT :numLibros");
+        WHERE id_usuario = :idUsuario ORDER BY fecha_adicion DESC LIMIT :numLibros");
       
       $query->bindParam(":idUsuario", $this->idUsuario, PDO::PARAM_STR);
       $query->bindParam(":numLibros", $numLibros, PDO::PARAM_INT);

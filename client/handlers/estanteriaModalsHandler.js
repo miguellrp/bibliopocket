@@ -11,9 +11,9 @@ export function getModalBusquedaAPI () {
 
     modalBusquedaAPI.innerHTML = generarBuscadorAPI();
 
-    const buscador = modalBusquedaAPI.querySelector("#buscador-libro");
-    const buscadorButton = modalBusquedaAPI.querySelector(".input-buscador.btn");
-    buscador.addEventListener("search", buscarLibroAPI);
+    const buscadorInput = modalBusquedaAPI.querySelector("input[type=search]");
+    const buscadorButton = modalBusquedaAPI.querySelector(".buscador-btn");
+    buscadorInput.addEventListener("search", buscarLibroAPI);
     buscadorButton.addEventListener("click", buscarLibroAPI);
 
     document.body.appendChild(modalBusquedaAPI);
@@ -68,11 +68,12 @@ export function getModalEliminacion (idLibro) {
 function generarBuscadorAPI () {
   return /*html */ `
     <h2>AÑADIR NUEVO LIBRO 🔎</h2>
-    <label for="buscador-libro">Buscar por título:
-      <input type="search" id="buscador-libro" 
-       class="input-buscador" placeholder="Cien años de soledad">
-       <input type="button" class="input-buscador btn" value="Buscar">
-    </label>
+      <div class="buscador">
+        <input type="search" class="input-buscador" placeholder="Buscar por título, autoría, editorial...">
+        <button class="buscador-btn">
+          <img src="/client/assets/images/magnifying-glass-icon.svg">
+        </button>
+      </div>
     <div class="resultados-busqueda">
       <img src="/client/assets/images/torre-libros.svg">
     </div>

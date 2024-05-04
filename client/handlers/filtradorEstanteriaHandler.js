@@ -1,6 +1,3 @@
-const estanteria = document.querySelector(".estanteria");
-let librosDOM = document.querySelectorAll(".libro");
-
 // Variables globales para controlar los filtros introducidos:
 let filtros = {
   titulo: "",
@@ -11,8 +8,7 @@ let filtros = {
   categorias: []
 };
 
-if (librosDOM.length > 0) prepararListenersFiltros();
-
+prepararListenersFiltros();
 
 // --- FUNCIÓN MAIN ---
 function prepararListenersFiltros () {
@@ -30,27 +26,13 @@ function prepararListenersFiltros () {
 
 // Función a la que se llamará con cada input en los campos filtradores por parte de la persona usuaria
 function actualizarLibrosFiltrados () {
+  const librosDOM = document.querySelectorAll(".libro");
+
   let librosOcultados = 0;
   librosDOM.forEach((libroDOM) => {
     const datosLibro = getDatosLibroDOM(libroDOM);
-    // "Flags" internas para comprobar que cumple todos los filtros introducidos simultáneamente
-    let tituloOk = true;
-    let autoriaOk = true;
-    let editorialOk = true;
-    let anhoPublicacionOk = true;
-    let estadoOk = true;
-    let categoriasOk = true;
-    const incluidaEnLibro = categoria => datosLibro.categorias.includes(categoria);
 
-    if (filtros.titulo != "" && !datosLibro.titulo.includes(filtros.titulo)) tituloOk = false;
-    if (filtros.autoria != "" && !datosLibro.autoria.includes(filtros.autoria)) autoriaOk = false;
-    if (filtros.editorial != "" && !datosLibro.editorial.includes(filtros.editorial)) editorialOk = false;
-    if (filtros.anhoPublicacion != "" && !datosLibro.anhoPublicacion.startsWith(filtros.anhoPublicacion)) anhoPublicacionOk = false;
-    if (!filtros.estados.includes(datosLibro.estado)) estadoOk = false;
-    if (filtros.categorias.length > 0 && !filtros.categorias.some(incluidaEnLibro)) categoriasOk = false;
-
-
-    if (tituloOk && autoriaOk && editorialOk && anhoPublicacionOk && estadoOk && categoriasOk) {
+    if (cumpleFiltros(datosLibro)) {
       libroDOM.style.display = "flex"; // Mostrar el libro si cumple con ambos filtros
     } else {
       libroDOM.style.display = "none"; // Ocultar el libro si no cumple con algún filtro
@@ -61,6 +43,26 @@ function actualizarLibrosFiltrados () {
   // Si no se han encontrado libros con los filtros aplicados:
   if (librosOcultados == librosDOM.length) mostrarPlaceholder(true);
   else mostrarPlaceholder(false);
+}
+
+function cumpleFiltros (datosLibro) {
+  let tituloOk = true;
+  let autoriaOk = true;
+  let editorialOk = true;
+  let anhoPublicacionOk = true;
+  let estadoOk = true;
+  let categoriasOk = true;
+  const incluidaEnLibro = categoria => datosLibro.categorias.includes(categoria);
+
+  if (filtros.titulo != "" && !datosLibro.titulo.includes(filtros.titulo)) tituloOk = false;
+  if (filtros.autoria != "" && !datosLibro.autoria.includes(filtros.autoria)) autoriaOk = false;
+  if (filtros.editorial != "" && !datosLibro.editorial.includes(filtros.editorial)) editorialOk = false;
+  if (filtros.anhoPublicacion != "" && !datosLibro.anhoPublicacion.startsWith(filtros.anhoPublicacion)) anhoPublicacionOk = false;
+  if (!filtros.estados.includes(datosLibro.estado)) estadoOk = false;
+  if (filtros.categorias.length > 0 && !filtros.categorias.some(incluidaEnLibro)) categoriasOk = false;
+
+
+  return tituloOk && autoriaOk && editorialOk && anhoPublicacionOk && estadoOk && categoriasOk;
 }
 
 

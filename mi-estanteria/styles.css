@@ -2,6 +2,8 @@
   --estado-leido: #72f358;
   --estado-leyendo: #8a8eff;
   --estado-pendiente: #ff6643;
+
+  --background-buscador: color-mix(in srgb, var(--secondary-contrast-color), white 20%);
 }
 
 /* Tema Claro ☀️ */
@@ -122,6 +124,7 @@ main {
 
     background-color: var(--background-vista-libro);
     transition: .3s ease;
+    animation: fade-in 1.5s forwards;
 
     & .portada-container {
       margin: auto;
@@ -222,58 +225,74 @@ main {
   display: flex;
 }
 
-.input-buscador {
-  width: 230px;
-  padding: 9px;
-  margin-left: 5px;
-  font-size: 15px;
+.buscador {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
 
-  outline: none;
-  border: 1px solid var(--primary-color);
-  background-color: color-mix(in srgb, var(--secondary-contrast-color), white 20%);
-  color: var(--secondary-lighten-color);
-  font-weight: bold;
+  & .input-buscador {
+    width: 80%;
+    padding: 9px;
+    font-size: 15px;
   
-  transition: .6s ease;
-
-  &:focus-visible {
-    box-shadow: 0 0 0 3.5px var(--primary-color);
+    outline: none;
+    border: 1px solid var(--background-buscador);
+    background-color: var(--background-buscador);
+    color: var(--secondary-lighten-color);
+    font-weight: bold;
+    
+    transition: .6s ease;
+  
+    &:focus-visible {
+      box-shadow: 0 0 0 3.5px var(--primary-color);
+    }
+  
+    &::placeholder {
+      font-style: italic;
+      color: var(--primary-color);
+      opacity: 0.5;
+    }
+  
+    &::-webkit-search-cancel-button{
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      right: 0;
+      
+      -webkit-mask-image: url("/client/assets/images/x-circle-icon.svg");
+      mask-image: url("/client/assets/images/x-circle-icon.svg");
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      background-color: var(--primary-color);
+      
+      cursor: pointer;
+      transition: opacity .3s ease;
+    }
   }
 
-  &::placeholder {
-    font-style: italic;
-    color: var(--primary-color);
-    opacity: 0.5;
-  }
+  & .buscador-btn {
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 1.5px 20px;
+  
+    border: none;
+    outline: none;
 
-  &::-webkit-search-cancel-button{
-    -webkit-appearance: none;
-    height: 16px;
-    width: 16px;
-    right: 0;
-    
-    -webkit-mask-image: url("/client/assets/images/x-circle-icon.svg");
-    mask-image: url("/client/assets/images/x-circle-icon.svg");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    background-color: var(--primary-color);
-    
+    color: var(--secondary-lighten-color);
+    background-color: var(--background-buscador);
     cursor: pointer;
-    transition: opacity .3s ease;
+    transition: .3s ease-in;
+  
+    &:hover {
+      background-color: color-mix(in srgb, var(--primary-color), black 20%);
+    }
   }
-}
 
-.input-buscador.btn {
-  width: -moz-fit-content;
-  width: fit-content;
-
-  color: var(--secondary-lighten-color);
-  background-color: var(--primary-color);
-  cursor: pointer;
-  transition: .3s ease-in;
-
-  &:hover {
-    background-color: color-mix(in srgb, var(--primary-color), black 20%);
+  & .input-buscador:focus + .buscador-btn {
+    padding: 4.5px 20px;
+    background-color: var(--primary-color);
   }
 }
 
@@ -384,7 +403,7 @@ main {
       transition: .3s ease;
 
       &:hover {
-        background-color: color-mix(in srgb, var(--secondary-contrast-color), white 20%);
+        background-color: var(--background-buscador);
       }
 
       &:active, &:focus-visible {
@@ -641,5 +660,15 @@ main {
       margin-right: 5px;
       content: "▶ ";
     }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  } to {
+    opacity: 1;
+    filter: blur(0);
   }
 }

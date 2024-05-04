@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Categoria.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/database/Conector.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
@@ -102,6 +103,53 @@ class Libro {
     $camposDB["fechaAdicionDB"]     = $query["fecha_adicion"];
 
     return $camposDB;
+  }
+
+  function render() {
+    $categoriasLibroDB = Categoria::getCategoriasDe($this->getId());
+    $categoriasLibroTags = "";
+    
+    foreach($categoriasLibroDB as $categoriaDB) {
+      $categoriasLibroTags .= "<input type='hidden' name='categorias[]' value='".$categoriaDB."'>";
+    }
+
+    echo "
+    <div class='libro'>
+      <div class='portada-container'>
+        <img src='".$this->getPortada()."' class='portada'>
+        <img src='/client/assets/images/marcador-".strtolower($this->getEstadoTexto()).".svg' class='marcador'>
+      </div>
+      <div class='datos-libro'>
+        <div class='cabecera'>
+          <p class='titulo'>".$this->getTitulo()."</p>
+          <p class='subtitulo'>".$this->getSubtitulo()."</p>
+        </div>
+        <hr>
+        <p class='autoria'>".$this->getAutoria()."</p>
+        <p class='editorial'>".$this->getEditorial()."</p>
+        <p class='anho-publicacion'>".$this->getAnhoPublicacion()."</p>
+        <div class='grupo-buttons-libro'>
+          <svg xmlns='http://www.w3.org/2000/svg' class='icon eliminar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM112,168a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm0-120H96V40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8Z'></path></svg>
+          <svg xmlns='http://www.w3.org/2000/svg' class='icon modificar' fill='var(--primary-color)' viewBox='0 0 256 256'><path d='M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160l90.35-90.35,16.68,16.69L68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188l90.35-90.35h0l16.68,16.69Z'></path></svg>
+        </div>
+        <form name='datosLibro' class='hidden'>
+          <input type='hidden' name='id' value='".$this->getId()."'>
+          <input type='hidden' name='titulo' value='".$this->getTitulo()."'>
+          <input type='hidden' name='subtitulo' value='".$this->getSubtitulo()."'>
+          <input type='hidden' name='descripcion' value='".$this->getDescripcion()."'>
+          <input type='hidden' name='portada' value='".$this->getPortada()."'>
+          <input type='hidden' name='autoria' value='".$this->getAutoria()."'>
+          <input type='hidden' name='numPaginas' value='".$this->getNumPaginas()."'>
+          <input type='hidden' name='editorial' value='".$this->getEditorial()."'>
+          <input type='hidden' name='anhoPublicacion' value='".$this->getAnhoPublicacion()."'>
+          <input type='hidden' name='enlaceAPI' value='".$this->getEnlaceAPI()."'>
+          <input type='hidden' name='estado' value='".$this->getEstado()."'>
+        </form>
+        <form name='categorias-hidden' class='hidden'>
+          $categoriasLibroTags
+        </form>
+      </div>
+    </div>";
   }
 
   // --- GETTERS ---

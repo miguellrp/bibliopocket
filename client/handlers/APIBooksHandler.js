@@ -1,10 +1,10 @@
-import { Libro } from "../classes/Libro.js";
+import { Libro } from "/client/classes/Libro.js";
 
 /* VARIABLES GLOBALES */
 const MAX_RESULTADOS = 15;
 
 export async function buscarLibroAPI () {
-  const buscadorTag = document.getElementById("buscador-libro");
+  const buscadorTag = document.querySelector("input[type=search]");
   const terminoBuscado = eliminarEspaciosExtra(buscadorTag.value);
   const resultadosTag = document.querySelector(".resultados-busqueda");
 

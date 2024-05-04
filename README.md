@@ -36,7 +36,7 @@ Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_
 | Mi estantería | La persona usuaria puede consultar los libros añadidos a su estantería | ✅ |
 | Mi estantería | La persona usuaria puede modificar los datos de sus libros o eliminarlos de su estantería | ✅ |
 | Mi estantería | La persona usuaria puede consultar en base a determinados filtros los libros de su estantería | ✅ |
-| Mi estantería | La persona usuaria puede compartir una valoración (numérica [⭐] + reseña) de un libro leído | ❌ |
-| Mi estantería | La persona usuaria puede guardar anotaciones asociadas a cualquier libro de su estantería | ❌ |
+| Mis objetivos | La persona usuaria puede establecer objetivos / metas en base a sus lecturas pendientes | ❌ |
+| Mis objetivos | La persona usuaria puede visualizar un histórico de los progresos de sus objetivos establecidos | ❌ |
 | Mi perfil | La persona usuaria puede modificar datos relativos a su cuenta personal y darse de baja | ✅ |
 | Mi perfil | La persona usuaria puede consultar estadísticas relativas a la actividad de su cuenta en _BiblioPocket_ | ✏️ |

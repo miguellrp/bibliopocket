@@ -42,7 +42,7 @@ export function getModalDatosLibro (libroVinculado = null) {
 }
 
 
-export function getModalEliminacion (idLibro) {
+export function getModalEliminacion (libroVinculado) {
   let modalEliminacionLibro = document.querySelector("#eliminar-libro-modal");
 
   if (modalEliminacionLibro === null) {
@@ -50,7 +50,7 @@ export function getModalEliminacion (idLibro) {
     modalEliminacionLibro.setAttribute("class", "modal");
     modalEliminacionLibro.setAttribute("id", "eliminar-libro-modal");
 
-    modalEliminacionLibro.innerHTML = generarFormEliminacion(idLibro);
+    modalEliminacionLibro.innerHTML = generarFormEliminacion();
     document.body.appendChild(modalEliminacionLibro);
   } else {
     const formModalEliminacion = modalEliminacionLibro.querySelector("form");
@@ -59,7 +59,7 @@ export function getModalEliminacion (idLibro) {
     formModalEliminacion.removeChild(idAsociadoAnteriorTag);
   }
 
-  vincularFormEliminacion(modalEliminacionLibro, idLibro);
+  vincularFormEliminacion(modalEliminacionLibro, libroVinculado);
   return modalEliminacionLibro;
 }
 
@@ -133,10 +133,11 @@ function generarFormEliminacion () {
   return /* html */`
     <form action="" method="POST">
       <p>¿Estás segur@ de que quieres eliminar este libro de tu estantería?</p>
+      <p class="referencia"></p>
       <small>Todos sus datos modificados se perderán.</small>
       <div class="grupo-buttons">
-        <input type="submit" name="eliminar-libro" value="Confirmar">
-        <input type="button" value="Cancelar">
+        <input type="submit" class="submit-btn" name="eliminar-libro" value="Confirmar">
+        <input type="button" class="submit-btn" value="Cancelar">
       </div>
     </form>
   `;
@@ -144,13 +145,16 @@ function generarFormEliminacion () {
 
 
 // --- FUNCIONES "RELACIONALES" ---
-function vincularFormEliminacion (modalEliminacion, idLibro) {
+function vincularFormEliminacion (modalEliminacion, libroVinculado) {
   const formEliminacion = modalEliminacion.querySelector("form");
 
   const idLibroVinculadoTag = document.createElement("input");
-  idLibroVinculadoTag.value = idLibro;
+  idLibroVinculadoTag.value = libroVinculado.id.value;
   idLibroVinculadoTag.type = "hidden";
   idLibroVinculadoTag.name = "idLibroEstante";
+
+  const referenciaLibro = modalEliminacion.querySelector(".referencia")
+  referenciaLibro.innerHTML = `<span>${libroVinculado.titulo.value}</span>, de ${libroVinculado.autoria.value}`;
 
   formEliminacion.appendChild(idLibroVinculadoTag);
 }
@@ -254,16 +258,21 @@ function actualizarDataForm (tipoForm, libro) {
   }
 
   function getSubmitButtonForm () {
-    let submitButtonTag = modalDatosLibro.querySelector("input[type='submit']");
+    let submitButtonTag = modalDatosLibro.querySelector("button[type=submit]");
 
     if (submitButtonTag === null) {
-      submitButtonTag = document.createElement("input");
+      submitButtonTag = document.createElement("button");
       submitButtonTag.type = "submit";
+      submitButtonTag.className = "submit-btn";
       submitButtonTag.name = dataForm.submitButtonName;
+
+      submitButtonTag.innerHTML = `
+      <svg class=icon>
+        <use xlink:href=/client/assets/images/floppy-disk-icon.svg#floppy-disk>
+        </use>
+      </svg>Guardar cambios`;
       form.append(submitButtonTag);
     }
-
-    submitButtonTag.value = dataForm.submitButtonText;
   }
 
   function getInputHiddenFields () {
@@ -330,7 +339,7 @@ function actualizarDataForm (tipoForm, libro) {
   }
 
   function anhadirUltimoElementoForm (ultimoElementoForm) {
-    const submitButton = form.querySelector("input[type=submit]");
+    const submitButton = form.querySelector("button[type=submit]");
 
     // Se inserta el último elemento del form inmediatamante anterior al submit button:
     form.insertBefore(ultimoElementoForm, submitButton);

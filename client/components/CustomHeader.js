@@ -28,21 +28,22 @@ class CustomHeader extends HTMLElement {
           
           list-style: none;
 
-          & li {
+          & a, input[name="log-out"] {
             font-weight: bold;
             transition: .3s ease;
 
             &:hover {
-              filter: drop-shadow(0 0 3px var(--primary-color));
+              color: color-mix(in srgb, var(--primary-color) 100%, #fff 35%);
             }
+          }
 
-            &.pagina-activa {
-              & a {
-                color: var(--header-active-color);
-              }
+          & .pagina-activa {
+            & a {
+              color: var(--header-active-color);
 
               &:hover {
-                filter: drop-shadow(0 0 3px var(--header-font-color));
+                color: var(--header-active-color);
+                filter: drop-shadow(0 0 1.5px var(--header-font-color));
               }
             }
           }
@@ -165,7 +166,7 @@ class CustomHeader extends HTMLElement {
 
             & li, & input[type="submit"] {
               font-size: 1.3rem;
-              font-weight: 500;
+              font-weight: bold;
             }
 
             & li {

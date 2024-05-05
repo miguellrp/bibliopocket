@@ -46,7 +46,7 @@ body {
     border-radius: 8px;
     color: var(--seccion-inactiva-foreground);
     background-color: var(--seccion-inactiva-background);
-    box-shadow: 0 0 10px 1px #00000070;
+    box-shadow: 2px 2px 2px 1px #00000070;
 
     cursor: pointer;
     transition: .4s ease;
@@ -55,7 +55,7 @@ body {
   & [active] {
     color: var(--seccion-activa-foreground);
     background-color: var(--seccion-activa-background);
-    box-shadow: 0 0 0 transparent;
+    box-shadow: none;
   }
 }
 

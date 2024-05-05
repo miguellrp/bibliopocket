@@ -5,7 +5,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Libro.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Usuario.php");
 
 // -- CONSTANTES GLOBALES --
-$cargaLibrosInicial = 3;
+$cargaLibrosInicial = 8;
 $conn = new Conector;
 
 // Para controlar feedback en cambios hechos por la persona usuaria:
@@ -91,9 +91,10 @@ if (isset($_POST["eliminar-libro"])) {
   session_write_close();
 }
 
-
-$estanteriaUsuario = new Estanteria($usuarioActivo->getId());
-$idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds(0, $cargaLibrosInicial);
+if (isset($usuarioActivo)) {
+  $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
+  $idsLibrosEstanteria = $estanteriaUsuario->getLibrosIds(0, $cargaLibrosInicial);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es-ES">

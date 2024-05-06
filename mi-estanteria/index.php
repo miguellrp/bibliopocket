@@ -181,6 +181,7 @@ if (isset($usuarioActivo)) {
             <custom-tagify tipo-filtro="true"></custom-tagify>
             <div class="categorias-tags"></div>
           </label>
+          <button class='submit-btn'>Cargar todos los libros</button>
         </div>
       </details>
       <?php endif; ?>

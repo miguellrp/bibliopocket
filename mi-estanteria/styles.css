@@ -212,10 +212,6 @@ main {
       }
     }
   }
-
-  & .libro.cargado {
-    animation: fade-in 1.5s forwards;
-  }
 }
 
 .filters-not-found, .empty-bookshelf {
@@ -763,12 +759,12 @@ html[data-theme="light"] {
 }
 
 
-@keyframes fade-in {
+@keyframes slide-in {
   from {
     opacity: 0;
-    filter: blur(4px);
+    transform: translateX(220px);
   } to {
     opacity: 1;
-    filter: blur(0);
+    transform: translateX(0);
   }
 }

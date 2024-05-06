@@ -230,6 +230,9 @@ main {
   & small {
     opacity: 0.8;
     font-style: italic;
+
+    text-wrap: balance;
+    text-align: center;
   }
 }
 
@@ -705,14 +708,6 @@ main {
     & img {
       width: 48vw;
       min-width: 275px;
-    }
-  
-    & small {
-      opacity: 0.8;
-      font-style: italic;
-
-      text-wrap: balance;
-      text-align: center;
     }
   }
 

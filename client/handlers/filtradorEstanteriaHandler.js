@@ -24,8 +24,6 @@ function prepararListenersFiltros () {
   setFiltroTextListener(camposFiltrador[3], "anhoPublicacion");
   estadosFiltrador.forEach((estadoFiltro) => setFiltroEstadoListener(estadoFiltro));
   setFiltroTagifyListener(tagifyFiltrador);
-
-  setCargarEstanteriaListener();
 }
 
 // Función a la que se llamará con cada input en los campos filtradores por parte de la persona usuaria
@@ -126,47 +124,10 @@ function setFiltroTagifyListener (tagifyFiltro) {
   });
 }
 
-function setCargarEstanteriaListener () {
-  const botonCargarEstanteria = document.querySelector(".grupo-filtros > button");
-  const idUsuario = document.querySelector(".estanteria").getAttribute("id-usuario");
-  const filtersNotFoundImageTag = document.querySelector(".filters-not-found");
-
-  botonCargarEstanteria.addEventListener("click", () => {
-    if (!bloquearPeticion) {
-      const librosCargados = document.querySelectorAll(".libro").length;
-
-      fetchLibrosIds(idUsuario, librosCargados)
-        .then(response => {
-          filtersNotFoundImageTag.insertAdjacentHTML("beforebegin", response);
-          actualizarLibrosFiltrados();
-
-          bloquearPeticion = (response == "") ? true : false; // Una vez la petición no devuelve más resultados, se "bloquea" la llamada al back
-        })
-        .catch(error => {
-          console.error("Error al cargar los libros: ", error);
-          bloquearPeticion = false;
-        });
-    } else {
-      botonCargarEstanteria.disabled = true;
-    }
-  });
-}
-
 function mostrarPlaceholder (mostrar) {
   const placeholderEstanteria = document.querySelector(".filters-not-found");
 
   if (mostrar) placeholderEstanteria.style.display = "flex";
   else placeholderEstanteria.style.display = "none";
 
-}
-
-async function fetchLibrosIds (idUsuario, indexUltimoLibro) {
-  try {
-    const response = await fetch(`http://localhost/server/API.php?tipoPeticion=getLibros&idUsuario=${idUsuario}&paginacion=${indexUltimoLibro}`);
-    const data = await response.text();
-
-    return data;
-  } catch (error) {
-    throw new Error("Error al obtener los IDs de los libros: ", error);
-  }
 }

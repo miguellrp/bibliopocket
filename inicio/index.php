@@ -5,18 +5,6 @@ include_once "../server/classes/Libro.php";
 include_once "../server/classes/Usuario.php";
 
 
-if (isset($_SESSION["nombreUsuario"]) && !isset($_SESSION["usuarioActivo"])) {
-  $usuarioID = $conn->getUsuarioActualID($_SESSION["nombreUsuario"]);
-  $usuarioActivo = new Usuario($usuarioID);
-  $_SESSION["usuarioActivo"] = array(
-    "id"              => $usuarioActivo->getId(),
-    "nombreUsuario"   => $usuarioActivo->getNombreUsuario(),
-    "correo"          => $usuarioActivo->getEmail(),
-    "userPic"         => $usuarioActivo->getUserPic(),
-    "ultimoLogin"     => $usuarioActivo->getUltimoLogin()
-  );
-}
-
 // ⚠️ REVISABLE (establecer último login sólo una vez y no cada vez que refresque la página de inicio):
 // AÑADIR TAREA CRON a servidor para que vaya eliminando usuarios de la BBDD con último login hace más de 30 días p.ej.
 if (isset($_SESSION["usuarioActivo"])) {
@@ -74,7 +62,7 @@ if (isset($_SESSION["usuarioActivo"])) {
       ?>
       </div>
   <?php endif; ?>
-  <script src="../client/handlers/themeHandler.js"></script>
+  <script src="/client/handlers/themeHandler.js"></script>
 </body>
 
 </html>

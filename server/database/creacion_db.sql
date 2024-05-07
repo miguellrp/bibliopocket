@@ -13,6 +13,12 @@ CREATE TABLE usuarios (
   fecha_ultimo_login DATETIME NOT NULL
 );
 
+CREATE TABLE admins (
+  id_admin VARCHAR(128) PRIMARY KEY NOT NULL,
+  nombre_admin VARCHAR(128) UNIQUE NOT NULL,
+  contrasenha_admin VARCHAR(70) NOT NULL
+);
+
 /* Tabla para almacenar contraseñas temporales cuando la persona usuaria olvida su contraseña */
 CREATE TABLE contrasenhas_temporales (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
@@ -57,6 +63,13 @@ CREATE TABLE valoraciones (
   CONSTRAINT fk_ValoracionesUsuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
 
+
+-- Creación de admin para testing
+INSERT INTO admins VALUES(
+  UUID(),
+  "adminBPtesting",
+  "$2y$10$eJbGd/sAG6v7sMn6kM7g/Oaxg6qkjCzjWt.GMG7qiR1lM4jR.iMXC"
+);
 
 -- Creación de usuario para testing
 INSERT INTO usuarios VALUES(

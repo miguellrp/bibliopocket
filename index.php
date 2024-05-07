@@ -1,4 +1,5 @@
 <?php
+require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Admin.php';
 require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Usuario.php';
 require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Email.php';
 session_start();
@@ -17,6 +18,7 @@ if (isset($_POST["login-check"])) {
   $nombreUsuario = $_POST["nombre-usuario-log"];
   $contrasenha = $_POST["contrasenha-log"];
   $usuarioTemp = new Usuario("idTemporal",$nombreUsuario, $contrasenha);
+  $adminBP = new Admin("idTemporal", $nombreUsuario, $contrasenha);
 
 
   if ($usuarioTemp->loginDB() || Usuario::loginTemporal($nombreUsuario, $contrasenha)) {
@@ -32,8 +34,19 @@ if (isset($_POST["login-check"])) {
 
     $loginValido = true;
     header("location: inicio/");
-  }
-  else {
+
+  } else if ($adminBP->loginAdminDB()) {
+    $adminID = $conn->getAdminActualID($adminBP->getNombreAdmin());
+    $adminActivo = new Admin($adminID);
+    $_SESSION["adminActivo"] = array(
+      "idAdmin"       => $adminActivo->getIdAdmin(),
+      "nombreAdmin"   => $adminActivo->getNombreAdmin(),
+    );
+
+    $loginValido = true;
+    header("location: admin/");
+  
+  } else {
     $loginValido = false;
     session_destroy();
   }

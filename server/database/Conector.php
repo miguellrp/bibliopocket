@@ -41,6 +41,22 @@ class Conector {
         return $userID;
     }
 
+    function getAdminActualID($adminName) {
+        $adminID = "";
+
+        try {
+            $query = $this->conn->prepare("SELECT id_admin FROM admins WHERE nombre_admin = :adminName");
+            $query->bindParam(":adminName", $adminName);
+            $query->execute();
+
+            $adminID = $query->fetchColumn(0);
+        } catch (PDOException $exception) {
+            echo "Ocurrió un error al tratar de conseguir el ID de admin: " . $exception->getMessage();
+        }
+
+        return $adminID;
+    }
+
     function eliminarLibro($id) {
         try {
             $query = $this->conn->prepare("DELETE FROM libros

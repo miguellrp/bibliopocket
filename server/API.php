@@ -11,7 +11,9 @@ if(isset($_GET["idUsuario"])) {
     switch($tipoPeticion) {
       case "getLibros":
         $paginacion = $_GET["paginacion"];
-        getLibros($idUsuario, $paginacion);
+        $limitado = $_GET["limitado"];
+
+        getLibros($idUsuario, $paginacion, $limitado);
         break;
 
       default:
@@ -21,12 +23,14 @@ if(isset($_GET["idUsuario"])) {
 }
 
 // -- "PETICIONES" de la "API" --
-function getLibros($idUsuario, $paginacion) {
+function getLibros($idUsuario, $paginacion, $limitado) {
   $idUsuario = $_GET["idUsuario"];
   $estanteria = new Estanteria($idUsuario);
   $numLibros = 10;
 
-  $idsLibros = $estanteria->getLibrosIds($paginacion, $numLibros);
+  if ($limitado) $idsLibros = $estanteria->getLibrosIds($paginacion, $numLibros);
+  else $idsLibros = $estanteria->getLibrosIds($paginacion, 99999999999);
+
   foreach($idsLibros as $idLibro) {
     $libro = new Libro($idLibro);
     $libro->render();

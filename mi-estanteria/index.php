@@ -181,7 +181,6 @@ if (isset($usuarioActivo)) {
             <custom-tagify tipo-filtro="true"></custom-tagify>
             <div class="categorias-tags"></div>
           </label>
-          <button class='submit-btn'>Cargar todos los libros</button>
         </div>
       </details>
       <?php endif; ?>
@@ -199,7 +198,9 @@ if (isset($usuarioActivo)) {
             }
             echo "<div class='filters-not-found'>
               <img src='/client/assets/images/filters-not-found.svg' alt='Una persona buscando entre diferentes opciones que le salen en una pantalla.'>
-              <small>No hay libros en tu estantería con los filtros aplicados</small>
+              <small>No hemos encontrado libros en tu estantería con los filtros aplicados.<br>
+                Prueba a cargar todos los libros de tu estantería de un solo click.
+              </small>
             </div>";
           }
         ?>

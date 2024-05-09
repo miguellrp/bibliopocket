@@ -21,7 +21,6 @@ html[data-theme="light"] {
   --user-valid-color: #56ac3c;
 
   --header-active-color: #fdd9d6;
-  --header-font-color: var(--secondary-lighten-color);
   --header-background: color-mix(in srgb, var(--secondary-color), black 20%);
 }
 
@@ -37,7 +36,6 @@ html[data-theme="dark"] {
   --user-valid-color: #46d01c;
 
   --header-active-color: #fdd9d6;
-  --header-font-color: var(--secondary-lighten-color);
   --header-background: color-mix(in srgb, var(--background-color), white 10%);
 }
 

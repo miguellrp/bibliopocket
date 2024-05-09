@@ -18,7 +18,7 @@ class CustomButton extends HTMLElement {
     <style>
       input {
         padding: 10px;
-        outline: none;
+        outline: 3px solid transparent;
         border: 2px solid ${borderColor};
         border-radius: 5px;
         box-shadow: ${withShadow};
@@ -34,10 +34,14 @@ class CustomButton extends HTMLElement {
         transition: .2s ease;
         cursor: pointer;
 
-        &:active, &:focus-visible{
+        &:active, &:focus-visible {
           transform: ${withTranslation};
           box-shadow:0 0 0 var(--background-color);
           background-color: color-mix(in srgb, ${backgroundColor} 80%, black);
+        }
+
+        &:focus-visible {
+          outline: 3px solid var(--secondary-color);
         }
       }
     </style>

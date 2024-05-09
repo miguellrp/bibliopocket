@@ -29,9 +29,9 @@ class CustomHeader extends HTMLElement {
           
           list-style: none;
 
-          & a, input[name="log-out"] {
+          & a, & input[name="log-out"] {
+            padding: 3px;
             font-weight: bold;
-            transition: .3s ease;
 
             &:hover {
               color: color-mix(in srgb, var(--primary-color) 100%, #fff 35%);
@@ -44,7 +44,7 @@ class CustomHeader extends HTMLElement {
 
               &:hover {
                 color: var(--header-active-color);
-                filter: drop-shadow(0 0 1.5px var(--header-font-color));
+                filter: drop-shadow(0 0 1.5px var(--header-active-color));
               }
             }
           }
@@ -61,10 +61,21 @@ class CustomHeader extends HTMLElement {
       }
 
       h1 {
-        padding: 0;
-        margin: 20px;
+        padding: 5px !important;
+        margin: 15px;
         letter-spacing: -1px;
         text-shadow: 1.5px 1.5px 0 var(--secondary-color);
+      }
+
+      h1, a, input[name="log-out"], .hamburger-icon {
+        padding: 0 2.5px;
+        outline: 2px solid transparent;
+        border-radius: 5px;
+        transition: .3s ease;
+
+        &:focus-visible {
+          outline: 2px solid var(--header-active-color);
+        }
       }
 
       .icon {
@@ -84,11 +95,6 @@ class CustomHeader extends HTMLElement {
         color: var(--primary-color);
         background-color: transparent;
         cursor: pointer;
-
-        &:focus-visible {
-          border-radius: 5px;
-          outline: 2px solid var(--header-font-color);
-        }
       }
 
       /* DISEÑO HAMBURGER-ICON y apartado responsive a partir de: Álvaro Trigo (https://codepen.io/alvarotrigo/pen/XWejzjR) */
@@ -96,8 +102,9 @@ class CustomHeader extends HTMLElement {
         position: absolute;
         height: 23px;
         width: 35px;
-        top: 30px;
-        right: 20px;
+        padding: 5px !important;
+        top: 25px;
+        right: 15px;
         z-index: 2;
         flex-direction: column;
         justify-content: space-between;
@@ -144,6 +151,10 @@ class CustomHeader extends HTMLElement {
         transform: translateX(0);
       }
 
+      input[type="checkbox"]:focus-visible ~ .hamburger-icon {
+        outline: 2px solid var(--header-active-color);
+      }
+
       ::selection {
         color: var(--background-color);
         background: var(--primary-color);
@@ -164,6 +175,7 @@ class CustomHeader extends HTMLElement {
             transform: translateX(150%);
             transition: transform 0.5s ease-in-out;
             box-shadow: -2px 0px 5px 1px #00000060;
+            row-gap: 25px;
 
             & li, & input[type="submit"] {
               font-size: 1.3rem;
@@ -221,32 +233,42 @@ class CustomHeader extends HTMLElement {
     </header>
       `;
     else this.shadowRoot.innerHTML += /* html */ `
-      <header>
-          <h1><a href="/inicio">BiblioPocket 📚</a></h1>
-            <input type="checkbox">
-            <div class="hamburger-icon">
-              <span class="line line1"></span>
-              <span class="line line2"></span>
-              <span class="line line3"></span>
-            </div>
-            <ul class="menu-items">
-            <li class="${paginaActiva === 'inicio' ? 'pagina-activa' : ''}">
-              <a href="/inicio">INICIO</a>
-            </li>
-            <li class="${paginaActiva === 'mi-estanteria' ? 'pagina-activa' : ''}">
-              <a href="/mi-estanteria">MI ESTANTERÍA</a>
-            </li>
-            <li class="${paginaActiva === 'mi-perfil' ? 'pagina-activa' : ''}">
-              <a href="/mi-perfil">MI PERFIL</a>
-            </li>
-            <li>
-              <form action="/index.php" method="POST">
-                <input type="submit" value="SALIR" name="log-out">
-              </form>
-            </li>
-          </ul>
-        </header>
-      `;
+    <header>
+    <h1><a href="/inicio">BiblioPocket 📚</a></h1>
+      <input type="checkbox">
+      <div class="hamburger-icon">
+        <span class="line line1"></span>
+        <span class="line line2"></span>
+        <span class="line line3"></span>
+      </div>
+      <ul class="menu-items">
+        <li class="${paginaActiva === 'inicio' ? 'pagina-activa' : ''}">
+          <a href="/inicio">INICIO</a>
+        </li>
+        <li class="${paginaActiva === 'mi-estanteria' ? 'pagina-activa' : ''}">
+          <a href="/mi-estanteria">MI ESTANTERÍA</a>
+        </li>
+        <li class="${paginaActiva === 'mi-perfil' ? 'pagina-activa' : ''}">
+          <a href="/mi-perfil">MI PERFIL</a>
+        </li>
+        <li>
+          <form action="/index.php" method="POST">
+            <input type="submit" value="SALIR" name="log-out">
+          </form>
+        </li>
+      </ul>
+    </header>
+    `;
+
+    this.setListenerKeyHamburgerIcon();
+  }
+
+  setListenerKeyHamburgerIcon () {
+    const checkboxIcon = this.shadowRoot.querySelector("input[type=checkbox]");
+
+    checkboxIcon.addEventListener("keydown", (event) => {
+      if (event.key == "Enter") checkboxIcon.checked = !checkboxIcon.checked;
+    });
   }
 }
 

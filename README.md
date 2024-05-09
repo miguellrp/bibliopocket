@@ -10,7 +10,7 @@ _Biblioteca virtual en la que la persona usuaria podrá buscar libros, guardarlo
 4. Introducir el comando ```docker compose up --build``` (importante incluír el parámetro ```--build``` para que al _dockerizar_ tenga en cuenta la instalación de la extensión de la clase conectora PDO de PHP con la base de datos).
 5. Finalmente, se podrá acceder a la demo de la aplicación en http://localhost:80 y a la base de datos a través de phpMyAdmin en http://localhost:8001.
 
-Se ha creado <a href="#credenciales">un perfil</a> para testear la aplicación sin necesidad de realizar el proceso de registro.
+Se ha creado <a href="#credenciales">un perfil de usuario</a> para testear la aplicación sin necesidad de realizar el proceso de registro y, para acceder desde un perfil con rol de administrador, se ha creado también <a href="#credenciales">un perfil de _admin_</a>.
 
 Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_:
 1. En la terminal abierta, presionar CTRL + C para detener el _docker_ y, a continuación, introducir el comando ```docker compose down``` para eliminar los contenedores generados.
@@ -20,7 +20,8 @@ Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_
 ### Credenciales:
 | Contenedor | Nombre de usuario | Contraseña | Puerto |
 |:---:|:---:|:---:|:---:|
-| _BiblioPocket_ | testing | passtesting | :80 |
+| _BiblioPocket_ | testing<sub>(Usuario)</sub> | passtesting | :80 |
+| _BiblioPocket_ | adminBPtesting<sub>(Admin)</sub> | passAdminBPtesting | :80 |
 | _phpMyAdmin_ | adminBP | passBP | :8001 |
 
 
@@ -40,3 +41,5 @@ Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_
 | Mis objetivos | La persona usuaria puede visualizar un histórico de los progresos de sus objetivos establecidos | ❌ |
 | Mi perfil | La persona usuaria puede modificar datos relativos a su cuenta personal y darse de baja | ✅ |
 | Mi perfil | La persona usuaria puede consultar estadísticas relativas a la actividad de su cuenta en _BiblioPocket_ | ✏️ |
+| Panel de admin | La persona administradora puede visualizar en una tabla los datos básicos relativos a todas aquellas personas registradas en _BiblioPocket_ | ✅
+| Panel de admin | La persona administradora puede ejecutar ciertas operaciones básicas relativas a todas aquellas personas registradas en _BiblioPocket_ | ✅

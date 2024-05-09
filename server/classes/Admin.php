@@ -73,4 +73,51 @@ class Admin {
       return false;
     }
   }
+
+  function getAllUsuariosIDs() {
+    try {
+      $query = $this->conexionDB->conn->prepare("SELECT id FROM usuarios ORDER BY fecha_ultimo_login ASC");
+      
+      $query->execute();
+    } catch (PDOException $exception) {
+      echo "Ocurrió un error al cargar los IDs de tod@s l@s usuari@s de la BD. ". $exception->getMessage();
+    }
+
+    return $query->fetchAll(PDO::FETCH_COLUMN);
+  }
+
+  function eliminarUsuario($idUsuario) {
+    try {
+      $query = $this->conexionDB->conn->prepare("DELETE FROM usuarios WHERE id = :idUsuario");
+      
+      $query->bindParam(":idUsuario", $idUsuario);
+      $query->execute();
+
+    } catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar eliminar al usuario con ID $idUsuario. ". $exception->getMessage();
+    }
+
+    return $query->rowCount() == 1;
+  }
+
+  function editarUsuario($idUsuario, $nuevoNombre, $nuevoEmail) {
+    try {
+      $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
+        nombre_usuario  = :nuevoNombre,
+        email_usuario   = :nuevoEmail
+        WHERE id = :idUsuario");
+      
+      $query->bindParam(":idUsuario", $idUsuario);
+      $query->execute(array(
+        ":idUsuario"    => $idUsuario,
+        ":nuevoNombre"  => $nuevoNombre,
+        ":nuevoEmail"   => $nuevoEmail
+      ));
+
+    } catch (PDOException $exception) {
+      echo "Ocurrió un error al intentar editar al usuario con ID $idUsuario. ". $exception->getMessage();
+    }
+
+    return $query->rowCount() == 1;
+  }
 }

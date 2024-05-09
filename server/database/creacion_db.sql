@@ -3,6 +3,12 @@ CREATE DATABASE bibliopocketDB;
 USE bibliopocketDB;
 
 /* CREACIÓN ENTIDADES */
+CREATE TABLE admins (
+  id_admin VARCHAR(128) PRIMARY KEY NOT NULL,
+  nombre_admin VARCHAR(128) UNIQUE NOT NULL,
+  contrasenha_admin VARCHAR(70) NOT NULL
+);
+
 CREATE TABLE usuarios (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
   nombre_usuario VARCHAR(128) UNIQUE NOT NULL,
@@ -13,12 +19,6 @@ CREATE TABLE usuarios (
   fecha_ultimo_login DATETIME NOT NULL
 );
 
-CREATE TABLE admins (
-  id_admin VARCHAR(128) PRIMARY KEY NOT NULL,
-  nombre_admin VARCHAR(128) UNIQUE NOT NULL,
-  contrasenha_admin VARCHAR(70) NOT NULL
-);
-
 /* Tabla para almacenar contraseñas temporales cuando la persona usuaria olvida su contraseña */
 CREATE TABLE contrasenhas_temporales (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
@@ -26,6 +26,23 @@ CREATE TABLE contrasenhas_temporales (
   contrasenha_temporal VARCHAR(70) NOT NULL,
   fecha_expiracion TIMESTAMP NOT NULL,
   CONSTRAINT fk_contrasenhasTemporalesUsuarios FOREIGN KEY (email_usuario) REFERENCES usuarios(email_usuario) ON DELETE CASCADE
+);
+
+/* Tabla para llevar un registro de los bloqueos temporales ejecutados contra una persona usuaria */
+CREATE TABLE bloqueos (
+  id VARCHAR(128) PRIMARY KEY NOT NULL,
+  tipo INT UNIQUE NOT NULL
+  -- TODO: descripcion VARCHAR(256) NOT NULL
+  -- TODO: nivel_gravedad INT NOT NULL
+);
+
+CREATE TABLE bloqueos_usuarios (
+  id VARCHAR(128) PRIMARY KEY NOT NULL,
+  id_bloqueo VARCHAR(128) NOT NULL,
+  id_usuario VARCHAR(128) NOT NULL,
+  fecha_expiracion TIMESTAMP NOT NULL,
+  CONSTRAINT fk_BloqueosUsuarios_Usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+  CONSTRAINT fk_BloqueosUsuarios_Bloqueos FOREIGN KEY (id_bloqueo) REFERENCES bloqueos(id)
 );
 
 CREATE TABLE libros (
@@ -49,8 +66,8 @@ CREATE TABLE libros (
 CREATE TABLE categorias (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
   nombre VARCHAR(256) NOT NULL,
-  id_libro VARCHAR(128) NOT NULL,
   fecha_adicion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id_libro VARCHAR(128) NOT NULL,
   CONSTRAINT fk_CategoriasLibros FOREIGN KEY (id_libro) REFERENCES libros(id) ON DELETE CASCADE
 );
 
@@ -82,7 +99,16 @@ INSERT INTO usuarios VALUES(
   NOW()
 );
 
-/* Se activa la programación de eventos */
+-- Creación de motivos de bloqueo para testing
+INSERT INTO bloqueos VALUES
+  (UUID(), 1),
+  (UUID(), 2),
+  (UUID(), 3),
+  (UUID(), 4),
+  (UUID(), 5);
+
+
+-- Se activa la programación de eventos
 SET GLOBAL event_scheduler = ON;
 
 -- Para eliminar aquellas contraseñas temporales cuya fecha de expiración haya pasado

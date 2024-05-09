@@ -247,6 +247,73 @@ html[data-theme = "dark"] {
   }
 }
 
+.acceso-bloqueado {
+  --acceso-bloqueado-color: #fe4d80;
+
+  min-width: 320px;
+  max-height: 70vh;
+  overflow-y: scroll;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  scrollbar-color: var(--acceso-bloqueado-color) transparent;
+
+  border: 5px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to right, #de882c, var(--acceso-bloqueado-color));
+  
+  padding: 20px 25px;
+  box-shadow: 0 0 15px 2px #00000072;
+
+  background-color: color-mix(in srgb, var(--background-contrast-color) 30%, var(--user-invalid-color) 10%);
+  animation: animation-border .3s ease forwards;
+
+  & h2 {
+    padding: unset;
+    color: var(--acceso-bloqueado-color);
+  }
+
+  & p {
+    line-height: 1.5rem;
+    text-align: center;
+    text-wrap: balance;
+
+    & strong {
+      color: var(--acceso-bloqueado-color);
+    }
+  }
+
+  & li {
+    line-height: 1.5rem;
+
+    & ul > li {
+      font-size: 14px;
+      margin-bottom: 10px;
+      opacity: 0.8;
+
+      & span {
+        font-style: italic;
+      }
+    }
+  }
+
+  & .extra-info {
+    font-size: 13px;
+    text-wrap: balance;
+    text-align: center;
+    color: #ffe8e8;
+    line-height: unset;
+
+    margin: unset;
+  }
+
+  ::selection {
+    color: #f5e9e9;
+    background: var(--acceso-bloqueado-color);
+  }
+}
+
 ::selection {
   color: var(--background-color);
   background: var(--primary-color);

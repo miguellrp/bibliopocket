@@ -1,4 +1,6 @@
-// Variables globales para controlar los filtros introducidos:
+const camposFiltrador = getInputsTextFiltrador();
+
+// "Propiedades" del objeto global "filtros" que permitirá controlar los filtros introducidos:
 let filtros = {
   titulo: "",
   autoria: "",
@@ -10,11 +12,10 @@ let filtros = {
 
 let bloquearPeticion = false;
 
-prepararListenersFiltros();
+if (camposFiltrador.length > 0) prepararListenersFiltros();
 
 // --- FUNCIÓN MAIN ---
 function prepararListenersFiltros () {
-  const camposFiltrador = getInputsTextFiltrador();
   const estadosFiltrador = document.querySelectorAll("input[type=checkbox]");
   const tagifyFiltrador = document.querySelector("custom-tagify").shadowRoot.querySelector("input");
 

@@ -336,6 +336,21 @@ class Usuario {
     }
   }
 
+  function estaBloqueado() {
+    try {
+      $query = $this->conexionDB->conn->prepare("SELECT id from bloqueos_usuarios
+        WHERE id_usuario = :idUsuario AND fecha_expiracion >= NOW() LIMIT 1");
+      $query->execute(array(
+        ":idUsuario"  => $this->getId()
+      ));
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al comprobar si la cuenta ha sido bloqueada '. ". $exception->getMessage();
+    }
+
+    return $query->rowCount() > 0;
+  }
+
   // Funciones estáticas utilizadas para cuando una persona usuaria olvidó su contraseña
   static function getNombreUsuarioDe($emailUsuario) {
     try {

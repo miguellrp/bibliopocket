@@ -34,3 +34,13 @@
     fill: #6f20b9;
   }
 }
+
+@media (max-width: 350px) { 
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 20px;
+  }
+}

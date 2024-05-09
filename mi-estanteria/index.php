@@ -118,6 +118,7 @@ if (isset($usuarioActivo)) {
       <h2>👀 ¿A dónde quieres ir?</h2>
       <h3>Parece que primero tienes que <a href="../index.php">iniciar sesión</a></h3>
     </div>
+  <?php elseif($usuarioActivo->estaBloqueado()): Util::mostrarPantallaUsuarioBloqueado($usuarioActivo->getId()); ?>
   <?php else: ?>
     <custom-header pagina-activa="mi-estanteria"></custom-header>
     <h1>Estantería de

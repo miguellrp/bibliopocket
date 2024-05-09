@@ -6,6 +6,7 @@ class CustomHeader extends HTMLElement {
 
   connectedCallback () {
     const paginaActiva = this.getAttribute('pagina-activa') || '';
+    const siteType = this.getAttribute('site-type');
 
     this.shadowRoot.innerHTML = /* html */ `
     <style>
@@ -148,7 +149,7 @@ class CustomHeader extends HTMLElement {
         background: var(--primary-color);
       }
 
-      @media (max-width: 788px) {
+      ${siteType != "admin" ? /* css */ `@media (max-width: 788px) {
         header {
           & .menu-items {
             flex-direction: column;
@@ -201,34 +202,51 @@ class CustomHeader extends HTMLElement {
           position: absolute;
           transition: .3s ease;
         }
+      }`
+        : ""
       }
   </style>
-    <header>
-    <h1><a href="/inicio">BiblioPocket 📚</a></h1>
-      <input type="checkbox">
-      <div class="hamburger-icon">
-        <span class="line line1"></span>
-        <span class="line line2"></span>
-        <span class="line line3"></span>
-      </div>
-      <ul class="menu-items">
-        <li class="${paginaActiva === 'inicio' ? 'pagina-activa' : ''}">
-          <a href="/inicio">INICIO</a>
-        </li>
-        <li class="${paginaActiva === 'mi-estanteria' ? 'pagina-activa' : ''}">
-          <a href="/mi-estanteria">MI ESTANTERÍA</a>
-        </li>
-        <li class="${paginaActiva === 'mi-perfil' ? 'pagina-activa' : ''}">
-          <a href="/mi-perfil">MI PERFIL</a>
-        </li>
-        <li>
-          <form action="/index.php" method="POST">
-            <input type="submit" value="SALIR" name="log-out">
-          </form>
+  `;
+
+    if (siteType == "admin") this.shadowRoot.innerHTML += /* html */ `
+      <header>
+      <h1><a href="/admin">BiblioPocket 📚</a></h1>
+        <ul class="menu-items">
+          <li>
+            <form action="/index.php" method="POST">
+              <input type="submit" value="SALIR" name="log-out">
+            </form>
         </li>
       </ul>
     </header>
-    `;
+      `;
+    else this.shadowRoot.innerHTML += /* html */ `
+      <header>
+          <h1><a href="/inicio">BiblioPocket 📚</a></h1>
+            <input type="checkbox">
+            <div class="hamburger-icon">
+              <span class="line line1"></span>
+              <span class="line line2"></span>
+              <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+            <li class="${paginaActiva === 'inicio' ? 'pagina-activa' : ''}">
+              <a href="/inicio">INICIO</a>
+            </li>
+            <li class="${paginaActiva === 'mi-estanteria' ? 'pagina-activa' : ''}">
+              <a href="/mi-estanteria">MI ESTANTERÍA</a>
+            </li>
+            <li class="${paginaActiva === 'mi-perfil' ? 'pagina-activa' : ''}">
+              <a href="/mi-perfil">MI PERFIL</a>
+            </li>
+            <li>
+              <form action="/index.php" method="POST">
+                <input type="submit" value="SALIR" name="log-out">
+              </form>
+            </li>
+          </ul>
+        </header>
+      `;
   }
 }
 

@@ -1,8 +1,9 @@
 <?php
 session_start();
-include_once "../server/classes/Estanteria.php";
-include_once "../server/classes/Libro.php";
-include_once "../server/classes/Usuario.php";
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Estanteria.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Libro.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Usuario.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
 
 // ⚠️ REVISABLE (establecer último login sólo una vez y no cada vez que refresque la página de inicio):
@@ -26,15 +27,16 @@ if (isset($_SESSION["usuarioActivo"])) {
   <link rel="icon" type="image/png" href="/client/assets/images/favicon.png">
   <link rel="stylesheet" href="/client/styles/globals.css">
   <link rel="stylesheet" href="./styles.css">
-  <script src="../client/components/CustomHeader.js"></script>
+  <script src="/client/components/CustomHeader.js"></script>
 </head>
 
 <body>
   <?php if (!isset($usuarioActivo)): ?>
     <div class="caja-contenido">
       <h2>👀 ¿A dónde quieres ir?</h2>
-      <h3>Parece que primero tienes que <a href="../index.php">iniciar sesión</a></h3>
+      <h3>Parece que primero tienes que <a href="/index.php">iniciar sesión</a></h3>
     </div>
+  <?php elseif($usuarioActivo->estaBloqueado()): Util::mostrarPantallaUsuarioBloqueado($usuarioActivo->getId()) ?>
   <?php else: ?>
     <custom-header pagina-activa="inicio"></custom-header>
     <h2>👋 Bienvenid@ de nuevo,

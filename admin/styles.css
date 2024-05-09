@@ -1,0 +1,119 @@
+/* Tema Claro ☀️ */
+html[data-theme="light"] {
+  --dashboard-admin-border-color: #45171d;
+  --dashboard-admin-header-foreground: #f9f1d9;
+  --dashboard-admin-header-background: #ba4050;
+
+  --dashboard-admin-background-even: #e2b6bb;
+  --dashboard-admin-background-odd: #ffc3c9;
+}
+
+/* Tema Oscuro 🌙 */
+html[data-theme="dark"] {
+  --dashboard-admin-border-color: #cd6781;
+  --dashboard-admin-header-foreground: #f9f1d9;
+  --dashboard-admin-header-background: #774360;
+
+  --dashboard-admin-background-even: #5e4e62;
+  --dashboard-admin-background-odd: #715b76;
+}
+
+.panel {
+  margin: 0 auto;
+  width: 90vw;
+  table-layout: fixed;
+  overflow-x: scroll;
+
+  box-shadow: 0 0 5px 3px #00000050;
+  
+  & table {
+    font-size: 15px;
+    text-align: center;
+    border-collapse: collapse;
+    width: 90vw;
+  
+    & tr {
+      & th {
+        min-width: 95px;
+        padding: 12px 5px;
+
+        font-size: 17px;
+        color: var(--dashboard-admin-header-foreground);
+  
+        border: 2px solid var(--dashboard-admin-border-color);
+        background-color: var(--dashboard-admin-header-background);
+      }
+  
+      & td {
+        min-width: 50px;
+        padding: 16px;
+        
+        border: 2px solid var(--dashboard-admin-border-color);
+      }
+  
+      & .admin-opcion {
+        padding: unset;
+        cursor: pointer;
+        transition: .6s ease;
+        
+        &:hover {
+          font-size: 19px;
+        }
+      }
+  
+      &:nth-child(even) {
+        background-color: var(--dashboard-admin-background-even);
+      }
+      &:nth-child(odd) {
+        background-color: var(--dashboard-admin-background-odd);
+  
+      }
+    }
+  }
+}
+
+form {
+  margin: 0 15px;
+
+  & p, & label {
+    text-align: center;
+    text-wrap: balance;
+
+    & span {
+      font-weight: bold;
+      color: var(--secondary-color);
+    }
+  }
+
+  & select, & input[type="datetime-local"] {
+    padding: 10px 2px;
+    text-align: center;
+
+    outline: none;
+    border: 2px solid var(--primary-color);
+    transition: .3s ease;
+
+    &:focus-visible, &:focus {
+      box-shadow: 0 0 0 3.5px var(--primary-color);
+    }
+  }
+
+  & input[type="datetime-local"] {
+    padding: 10px;
+  }
+
+  & .warning {
+    width: -moz-fit-content !important;
+    width: fit-content !important;
+    padding: 5px;
+    border: 1px solid #dc7226;
+    
+    color: #b75915;
+    font-weight: bold;
+
+    &::before {
+      content: ⚠️;
+    }
+  }
+}
+

@@ -127,7 +127,6 @@ if (isset($adminActivo)) {
       toast.setTipo("'.$tipo.'");
 
       toast.showToast();
-      console.log(toast);
     </script>';
     }
 

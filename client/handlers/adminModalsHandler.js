@@ -1,6 +1,36 @@
 // Variable global que permitirá controlar el tipo de modal activo en /admin
 let modalActivo;
 
+function getModalEditarPermisosUsuario (opcionElemento) {
+  modalActivo = document.querySelector(".editar-permisos-usuario");
+  const infoUsuario = getInfoUsuario(opcionElemento);
+
+  if (modalActivo == null) {
+    modalActivo = document.createElement("dialog");
+    modalActivo.classList.add("modal", "editar-permisos-usuario");
+
+    modalActivo.innerHTML = /* html */ `
+      <form action="" method="POST">
+        <label for="permiso-anhadir-libros">Añadir libros a la estantería:
+          <custom-switcher id="permiso-anhadir-libros"></custom-switcher>
+        </label>
+        <label for="permiso-consultar-api-books">Realizar consultas en API externa:
+          <custom-switcher id="permiso-consultar-api-books" data-checked="true"></custom-switcher>
+        </label>
+        <div class="grupo-buttons">
+          <input type="submit" class="submit-btn" name="editar-usuario" value="Confirmar">
+          <input type="button" class="submit-btn" value="Cancelar">
+        </div>
+        <input type="hidden" name="idUsuario" value="${infoUsuario.idUsuario}">
+      </form>
+    `;
+  }
+  const cancelarBoton = modalActivo.querySelector("input[type=button]");
+  generarCierreModal(modalActivo, cancelarBoton);
+
+  mostrarModal(modalActivo);
+}
+
 function getModalEliminarUsuario (opcionElemento) {
   modalActivo = document.querySelector(".eliminar-usuario");
   const infoUsuario = getInfoUsuario(opcionElemento);
@@ -54,34 +84,6 @@ function getModalBloquearUsuario (opcionElemento) {
 
     const selectMotivosTag = modalActivo.querySelector("#motivo-bloqueo");
     insertarMotivosBloqueo(selectMotivosTag);
-  }
-  const cancelarBoton = modalActivo.querySelector("input[type=button]");
-  generarCierreModal(modalActivo, cancelarBoton);
-
-  mostrarModal(modalActivo);
-}
-
-function getModalEditarUsuario (opcionElemento) {
-  modalActivo = document.querySelector(".editar-usuario");
-  const infoUsuario = getInfoUsuario(opcionElemento);
-
-  if (modalActivo == null) {
-    modalActivo = document.createElement("dialog");
-    modalActivo.classList.add("modal", "editar-usuario");
-
-    modalActivo.innerHTML = /* html */ `
-      <form action="" method="POST">
-        <label for="nombre-usuario">Nombre de usuario:</label>
-        <input type="text" id="nombre-usuario" name="nombreUsuario" value="${infoUsuario.nombreUsuario}" required>
-        <label for="email-usuario">Email de usuario:</label>
-        <input type="email" id="email-usuario" name="emailUsuario" value="${infoUsuario.emailUsuario}" required>
-        <div class="grupo-buttons">
-          <input type="submit" class="submit-btn" name="editar-usuario" value="Confirmar">
-          <input type="button" class="submit-btn" value="Cancelar">
-        </div>
-        <input type="hidden" name="idUsuario" value="${infoUsuario.idUsuario}">
-      </form>
-    `;
   }
   const cancelarBoton = modalActivo.querySelector("input[type=button]");
   generarCierreModal(modalActivo, cancelarBoton);

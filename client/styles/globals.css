@@ -250,7 +250,7 @@ html[data-theme = "dark"] {
 
   min-width: 320px;
   max-height: 70vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -263,9 +263,7 @@ html[data-theme = "dark"] {
   
   padding: 20px 25px;
   box-shadow: 0 0 15px 2px #00000072;
-
   background-color: color-mix(in srgb, var(--background-contrast-color) 30%, var(--user-invalid-color) 10%);
-  animation: animation-border .3s ease forwards;
 
   & h2 {
     padding: unset;

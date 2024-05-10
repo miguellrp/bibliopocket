@@ -22,7 +22,7 @@ html[data-theme="dark"] {
   margin: 0 auto;
   width: 90vw;
   table-layout: fixed;
-  overflow-x: scroll;
+  overflow-x: auto;
 
   box-shadow: 0 0 5px 3px #00000050;
   
@@ -117,3 +117,27 @@ form {
   }
 }
 
+.modal.editar-permisos-usuario{
+  & form {
+    align-items: start;
+
+    & label {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      & i{
+        margin: 0 2px;
+      }
+  
+      & custom-switcher {
+        margin-left: 10px;
+      }
+    }
+
+    & .grupo-buttons {
+      margin: auto;
+    }
+  }
+}

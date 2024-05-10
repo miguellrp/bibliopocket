@@ -64,6 +64,7 @@ if (isset($adminActivo)) {
     <link rel="stylesheet" href="/client/styles/globals.css">
     <link rel="stylesheet" href="./styles.css">
     <script src="/client/components/CustomHeader.js"></script>
+    <script src="/client/components/CustomSwitcher.js"></script>
     <script src="/client/components/CustomToast.js"></script>
   </head>
 
@@ -101,7 +102,7 @@ if (isset($adminActivo)) {
                 <td>".$diasInactivo."</td>
                 <td>".$numInfracciones."</td>
                 <td>".$usuarioBP->getCountLibrosRegistrados()."</td>
-                <td class=admin-opcion onclick=getModalEditarUsuario(this)>✏️</td>
+                <td class=admin-opcion onclick=getModalEditarPermisosUsuario(this)>✏️</td>
                 <td class=admin-opcion onclick=getModalBloquearUsuario(this)>⛔</td>
                 <td class=admin-opcion onclick=getModalEliminarUsuario(this)>❌</td>
               </tr>

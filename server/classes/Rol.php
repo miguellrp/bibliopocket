@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
 class Rol {
   private $id;
@@ -49,6 +50,27 @@ class Rol {
     return $this->pConsultarApiExterna;
   }
 
+  static function setPermisosPorDefecto($idUsuario) {
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("INSERT INTO roles VALUES (
+      :idRol, :idUsuario, :pAnhadirLibros, :pConsultarApiExterna
+      )");
+
+      $query->execute(array(
+        ":idRol"                => Util::generarId(),
+        ":idUsuario"            => $idUsuario,
+        ":pAnhadirLibros"       => (int)TRUE,
+        ":pConsultarApiExterna" => (int)TRUE
+      ));
+      return true;
+    }
+    catch (PDOException $exception) {
+      echo "Ocurrió un error al recoger tratar de establecer los permisos por defecto de la persona usuaria". $exception->getMessage();
+      return false;
+    }
+  }
+
   function getPermisosAsCustomProperties() {
     $arrayPermisos = [
       "p-anhadir-libros"        => $this->getPAnhadirLibros() ? "true" : "false",
@@ -82,7 +104,7 @@ class Rol {
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al recoger tratar de actualizar los permisos de la persona usuaria". $exception->getMessage();
+      return false;
     }
-    return false;
   }
 }

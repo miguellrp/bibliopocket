@@ -19,7 +19,7 @@ function listenerModalBusquedaAPI () {
       const modalBusquedaAPI = modalesEstanteria.getModalBusquedaAPI();
       generarCierreModal(modalBusquedaAPI);
 
-      modalBusquedaAPI.showModal()
+      modalBusquedaAPI.showModal();
     });
   }
 }
@@ -27,13 +27,15 @@ function listenerModalBusquedaAPI () {
 function listenerModalCrearLibro () {
   const nuevoLibroBtn = document.getElementById("nuevo-libro-button");
 
-  nuevoLibroBtn.addEventListener("click", () => {
-    const modalNuevoLibro = modalesEstanteria.getModalDatosLibro();
-    generarCierreModal(modalNuevoLibro);
+  if (nuevoLibroBtn != null) {
+    nuevoLibroBtn.addEventListener("click", () => {
+      const modalNuevoLibro = modalesEstanteria.getModalDatosLibro();
+      generarCierreModal(modalNuevoLibro);
 
-    const estadosLibroTags = modalNuevoLibro.querySelector(".grupo-estados-libro").querySelectorAll(":scope > input");
-    estadosLibroTags.forEach((estadoLibroTag) => estadoLibroTag.addEventListener("click", listenersEstadosLibro));
+      const estadosLibroTags = modalNuevoLibro.querySelector(".grupo-estados-libro").querySelectorAll(":scope > input");
+      estadosLibroTags.forEach((estadoLibroTag) => estadoLibroTag.addEventListener("click", listenersEstadosLibro));
 
-    modalNuevoLibro.showModal();
-  });
+      modalNuevoLibro.showModal();
+    });
+  }
 }

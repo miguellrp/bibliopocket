@@ -79,12 +79,14 @@ function crearLibroTagAPI (libro) {
 }
 
 function generarForm (libro) {
+  const pAnhadirLibros = document.querySelector(".estanteria").getAttribute("p-anhadir-libros") == 1;
   formatearComillasDatos(libro);
 
+  const inputSubmit = pAnhadirLibros ? "<input type='submit' name='anhadir-libro' value='Añadir' class='add-btn'></input>" : "";
 
   return `
     <form action='' method='POST'>
-      <input type='submit' name='anhadir-libro' value="Añadir" class='add-btn'>
+      ${inputSubmit}
       <input type='hidden' name='id' value='${libro["id"]}'>
       <input type='hidden' name='titulo' value='${libro["titulo"]}'>
       <input type='hidden' name='subtitulo' value='${libro["subtitulo"]}'>

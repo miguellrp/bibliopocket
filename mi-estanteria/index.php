@@ -192,7 +192,7 @@ if (isset($usuarioActivo)) {
         </div>
       </details>
       <?php endif; ?>
-      <section class="estanteria" id-usuario=<?= $usuarioActivo->getId()?>>
+      <section class="estanteria" id-usuario=<?= $usuarioActivo->getId()?> p-anhadir-libros=<?= $rolUsuario->getPAnhadirLibros() ?>>
         <?php
           if (empty($idsLibrosEstanteria)) {
             echo "<div class='empty-bookshelf'>

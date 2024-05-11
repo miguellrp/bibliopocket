@@ -1,7 +1,8 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Admin.php';
-require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Usuario.php';
 require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Email.php';
+require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Rol.php';
+require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Usuario.php';
 session_start();
 
 $conn = new Conector();
@@ -95,6 +96,7 @@ if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_
       "userPic"         => $usuarioRegistrado->getUserPic(),
       "ultimoLogin"     => $usuarioRegistrado->getUltimoLogin()
     );
+    $permisosUsuario = Rol::setPermisosPorDefecto($usuarioRegistrado->getId());
     
     header("location: inicio/");
   }

@@ -23,8 +23,8 @@ CREATE TABLE usuarios (
 CREATE TABLE roles (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
   id_usuario VARCHAR(128) UNIQUE NOT NULL,
-  p_anhadir_libros BOOLEAN DEFAULT TRUE,
-  p_consultar_api_externa BOOLEAN DEFAULT TRUE
+  p_anhadir_libros BOOLEAN,
+  p_consultar_api_externa BOOLEAN
 );
 
 /* Tabla para almacenar contraseñas temporales cuando la persona usuaria olvida su contraseña */

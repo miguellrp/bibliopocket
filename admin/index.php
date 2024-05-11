@@ -2,6 +2,7 @@
 session_start();
 include_once $_SERVER['DOCUMENT_ROOT']."/server/classes/Admin.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/server/classes/Bloqueo.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/server/classes/Rol.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/server/classes/Usuario.php";
 
 if (isset($_SESSION["adminActivo"])) {
@@ -16,15 +17,21 @@ if (isset($adminActivo)) {
   }
 
   if (!empty($_POST)) {
-    if(isset($_POST["eliminar-usuario"])) {
-      if ($adminActivo->eliminarUsuario($_POST["idUsuario"])) {
+    if (isset($_POST["editar-permisos-usuario"])) {
+      $rolUsuario = new Rol($_POST["idUsuario"]);
+
+    if ($rolUsuario->editarPermisos(
+      pAnhadirLibros: ($_POST["pAnhadirLibros"] == "true"),
+      pConsultarApiExterna: ($_POST["pConsultarApiExterna"] == "true"))) {
         $_SESSION["toast"]["tipo"] = "ok";
-        $_SESSION["toast"]["mensaje"] = "Usuari@ eliminad@ correctamente de la base de datos";
+        $_SESSION["toast"]["mensaje"] = "Permisos actualizados correctamente";
       } else {
         $_SESSION["toast"]["tipo"] = "error";
-        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de eliminar a la persona usuaria de la base de datos";
+        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de actualizar los permisos de la persona usuaria";
       }
-    } else if (isset($_POST["bloquear-usuario"])) {
+    }
+
+    else if (isset($_POST["bloquear-usuario"])) {
       $bloqueEstablecido = new Bloqueo($_POST["motivo-bloqueo"]);
   
       if ($bloqueEstablecido->asociarA($_POST["idUsuario"], $_POST["fechaExpiracion"])) {
@@ -34,19 +41,20 @@ if (isset($adminActivo)) {
         $_SESSION["toast"]["tipo"] = "error";
         $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de bloquear a la persona usuaria";
       }
-    } else if (isset($_POST["editar-usuario"])) {
-  
-      if ($adminActivo->editarUsuario($_POST["idUsuario"], $_POST["nombreUsuario"], $_POST["emailUsuario"])) {
+    }
+
+    if(isset($_POST["eliminar-usuario"])) {
+      if ($adminActivo->eliminarUsuario($_POST["idUsuario"])) {
         $_SESSION["toast"]["tipo"] = "ok";
-        $_SESSION["toast"]["mensaje"] = "Datos modificados correctamente";
+        $_SESSION["toast"]["mensaje"] = "Usuari@ eliminad@ correctamente de la base de datos";
       } else {
         $_SESSION["toast"]["tipo"] = "error";
-        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de modificar los datos de la persona usuaria";
+        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de eliminar a la persona usuaria de la base de datos";
       }
     }
 
     $_SESSION["toast"]["showToast"] = true;
-    header("Location: /admin");
+    header("Location: index.php");
     session_write_close();
   }
 }
@@ -91,16 +99,21 @@ if (isset($adminActivo)) {
           <?php
             foreach($listaUsuariosBPids as $usuarioBPid) {
               $usuarioBP = new Usuario($usuarioBPid);
+              $rolUsuario = new Rol($usuarioBPid);
+              $listaPermisos = $rolUsuario->getPermisosAsCustomProperties();
+
               $diaActual = new DateTime;
               $diasInactivo = $diaActual->diff(new DateTime($usuarioBP->getUltimoLogin()))->days;
               $numInfracciones = count(Bloqueo::getBloqueosDe($usuarioBP->getId(), true));
 
               echo "
               <tr>
-                <td data-id=".$usuarioBP->getId().">".$usuarioBP->getNombreUsuario()."</td>
+                <td data-id=".$usuarioBP->getId()." $listaPermisos>"
+                .$usuarioBP->getNombreUsuario()."
+                </td>
                 <td>".$usuarioBP->getEmail()."</td>
-                <td>".$diasInactivo."</td>
-                <td>".$numInfracciones."</td>
+                <td>$diasInactivo</td>
+                <td>$numInfracciones</td>
                 <td>".$usuarioBP->getCountLibrosRegistrados()."</td>
                 <td class=admin-opcion onclick=getModalEditarPermisosUsuario(this)>✏️</td>
                 <td class=admin-opcion onclick=getModalBloquearUsuario(this)>⛔</td>

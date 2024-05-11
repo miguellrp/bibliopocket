@@ -19,6 +19,14 @@ CREATE TABLE usuarios (
   fecha_ultimo_login DATETIME NOT NULL
 );
 
+/* Tabla que permitirá gestionar los permisos vinculados a una persona usuaria */
+CREATE TABLE roles (
+  id VARCHAR(128) PRIMARY KEY NOT NULL,
+  id_usuario VARCHAR(128) UNIQUE NOT NULL,
+  p_anhadir_libros BOOLEAN DEFAULT TRUE,
+  p_consultar_api_externa BOOLEAN DEFAULT TRUE
+);
+
 /* Tabla para almacenar contraseñas temporales cuando la persona usuaria olvida su contraseña */
 CREATE TABLE contrasenhas_temporales (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
@@ -90,13 +98,21 @@ INSERT INTO admins VALUES(
 
 -- Creación de usuario para testing
 INSERT INTO usuarios VALUES(
-  UUID(),
+  "d02b7-aa8c6-73724-cddf7",
   "testing",
   "$2y$10$X6E8.2fofYExDpAVmzDrzeEAeKdfCCXMizPGOnyYeRk24vmlh1ksG",
   "test@test.test",
   NULL,
   NOW(),
   NOW()
+);
+
+-- Se le asocian los permisos por defecto
+INSERT INTO roles VALUES(
+  UUID(),
+  "d02b7-aa8c6-73724-cddf7",
+  TRUE,
+  TRUE
 );
 
 -- Creación de motivos de bloqueo para testing

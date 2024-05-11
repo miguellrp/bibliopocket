@@ -266,9 +266,11 @@ class CustomHeader extends HTMLElement {
   setListenerKeyHamburgerIcon () {
     const checkboxIcon = this.shadowRoot.querySelector("input[type=checkbox]");
 
-    checkboxIcon.addEventListener("keydown", (event) => {
-      if (event.key == "Enter") checkboxIcon.checked = !checkboxIcon.checked;
-    });
+    if (checkboxIcon != null) {
+      checkboxIcon.addEventListener("keydown", (event) => {
+        if (event.key == "Enter") checkboxIcon.checked = !checkboxIcon.checked;
+      });
+    }
   }
 }
 

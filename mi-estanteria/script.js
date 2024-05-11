@@ -14,12 +14,14 @@ function prepararListenersButtons () {
 function listenerModalBusquedaAPI () {
   const buscarLibroBtn = document.getElementById("busqueda-button");
 
-  buscarLibroBtn.addEventListener("click", () => {
-    const modalBusquedaAPI = modalesEstanteria.getModalBusquedaAPI();
-    generarCierreModal(modalBusquedaAPI);
+  if (buscarLibroBtn != null) {
+    buscarLibroBtn.addEventListener("click", () => {
+      const modalBusquedaAPI = modalesEstanteria.getModalBusquedaAPI();
+      generarCierreModal(modalBusquedaAPI);
 
-    modalBusquedaAPI.showModal()
-  });
+      modalBusquedaAPI.showModal()
+    });
+  }
 }
 
 function listenerModalCrearLibro () {

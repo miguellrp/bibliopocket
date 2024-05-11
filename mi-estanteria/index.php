@@ -2,6 +2,7 @@
 session_start();
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Estanteria.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Libro.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Rol.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Usuario.php");
 
 // -- CONSTANTES GLOBALES --
@@ -12,8 +13,10 @@ $conn = new Conector;
 if (!isset($_SESSION["toast"])) $_SESSION["toast"]["showToast"] = false;
 
 
-if (isset($_SESSION["usuarioActivo"])) 
+if (isset($_SESSION["usuarioActivo"])) {
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
+  $rolUsuario = new Rol($usuarioActivo->getId());
+}
 
 if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
   $idLibro = isset($_POST["anhadir-libro"]) ? $_POST["id"] : uniqid();
@@ -125,6 +128,7 @@ if (isset($usuarioActivo)) {
       <?= $usuarioActivo->getNombreUsuario() ?>
     </h1>
     <div class="grupo-buttons">
+      <?php if ($rolUsuario->getPConsultarApiExterna()): ?>
       <custom-button
         id="busqueda-button"
         data-contenido="Añadir libro 🔎"
@@ -132,6 +136,8 @@ if (isset($usuarioActivo)) {
         font-color="var(--secondary-lighten-color)"
       >
       </custom-button>
+      <?php endif; ?>
+      <?php if ($rolUsuario->getPAnhadirLibros()): ?>
       <custom-button
         id="nuevo-libro-button"
         data-contenido="Crear libro desde 0 ➕"
@@ -139,6 +145,7 @@ if (isset($usuarioActivo)) {
         font-color="var(--secondary-contrast-color)"
       >
       </custom-button>
+      <?php endif; ?>
     </div>
     <main>
     <?php if (!empty($idsLibrosEstanteria)): ?>

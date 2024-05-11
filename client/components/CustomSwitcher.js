@@ -43,7 +43,18 @@ class CustomSwitcher extends HTMLElement {
 
         & .circle {
           margin-left: 30px;
-          background: var(--secondary-color);
+          background: #5cc31d;
+          animation: stretch .5s ease;
+        }
+      }
+
+      @keyframes stretch {
+        50% {
+          transform: scale(0.4, 0.7);
+        } 80% {
+          transform: scale(1.1, 1.1);
+        } 100% {
+          transform: scale(1);
         }
       }
     </style>
@@ -60,8 +71,10 @@ class CustomSwitcher extends HTMLElement {
   setInputHidden () {
     const inputHidden = document.createElement("input");
     const switcherChecked = this.getAttribute("data-checked") === "true";
+    const nameInputHidden = this.getAttribute("data-name");
 
     inputHidden.type = "hidden";
+    if (nameInputHidden != null) inputHidden.name = nameInputHidden;
     inputHidden.value = switcherChecked;
 
     this.parentNode.appendChild(inputHidden);

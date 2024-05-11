@@ -48,7 +48,7 @@ function getBloqueos() {
   $listaBloqueos = Bloqueo::getBloqueos();
 
   foreach($listaBloqueos as $idBloqueo => $tipoBloqueo) {
-    $bloqueo = new Bloqueo($idBloqueo, $tipoBloqueo);
+    $bloqueo = new Bloqueo($idBloqueo);
     $bloqueo->render();
   }
 }

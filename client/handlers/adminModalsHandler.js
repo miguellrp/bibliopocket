@@ -10,15 +10,16 @@ function getModalEditarPermisosUsuario (opcionElemento) {
     modalActivo.classList.add("modal", "editar-permisos-usuario");
 
     modalActivo.innerHTML = /* html */ `
+      <h3>Editar permisos de <span>${infoUsuario.nombreUsuario}</span></h3>
       <form action="" method="POST">
         <label for="permiso-anhadir-libros">Añadir libros a la estantería:
-          <custom-switcher id="permiso-anhadir-libros"></custom-switcher>
+          <custom-switcher id="permiso-anhadir-libros" data-name="pAnhadirLibros" data-checked=${infoUsuario.pAnhadirLibros}></custom-switcher>
         </label>
-        <label for="permiso-consultar-api-books">Realizar consultas en API externa:
-          <custom-switcher id="permiso-consultar-api-books" data-checked="true"></custom-switcher>
+        <label for="permiso-consultar-api-externa">Realizar consultas en API externa:
+          <custom-switcher id="permiso-consultar-api-externa" data-name="pConsultarApiExterna" data-checked=${infoUsuario.pConsultarApiExterna}></custom-switcher>
         </label>
         <div class="grupo-buttons">
-          <input type="submit" class="submit-btn" name="editar-usuario" value="Confirmar">
+          <input type="submit" class="submit-btn" name="editar-permisos-usuario" value="Confirmar">
           <input type="button" class="submit-btn" value="Cancelar">
         </div>
         <input type="hidden" name="idUsuario" value="${infoUsuario.idUsuario}">
@@ -69,8 +70,9 @@ function getModalBloquearUsuario (opcionElemento) {
     const fechaMaximaPermitida = getFechaMaximaPermitida();
 
     modalActivo.innerHTML = /* html */ `
+      <h3>Establecer bloqueo temporal a <span>${infoUsuario.nombreUsuario}</span></h3>
       <form action="" method="POST">
-        <label for="motivo-bloqueo">Selecciona el motivo del bloqueo a <span>${infoUsuario.nombreUsuario}</span>:</label>
+        <label for="motivo-bloqueo">Selecciona el motivo de bloqueo:</label>
         <select name="motivo-bloqueo" id="motivo-bloqueo"></select>
         <label for="fecha-expiracion">Establece la fecha de expiración de este bloqueo:</label>
         <input type="datetime-local" id="fecha-expiracion" name="fechaExpiracion" min=${inicioDiaSiguiente} max=${fechaMaximaPermitida}>
@@ -96,12 +98,15 @@ function getInfoUsuario (elementoTabla) {
   const primerCelda = elementoTabla.closest("tr").cells[0];
   const idUsuario = primerCelda.getAttribute("data-id");
   const nombreUsuario = primerCelda.textContent;
-  const emailUsuario = elementoTabla.closest("tr").cells[1].textContent;
+
+  const pAnhadirLibros = primerCelda.getAttribute("p-anhadir-libros") === "true";
+  const pConsultarApiExterna = primerCelda.getAttribute("p-consultar-api-externa") === "true";
 
   return {
     "idUsuario": idUsuario,
     "nombreUsuario": nombreUsuario,
-    "emailUsuario": emailUsuario
+    "pAnhadirLibros": pAnhadirLibros,
+    "pConsultarApiExterna": pConsultarApiExterna
   };
 }
 
@@ -128,6 +133,7 @@ function generarCierreModal (modal, cierreButton = null) {
 function mostrarModal (modal) {
   document.body.appendChild(modal);
   modal.showModal();
+  modal.querySelector("input[type=submit").blur();
 }
 
 
@@ -138,6 +144,19 @@ function insertarMotivosBloqueo (selectMotivosTag) {
     console.error("Error al cargar los motivos de bloqueo: ", error);
   });
 }
+
+/* Función asíncrona para recoger los permisos de las personas usuarias registradas en BP */
+async function fetchListaRoles () {
+  try {
+    const response = await fetch(`http://localhost/server/API.php?tipoPeticion=getRoles`);
+    const data = await response.text();
+
+    return data;
+  } catch (error) {
+    throw new Error("Error al obtener los roles de la BD: ", error);
+  }
+}
+
 /* Función asíncrona para traer la lista de todos los motivos de bloqueo almacenados en la BD */
 async function fetchListaBloqueos () {
   try {
@@ -151,6 +170,7 @@ async function fetchListaBloqueos () {
 }
 
 
+/* -- Funciones complementarias -- */
 function getFechaDiaSiguiente () {
   const inicioDiaSiguiente = new Date();
   inicioDiaSiguiente.setDate(inicioDiaSiguiente.getDate() + 1);

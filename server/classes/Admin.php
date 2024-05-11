@@ -99,25 +99,4 @@ class Admin {
 
     return $query->rowCount() == 1;
   }
-
-  function editarUsuario($idUsuario, $nuevoNombre, $nuevoEmail) {
-    try {
-      $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
-        nombre_usuario  = :nuevoNombre,
-        email_usuario   = :nuevoEmail
-        WHERE id = :idUsuario");
-      
-      $query->bindParam(":idUsuario", $idUsuario);
-      $query->execute(array(
-        ":idUsuario"    => $idUsuario,
-        ":nuevoNombre"  => $nuevoNombre,
-        ":nuevoEmail"   => $nuevoEmail
-      ));
-
-    } catch (PDOException $exception) {
-      echo "Ocurrió un error al intentar editar al usuario con ID $idUsuario. ". $exception->getMessage();
-    }
-
-    return $query->rowCount() == 1;
-  }
 }

@@ -106,6 +106,7 @@ class Usuario {
   function registrarUsuarioDB() {
     $idGenerado = Util::generarId();
     $passHasheado = password_hash($this->getContrasenha(), PASSWORD_DEFAULT);
+    $registroOk = true;
 
     try {
       $query = $this->conexionDB->conn->prepare("INSERT INTO usuarios
@@ -122,11 +123,10 @@ class Usuario {
       ));
     }
     catch (PDOException $exception) {
-      echo "Ocurrió un error durante el registro. ". $exception->getMessage();
-      return false;
+      $registroOk = false;
     }
     
-    return true;
+    return $registroOk;
   }
 
   function setUltimoLoginDB() {
@@ -411,5 +411,35 @@ class Usuario {
       echo "Ocurrió un error durante el login con contraseña temporal. ". $exception->getMessage();
       return false;
     }
+  }
+
+  static function esEmailUnico($emailIntroducido) {
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("SELECT email_usuario FROM usuarios WHERE email_usuario = :emailIntroducido");
+      
+      $query->bindParam(":emailIntroducido", $emailIntroducido);
+      $query->execute();
+
+    } catch (PDOException $exception) {
+      echo "Ocurrió un error al comprobar si el email introducido es único en la BD. ". $exception->getMessage();
+    }
+
+    return $query->rowCount() == 0;
+  }
+
+  static function esNombreUnico($nombreUsuario) {
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("SELECT nombre_usuario FROM usuarios WHERE nombre_usuario = :nombreUsuario");
+      
+      $query->bindParam(":nombreUsuario", $nombreUsuario);
+      $query->execute();
+
+    } catch (PDOException $exception) {
+      echo "Ocurrió un error al comprobar si el nombre de usuario introducido es único en la BD. ". $exception->getMessage();
+    }
+    
+    return $query->rowCount() == 0;
   }
 }

@@ -55,29 +55,47 @@ if (isset($_POST["login-check"])) {
 
 // Comprobación registro
 if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["codigoRegistro"] != $_POST["codigo"]) {
-  $codigoGenerado = rand(1000, 9999);
-  $tiempoExpiracionCodigo = time() + 300;
-  $_SESSION["codigoRegistro"] = $codigoGenerado;
+  if (Usuario::esEmailUnico($_POST["email-usuario-reg"])) {
+    if (Usuario::esNombreUnico($_POST["nombre-usuario-reg"])) {
+      $codigoGenerado = rand(1000, 9999);
+      $tiempoExpiracionCodigo = time() + 300;
+      $_SESSION["codigoRegistro"] = $codigoGenerado;
+    
+      $emailUsuarioRegistro = $_POST["email-usuario-reg"] ?? $_POST["email"];
+      $nombreUsuarioRegistro = $_POST["nombre-usuario-reg"] ?? $_POST["usuario"];
+      $contrasenhaUsuarioRegistro = $_POST["contrasenha-reg"] ?? $_POST["email"];
+    
+      $emailConfirmacion = new Email($emailUsuarioRegistro, $nombreUsuarioRegistro, 0, $_SESSION["codigoRegistro"]);
+      if ($emailConfirmacion->sendMail()) {
+        echo "
+          <dialog class='modal' id='confirmacion-registro' open>
+            <form action='".$_SERVER['PHP_SELF']."' method='POST'>
+              <label for='codigo'>Introduce el código enviado a tu correo: </label>
+              <input type='text' class='input-text' minlength=4 maxlength=4 id='codigo' name='codigo' required>
+              <input type='submit' class='submit-btn' name='confirm-registro-check' value='Enviar'>
+              <input type='hidden' name='usuario' value='".$nombreUsuarioRegistro."'>
+              <input type='hidden' name='contrasenha' value='".$contrasenhaUsuarioRegistro."'>
+              <input type='hidden' name='email' value='".$emailUsuarioRegistro."'>
+            </form>
+          </dialog>
+        ";
 
-  $emailUsuarioRegistro = $_POST["email-usuario-reg"] ?? $_POST["email"];
-  $nombreUsuarioRegistro = $_POST["nombre-usuario-reg"] ?? $_POST["usuario"];
-  $contrasenhaUsuarioRegistro = $_POST["contrasenha-reg"] ?? $_POST["email"];
-
-  $emailConfirmacion = new Email($emailUsuarioRegistro, $nombreUsuarioRegistro, 0, $_SESSION["codigoRegistro"]);
-  if ($emailConfirmacion->sendMail()) {
-    echo "
-      <dialog class='modal' id='confirmacion-registro' open>
-        <form action='".$_SERVER['PHP_SELF']."' method='POST'>
-          <label for='codigo'>Introduce el código enviado a tu correo: </label>
-          <input type='text' class='input-text' minlength=4 maxlength=4 id='codigo' name='codigo' required>
-          <input type='submit' class='submit-btn' name='confirm-registro-check' value='Enviar'>
-          <input type='hidden' name='usuario' value='".$nombreUsuarioRegistro."'>
-          <input type='hidden' name='contrasenha' value='".$contrasenhaUsuarioRegistro."'>
-          <input type='hidden' name='email' value='".$emailUsuarioRegistro."'>
-        </form>
-      </dialog>
-    ";
+        $_SESSION["toast"]["tipo"] = "ok";
+        $_SESSION["toast"]["mensaje"] = "Código de confirmación enviado correctamente";
+      } else {
+        $_SESSION["toast"]["tipo"] = "error";
+        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al enviar el código de confirmación";
+      }
+    } else {
+      $_SESSION["toast"]["tipo"] = "warning";
+      $_SESSION["toast"]["mensaje"] = "El nombre de usuario introducido ya está registrado en BiblioPocket";
+    }
+  } else {
+    $_SESSION["toast"]["tipo"] = "warning";
+    $_SESSION["toast"]["mensaje"] = "El correo electrónico introducido ya está registrado en BiblioPocket";
   }
+
+  $_SESSION["toast"]["showToast"] = true;
 }
 
 // Confirmación registro (email válido)
@@ -97,7 +115,6 @@ if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_
       "ultimoLogin"     => $usuarioRegistrado->getUltimoLogin()
     );
     $permisosUsuario = Rol::setPermisosPorDefecto($usuarioRegistrado->getId());
-    
     header("location: inicio/");
   }
 }

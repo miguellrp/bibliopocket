@@ -30,8 +30,8 @@ class Libro {
         "subtitulo"         => $_POST["subtitulo"],
         "autoria"           => $_POST["autoria"],
         "descripcion"       => $_POST["descripcion"],
-        "portada"           => $_POST["portada"]??null,
-        "numPaginas"        => $_POST["numPaginas"],
+        "portada"           => !empty($_POST["portada"]) ? $_POST["portada"] : null,
+        "numPaginas"        => !empty($_POST["numPaginas"]) ? $_POST["numPaginas"] : null,
         "editorial"         => $_POST["editorial"],
         "anhoPublicacion"   => $_POST["anhoPublicacion"],
         "enlaceAPI"         => $_POST["enlaceAPI"],
@@ -166,7 +166,7 @@ class Libro {
   }
 
   function getAutoria() {
-    return $this->autoria;
+    return ($this->autoria != null) ? $this->autoria : "Autoría no disponible";
   }
 
   function getDescripcion() {
@@ -182,11 +182,11 @@ class Libro {
   }
 
   function getEditorial() {
-    return $this->editorial;
+    return ($this->editorial != null) ? $this->editorial : "Editorial no disponible";
   }
 
   function getAnhoPublicacion() {
-    return $this->anhoPublicacion;
+    return ($this->anhoPublicacion != null) ? $this->anhoPublicacion : "s.f.";
   }
 
   function getEnlaceAPI() {

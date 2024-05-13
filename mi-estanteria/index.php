@@ -25,20 +25,22 @@ if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
 
   // Si el libro a añadir no está guardado todavía, se añade a su estantería:
   if (!$usuarioActivo->esLibroGuardado($nuevoLibro)) {
-    $estanteriaDB->registrarLibro($nuevoLibro);
-
-    if (isset($_POST["categorias-tagify-nuevo-libro"])) {
-      $categorias = $_POST["categorias-tagify-nuevo-libro"];
-  
-      foreach($categorias as $nombreCategoria) {
-        $categoria = new Categoria($nombreCategoria);
-        
-        if ($categoria->sinAsociarEn($idLibro)) $categoria->asociarA($idLibro);
+    if ($estanteriaDB->registrarLibro($nuevoLibro)) {
+      if (isset($_POST["categorias-tagify-nuevo-libro"])) {
+        $categorias = $_POST["categorias-tagify-nuevo-libro"];
+    
+        foreach($categorias as $nombreCategoria) {
+          $categoria = new Categoria($nombreCategoria);
+          
+          if ($categoria->sinAsociarEn($idLibro)) $categoria->asociarA($idLibro);
+        }
       }
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha añadido el libro a tu estantería";
+    } else {
+      $_SESSION["toast"]["tipo"] = "error";
+      $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de añadir el libro a tu estantería";
     }
-
-    $_SESSION["toast"]["tipo"] = "ok";
-    $_SESSION["toast"]["mensaje"] = "Se ha añadido el libro a tu estantería";
   } else {
     $_SESSION["toast"]["tipo"] = "info";
     $_SESSION["toast"]["mensaje"] = "Ya has añadido este libro a tu estantería";
@@ -83,10 +85,18 @@ if (isset($_POST["modificar-libro"])) {
 }
 
 if (isset($_POST["eliminar-libro"])) {
-  $conn->eliminarLibro($_POST["idLibroEstante"]);
+  $idLibro = $_POST["idLibroEstante"];
+  $libroSeleccionado = new Libro($idLibro);
+  $estanteriaDB = new Estanteria($usuarioActivo->getId());
 
-  $_SESSION["toast"]["tipo"] = "ok";
-  $_SESSION["toast"]["mensaje"] = "Se ha eliminado el libro de tu estantería";
+  if ($estanteriaDB->eliminarLibro($libroSeleccionado)) {
+    $_SESSION["toast"]["tipo"] = "ok";
+    $_SESSION["toast"]["mensaje"] = "Se ha eliminado el libro de tu estantería";
+  } else {
+    $_SESSION["toast"]["tipo"] = "error";
+    $_SESSION["toast"]["mensaje"] = "Ha ocurrido un error al tratar de eliminar el libro";
+  }
+
   $_SESSION["toast"]["showToast"] = true;
 
 

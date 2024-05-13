@@ -66,11 +66,26 @@ class Estanteria {
         ":fechaAdicion"     => $libro->getFechaAdicion(),
         ":userID"           => $this->getIdUsuario()
       ));
+      return true;
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al registrar el libro. ". $exception->getMessage();
+      return false;
     }
   }
+
+  function eliminarLibro($libro) {
+    try {
+        $query = $this->conexionDB->conn->prepare("DELETE FROM libros
+            WHERE id = :id");
+        $query->execute(array(":id" => $libro->getId()));
+    }
+    catch (PDOException $exception) {
+        echo "Ocurrió un error al intentar eliminar el libro. ". $exception->getMessage();
+    }
+
+    return $query->rowCount() == 1;
+}
 
   function getUltimosLibrosAnhadidos($numLibros) {
     try {

@@ -93,7 +93,7 @@ function generarFormDatosLibro () {
       </custom-image-uploader>  
       <div class="datos-cabecera">
         <label for="titulo">Título:</label>
-        <input type="text" id="titulo" class="input-txt" name="titulo" >
+        <input type="text" id="titulo" class="input-txt" name="titulo" required>
 
         <label for="subtitulo">Subtítulo:</label>
         <input type="text" id="subtitulo" class="input-txt" name="subtitulo">
@@ -106,13 +106,13 @@ function generarFormDatosLibro () {
       <input type="text" id="autoria" class="input-txt" name="autoria">
 
       <label for="num-paginas">Nº de páginas:</label>
-      <input type="text" id="num-paginas" class="input-txt" name="numPaginas">
+      <input type="number" id="num-paginas" class="input-txt" name="numPaginas">
 
       <label for="editorial">Editorial:</label>
       <input type="text" id="editorial" class="input-txt" name="editorial">
 
       <label for="anho-publicacion">Año de publicación:</label>
-      <input type="text" id="anho-publicacion" class="input-txt" name="anhoPublicacion">
+      <input type="number" id="anho-publicacion" class="input-txt" name="anhoPublicacion">
 
       <label>Estado:</label>
       <div class="grupo-estados-libro">
@@ -233,7 +233,7 @@ function actualizarDataForm (tipoForm, libro) {
   camposForm.autoria.value = dataForm.autoriaLibro;
   camposForm.numPaginas.value = dataForm.numPaginasLibro;
   camposForm.editorial.value = dataForm.editorialLibro;
-  camposForm.anhoPublicacion.value = dataForm.anhoPublicacionLibro;
+  camposForm.anhoPublicacion.value = dataForm.anhoPublicacionLibro ?? "s.f";
 
   if (dataForm.estadoLibro == 0) camposForm.estadoPendiente.setAttribute("checked", "");
   if (dataForm.estadoLibro == 1) camposForm.estadoLeyendo.setAttribute("checked", "");

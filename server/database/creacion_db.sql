@@ -57,7 +57,7 @@ CREATE TABLE libros (
   id VARCHAR(128) PRIMARY KEY NOT NULL,
   titulo VARCHAR(256) NOT NULL,
   subtitulo VARCHAR(256),
-  autoria VARCHAR(256) NOT NULL,
+  autoria VARCHAR(256),
   descripcion VARCHAR(5000),
   portada VARCHAR(512),
   num_paginas INTEGER,

@@ -56,18 +56,4 @@ class Conector {
 
         return $adminID;
     }
-
-    function eliminarLibro($id) {
-        try {
-            $query = $this->conn->prepare("DELETE FROM libros
-                WHERE id = :id");
-
-            $query->bindParam(":id", $id, PDO::PARAM_STR);
-            $query->execute();
-        }
-        catch (PDOException $exception) {
-            echo "Ocurrió un error al intentar eliminar el libro. ". $exception->getMessage();
-        }
-    }
 }
-?>

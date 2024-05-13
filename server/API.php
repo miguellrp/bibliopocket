@@ -19,9 +19,9 @@ if(isset($_GET["tipoPeticion"])) {
       }
       break;
     
-      case "getBloqueos": 
-        getBloqueos();
-        break;
+    case "getBloqueos": 
+      getBloqueos();
+      break;
 
     default:
       throw new Exception($_GET["tipoPeticion"]);

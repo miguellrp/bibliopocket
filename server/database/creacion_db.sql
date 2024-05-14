@@ -15,7 +15,7 @@ CREATE TABLE usuarios (
   contrasenha_usuario VARCHAR(70) NOT NULL,
   email_usuario VARCHAR(256) UNIQUE NOT NULL,
   user_pic VARCHAR(128),
-  fecha_registro DATETIME NOT NULL,
+  fecha_registro DATETIME NOT NULL DEFAULT NOW(),
   fecha_ultimo_login DATETIME NOT NULL
 );
 

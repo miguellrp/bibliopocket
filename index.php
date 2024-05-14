@@ -64,8 +64,9 @@ if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["cod
       $emailUsuarioRegistro = $_POST["email-usuario-reg"] ?? $_POST["email"];
       $nombreUsuarioRegistro = $_POST["nombre-usuario-reg"] ?? $_POST["usuario"];
       $contrasenhaUsuarioRegistro = $_POST["contrasenha-reg"] ?? $_POST["email"];
-    
-      $emailConfirmacion = new Email($emailUsuarioRegistro, $nombreUsuarioRegistro, 0, $_SESSION["codigoRegistro"]);
+      $customData = ["nombreUsuario" => $nombreUsuarioRegistro, "codigoRegistro" => $_SESSION["codigoRegistro"]];
+
+      $emailConfirmacion = new Email($emailUsuarioRegistro, $nombreUsuarioRegistro, 0, $customData);
       if ($emailConfirmacion->sendMail()) {
         echo "
           <dialog class='modal' id='confirmacion-registro' open>
@@ -127,8 +128,9 @@ if (isset($_POST["recuperacion-contrasenha"])) {
   if ($nombreUsuario != null) {
     // Random password by: Dave Vogt [https://stackoverflow.com/questions/1837432/how-to-generate-random-password-with-php]
     $contrasenhaTemporal = base64_encode(random_bytes(12));
+    $customData = ["nombreUsuario" => $nombreUsuario, "contrasenhaTemporal" => $contrasenhaTemporal];
 
-    $emailRecuperacion = new Email($correoUsuario, $nombreUsuario, 1, $contrasenhaTemporal);
+    $emailRecuperacion = new Email($correoUsuario, $nombreUsuario, 1, $customData);
     if ($emailRecuperacion->sendMail()) {
       Usuario::setContrasenhaTemporalDe($correoUsuario, $contrasenhaTemporal);
       $_SESSION["toast"]["tipo"] = "ok";

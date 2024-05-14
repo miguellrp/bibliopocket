@@ -90,6 +90,7 @@ class Email {
         break;
     }
 
+    $mainInfo = $this->customData["codigoRegistro"] ?? $this->customData["contrasenhaTemporal"];
     $bodyMessage = "
           <body style='margin:0;padding:0;'>
             <table style='width:100%;border-collapse:collapse;border:none;border-spacing:0;'>
@@ -107,8 +108,9 @@ class Email {
                           <tr>
                             <td style='padding:0 0 0 0;color:#153643;'>
                               <h1 style='font-size:24px;margin:0 0 20px 0;'>".$titleMail."</h1>
+                              <h2 style='font-size:18px;margin:10px 0 20px 0;font-weight:normal'>¡Hola, <span style='color:#774360;font-weight:bold'>".$this->customData["nombreUsuario"]."</span>!</h2>
                               <p style='margin:0 0 12px 0;font-size:16px;line-height:24px;'>".$messageMail."</p>
-                              <p style='margin:0;font-size:20px;font-weight:bold;border:2px solid #774360;color:#774360;background-color:#fffdde;padding:10px;width: fit-content;margin:auto;text-align:center;'>".$this->customData."</p>
+                              <p style='margin:0;font-size:20px;font-weight:bold;border:2px solid #774360;color:#774360;background-color:#fffdde;padding:10px;width: fit-content;margin:auto;text-align:center;'>".$mainInfo."</p>
                             </td>
                           </tr>
                         </table>

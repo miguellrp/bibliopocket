@@ -141,7 +141,7 @@ if (isset($usuarioActivo)) {
           <span class="detalle-user"><?= $usuarioActivo->getCountLibrosRegistrados() ?></span>
         </li>
         <li>Tiempo transcurrido desde tu registro:
-          <span class="detalle-user"><?= $usuarioActivo->getDiasRegistrado() ?></span>
+          <span class="detalle-user"><?= $usuarioActivo->getTiempoRegistrado() ?></span>
         </li>
       </ul>
     </section>

@@ -110,15 +110,14 @@ class Usuario {
 
     try {
       $query = $this->conexionDB->conn->prepare("INSERT INTO usuarios
-      (id, nombre_usuario, contrasenha_usuario, email_usuario, fecha_registro, fecha_ultimo_login)
-      VALUES (:id, :nombreUsuario, :contrasenhaHash, :email, :fechaRegistro, :fechaUltimoLogin)");
+      (id, nombre_usuario, contrasenha_usuario, email_usuario, fecha_ultimo_login)
+      VALUES (:id, :nombreUsuario, :contrasenhaHash, :email, :fechaUltimoLogin)");
   
       $query->execute(array(
         ":id"               => $idGenerado,
         ":nombreUsuario"    => $this->getNombreUsuario(),
         ":contrasenhaHash"  => $passHasheado,
         ":email"            => $this->getEmail(),
-        ":fechaRegistro"    => date("Y-m-d H:i:s"),
         ":fechaUltimoLogin" => date("Y-m-d H:i:s")
       ));
     }
@@ -135,7 +134,6 @@ class Usuario {
         SET fecha_ultimo_login = NOW() WHERE id = :id");
 
       $query->execute(array(":id" => $this->id));
-      $this->ultimoLogin = date("d-m-Y H:i:s");
     }
     catch (PDOException $exception) {
       echo "Ocurrió un error al actualizar la fecha del último login. ". $exception->getMessage();
@@ -322,9 +320,9 @@ class Usuario {
     }
   }
 
-  function getDiasRegistrado() {
+  function getTiempoRegistrado() {
     try {
-      $query = $this->conexionDB->conn->prepare("SELECT TIMEDIFF(now(), fecha_registro) from usuarios
+      $query = $this->conexionDB->conn->prepare("SELECT TIMEDIFF(NOW(), fecha_registro) from usuarios
         WHERE id = :id");
       $query->execute(array(
         ":id"  => $this->getId()
@@ -374,6 +372,8 @@ class Usuario {
     $fechaExpiracion = $fechaActual->format('Y-m-d H:i:s');
 
     try {
+      Usuario::deleteContrasenhaTemporal($emailUsuario);
+      
       $conexionDB = new Conector;
       $query = $conexionDB->conn->prepare("INSERT INTO contrasenhas_temporales
         VALUES (:id, :emailUsuario, :contrasenhaTemporal, :fechaExpiracion)");
@@ -390,6 +390,19 @@ class Usuario {
     }
     
     return true;
+  }
+
+  static function deleteContrasenhaTemporal($emailUsuario) {
+    try {
+      $conexionDB = new Conector;
+      $query = $conexionDB->conn->prepare("DELETE FROM contrasenhas_temporales
+        WHERE email_usuario = :emailUsuario");
+      $query->bindParam(":emailUsuario", $emailUsuario);
+      $query->execute();
+    } 
+    catch (PDOException $exception) {
+      echo "No había ninguna contraseña temporal asignada al correo $emailUsuario. ";
+    }
   }
   
   static function loginTemporal($nombreUsuario, $contrasenhaTemporal) {

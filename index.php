@@ -5,6 +5,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Rol.php';
 require $_SERVER['DOCUMENT_ROOT'].'/server/classes/Usuario.php';
 session_start();
 
+date_default_timezone_set('Europe/Madrid'); // Temporalmente se establece en la landing la zona horaria local
 $conn = new Conector();
 $loginValido = true;
 

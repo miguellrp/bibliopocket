@@ -97,6 +97,7 @@ function prepararRestablecerCuentaListener () {
     generarCierreModal(modalRestablecerCuenta, cierreButton);
 
     modalRestablecerCuenta.showModal();
+    modalRestablecerCuenta.querySelector("input[type=submit]").blur();
   });
 }
 
@@ -130,6 +131,7 @@ function prepararEliminarCuentaListener () {
     generarCierreModal(modalEliminarCuenta, cierreButton);
 
     modalEliminarCuenta.showModal();
+    modalEliminarCuenta.querySelector("button[type=submit]").blur();
   });
 }
 

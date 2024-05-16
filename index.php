@@ -54,17 +54,17 @@ if (isset($_POST["login-check"])) {
 }
 
 // Comprobación registro
-if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["codigoRegistro"] != $_POST["codigo"]) {
+if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["codigoConfirmacion"] != $_POST["codigo"]) {
   if (Usuario::esEmailUnico($_POST["email-usuario-reg"])) {
     if (Usuario::esNombreUnico($_POST["nombre-usuario-reg"])) {
       $codigoGenerado = rand(1000, 9999);
       $tiempoExpiracionCodigo = time() + 300;
-      $_SESSION["codigoRegistro"] = $codigoGenerado;
+      $_SESSION["codigoConfirmacion"] = $codigoGenerado;
     
       $emailUsuarioRegistro = $_POST["email-usuario-reg"] ?? $_POST["email"];
       $nombreUsuarioRegistro = $_POST["nombre-usuario-reg"] ?? $_POST["usuario"];
       $contrasenhaUsuarioRegistro = $_POST["contrasenha-reg"] ?? $_POST["email"];
-      $customData = ["nombreUsuario" => $nombreUsuarioRegistro, "codigoRegistro" => $_SESSION["codigoRegistro"]];
+      $customData = ["nombreUsuario" => $nombreUsuarioRegistro, "codigoConfirmacion" => $_SESSION["codigoConfirmacion"]];
 
       $emailConfirmacion = new Email($emailUsuarioRegistro, $nombreUsuarioRegistro, 0, $customData);
       if ($emailConfirmacion->sendMail()) {
@@ -100,7 +100,7 @@ if (isset($_POST["registro-check"]) || isset($_POST["codigo"]) && $_SESSION["cod
 }
 
 // Confirmación registro (email válido)
-if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoRegistro"] == $_POST["codigo"]) {
+if (isset($_POST["confirm-registro-check"]) && $_SESSION["codigoConfirmacion"] == $_POST["codigo"]) {
   $nombreUsuario = $_POST["usuario"];
   $contrasenha = $_POST["contrasenha"];
   $email = $_POST["email"];

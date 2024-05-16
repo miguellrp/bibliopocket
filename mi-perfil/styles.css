@@ -137,6 +137,11 @@ body {
   }
 }
 
+#configuracion-modal > form > input[type="text"], input[type="password"], input[type="email"] {
+  min-width: 350px;
+  text-align: center;
+}
+
 .datos-user {
   display: flex;
   justify-content: space-around;

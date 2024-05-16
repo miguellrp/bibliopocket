@@ -1,6 +1,7 @@
 <?php
 session_start();
-include_once "../server/classes/Usuario.php";
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Usuario.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/server/classes/Email.php");
 
 // Para conservar la sección activa dentro de "Mi perfil"
 if (!isset($_SESSION["seccionActiva"])) $_SESSION["seccionActiva"] = 0;
@@ -27,13 +28,35 @@ if (isset($usuarioActivo)) {
   }
 
   if (isset($_POST["cambiar-correo"])) {
-    if ($_POST["correo-nuevo"] != $usuarioActivo->getEmail()) {
-      $usuarioActivo->actualizarCorreo($_POST["correo-nuevo"]);
+    $nuevoCorreo = $_POST["correo-nuevo"];
+    if ($nuevoCorreo != $usuarioActivo->getEmail() && Usuario::esEmailUnico($nuevoCorreo)) {
+      $codigoGenerado = rand(1000, 9999);
+      $tiempoExpiracionCodigo = time() + 300;
+      $_SESSION["codigoConfirmacion"] = $codigoGenerado;
 
-      $_SESSION["seccionActiva"] = 1;
-      header("Location: index.php");
-      session_write_close();
+      $customData = ["nombreUsuario" => $usuarioActivo->getEmail(), "codigoConfirmacion" => $_SESSION["codigoConfirmacion"]];
+
+      $emailCambioCorreo = new Email($nuevoCorreo, $usuarioActivo->getNombreUsuario(), 0, $customData);
+      if ($emailCambioCorreo->sendMail()) {
+        echo "<dialog class='modal' id='configuracion-modal' style='z-index:15; margin-top: 200px' open>
+          <form action='' method='POST'>
+            <label for='codigo'>Introduce el código enviado a tu nuevo correo: </label>
+            <input type='text' class='input-text' minlength=4 maxlength=4 id='codigo' name='codigo' required>
+            <input type='submit' class='submit-btn' name='confirm-nuevo-correo' value='Enviar'>
+            <input type='hidden' name='usuario' value='".$usuarioActivo->getNombreUsuario()."'>
+            <input type='hidden' name='correo-nuevo' value='".$nuevoCorreo."'>
+          </form>
+        </dialog>";
+      }
     }
+  }
+
+  if (isset($_POST["confirm-nuevo-correo"]) && $_POST["codigo"] == $_SESSION["codigoConfirmacion"]) {
+    $usuarioActivo->actualizarCorreo($_POST["correo-nuevo"]);
+
+    $_SESSION["seccionActiva"] = 1;
+    header("Location: index.php");
+    session_write_close();
   }
 
   if (isset($_POST["cambiar-contrasenha"])) {

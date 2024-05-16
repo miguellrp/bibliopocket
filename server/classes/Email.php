@@ -71,6 +71,10 @@ class Email {
       case 1:
         $subjectMail = "Recuperación de cuenta";
         break;
+      // Cambio de correo electrónico
+      case 2:
+        $subjectMail = "Confirmación de cambio de correo";
+        break;
     }
 
     return $subjectMail;
@@ -88,9 +92,14 @@ class Email {
         $titleMail = "Contraseña temporal";
         $messageMail = "Aquí tienes una contraseña temporal para iniciar sesión con tu correo. Esta contraseña se borrará dentro de 15 minutos. <strong>¡No te olvides de cambiar la contraseña al entrar en tu cuenta!</strong>";
         break;
+      // Cambio de correo electrónico
+      case 2:
+          $titleMail = "Confirmación de cambio de correo electrónico";
+          $messageMail = "Aquí tienes el código para confirmar el cambio de correo electrónico asociado a tu cuenta:";
+          break;
     }
 
-    $mainInfo = $this->customData["codigoRegistro"] ?? $this->customData["contrasenhaTemporal"];
+    $mainInfo = $this->customData["codigoConfirmacion"] ?? $this->customData["contrasenhaTemporal"];
     $bodyMessage = "
           <body style='margin:0;padding:0;'>
             <table style='width:100%;border-collapse:collapse;border:none;border-spacing:0;'>

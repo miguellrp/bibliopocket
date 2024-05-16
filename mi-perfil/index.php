@@ -48,6 +48,10 @@ if (isset($usuarioActivo)) {
           </form>
         </dialog>";
       }
+    } else {
+      $_SESSION["toast"]["tipo"] = "warning";
+      $_SESSION["toast"]["mensaje"] = "El correo electrónico introducido ya está registrado en BiblioPocket";
+      $_SESSION["toast"]["showToast"] = "true";
     }
   }
 

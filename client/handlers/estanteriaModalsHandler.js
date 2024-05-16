@@ -289,7 +289,6 @@ function actualizarDataForm (tipoForm, libro) {
       hiddenDataTags.childNodes[0].value = dataForm.idLibro;
       hiddenDataTags.childNodes[1].value = dataForm.portadaLibro;
       hiddenDataTags.childNodes[2].value = dataForm.enlaceAPI;
-      hiddenDataTags.childNodes[3].value = dataForm.categoriasLibro;
     }
   }
 

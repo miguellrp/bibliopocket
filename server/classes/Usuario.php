@@ -2,6 +2,9 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/database/Conector.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 
+// Para controlar feedback en cambios hechos por la persona usuaria:
+if (!isset($_SESSION["toast"])) $_SESSION["toast"]["showToast"] = false;
+
 class Usuario {
   private $id;
   private $nombreUsuario;
@@ -183,12 +186,18 @@ class Usuario {
         ":id"  => $this->getId(),
         ":nuevoNombreUsuario" => $nuevoNombreUsuario
       ));
-      return true;
+
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
     }
     catch (PDOException $exception) {
-      echo "Ocurrió un error al intentar actualizar el nombre de usuario. ". $exception->getMessage();
-      return false;
+      $_SESSION["toast"]["tipo"] = "warning";
+      $_SESSION["toast"]["mensaje"] = "El nombre de usuario introducido ya está registrado en BiblioPocket";
     }
+
+    $_SESSION["toast"]["showToast"] = true;
+
+    return $query->rowCount() == 1;
   }
 
   function actualizarUserPic() {
@@ -215,13 +224,15 @@ class Usuario {
         ":nuevaPic" => $this->getUserPic()
       ));
 
-      $subidaOk = true;
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
     }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al intentar actualizar la foto de perfil. ". $exception->getMessage();
+    catch (PDOException) {
+      $_SESSION["toast"]["tipo"] = "error";
+      $_SESSION["toast"]["mensaje"] = "Ha ocurrido un problema al intentar actualizar tu perfil";
     }
 
-    return $subidaOk;
+    $_SESSION["toast"]["showToast"] = true;
   }
 
   function actualizarCorreo($nuevoEmail) {
@@ -234,12 +245,15 @@ class Usuario {
         ":nuevoEmail" => $nuevoEmail
       ));
 
-      return true;
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu correo correctamente";
     }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al intentar actualizar el correo. ". $exception->getMessage();
-      return false;
+    catch (PDOException) {
+      $_SESSION["toast"]["tipo"] = "error";
+      $_SESSION["toast"]["mensaje"] = "No se ha podido actualizar tu correo (correo no válido o ya registrado en BiblioPocket)";
     }
+
+    $_SESSION["toast"]["showToast"] = true;
   }
 
   function actualizarContrasenha($contrasenhaAntigua, $nuevaContrasenha) {
@@ -249,18 +263,25 @@ class Usuario {
         $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
         contrasenha_usuario = :nuevaContrasenha
         WHERE id = :id");
-      $query->execute(array(
-        ":id"  => $this->getId(),
-        ":nuevaContrasenha" => $nuevaContrasenhaHasheada
-      ));
-      return true;
+
+        $query->execute(array(
+          ":id"  => $this->getId(),
+          ":nuevaContrasenha" => $nuevaContrasenhaHasheada
+        ));
+
+        $_SESSION["toast"]["tipo"] = "ok";
+        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu contraseña correctamente";
       } else {
-        return false;
+        $_SESSION["toast"]["tipo"] = "warning";
+        $_SESSION["toast"]["mensaje"] = "La contraseña antigüa introducida no es correcta";
       }
     }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al intentar actualizar la contraseña. ". $exception->getMessage();
+    catch (PDOException) {
+      $_SESSION["toast"]["tipo"] = "error";
+      $_SESSION["toast"]["mensaje"] = "No se ha podido actualizar tu contraseña";
     }
+
+    $_SESSION["toast"]["showToast"] = true;
   }
 
   function restablecerCuenta() {
@@ -270,10 +291,16 @@ class Usuario {
       $query->execute(array(
         ":idUsuario"  => $this->getId()
       ));
+
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se han restablecido los datos de tu cuenta correctamente";
     }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al tratar de restablecer la cuenta. ". $exception->getMessage();
+    catch (PDOException) {
+      $_SESSION["toast"]["tipo"] = "error";
+      $_SESSION["toast"]["mensaje"] = "No se ha podido restablecer tu cuenta";
     }
+
+    $_SESSION["toast"]["showToast"] = true;
   }
 
   function eliminarCuenta() {

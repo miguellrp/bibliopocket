@@ -14,22 +14,11 @@ if (isset($_SESSION["usuarioActivo"]))
 if (isset($usuarioActivo)) {
   if (isset($_POST["modificacion-datos-user"])) {
     if (isset($_FILES["userProfilePic"]) && is_uploaded_file($_FILES["userProfilePic"]["tmp_name"])) {
-      if ($usuarioActivo->actualizarUserPic()) {
-        $_SESSION["toast"]["tipo"] = "ok";
-        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
-      } else {
-        $_SESSION["toast"]["tipo"] = "error";
-        $_SESSION["toast"]["mensaje"] = "Ha ocurrido un problema al intentar actualizar tu perfil";
-      }
-      $_SESSION["toast"]["showToast"] = true;
+      $usuarioActivo->actualizarUserPic();
     }
 
     if (isset($_POST["username"]) && ($_POST["username"]) != $usuarioActivo->getNombreUsuario()) {
       $usuarioActivo->actualizarNombreUsuario($_POST["username"]);
-
-      $_SESSION["toast"]["showToast"] = true;
-      $_SESSION["toast"]["tipo"] = "ok";
-      $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu perfil correctamente";
     }
     
     $_SESSION["seccionActiva"] = 1;
@@ -39,16 +28,7 @@ if (isset($usuarioActivo)) {
 
   if (isset($_POST["cambiar-correo"])) {
     if ($_POST["correo-nuevo"] != $usuarioActivo->getEmail()) {
-      if ($usuarioActivo->actualizarCorreo($_POST["correo-nuevo"])) {
-        $_SESSION["toast"]["tipo"] = "ok";
-        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu correo correctamente";
-
-      } else {
-        $_SESSION["toast"]["tipo"] = "error";
-        $_SESSION["toast"]["mensaje"] = "No se ha podido actualizar tu correo";
-      }
-  
-      $_SESSION["toast"]["showToast"] = true;
+      $usuarioActivo->actualizarCorreo($_POST["correo-nuevo"]);
 
       $_SESSION["seccionActiva"] = 1;
       header("Location: index.php");
@@ -60,16 +40,8 @@ if (isset($usuarioActivo)) {
     if ($_POST["contrasenha-nueva"] === $_POST["contrasenha-nueva-confirmacion"]) {
       $contrasenhaAntigua = $_POST["contrasenha-antigua"];
       $contrasenhaNueva = $_POST["contrasenha-nueva"];
+      $usuarioActivo->actualizarContrasenha($contrasenhaAntigua, $contrasenhaNueva);
 
-      if ($usuarioActivo->actualizarContrasenha($contrasenhaAntigua, $contrasenhaNueva)) {
-        $_SESSION["toast"]["tipo"] = "ok";
-        $_SESSION["toast"]["mensaje"] = "Se ha actualizado tu contraseña correctamente";
-      } else {
-        $_SESSION["toast"]["tipo"] = "error";
-        $_SESSION["toast"]["mensaje"] = "No se ha podido actualizar tu contraseña";
-      }
-
-      $_SESSION["toast"]["showToast"] = true;
       $_SESSION["seccionActiva"] = 1;
       header("Location: index.php");
       session_write_close();
@@ -78,10 +50,6 @@ if (isset($usuarioActivo)) {
   
   if (isset($_POST["restablecer-cuenta"])) {
     $usuarioActivo->restablecerCuenta();
-
-    $_SESSION["toast"]["showToast"] = true;
-    $_SESSION["toast"]["tipo"] = "ok";
-    $_SESSION["toast"]["mensaje"] = "Se han restablecido los datos de tu cuenta correctamente";
 
     $_SESSION["seccionActiva"] = 1;
     header("Location: index.php");

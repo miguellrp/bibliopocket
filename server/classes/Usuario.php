@@ -165,7 +165,8 @@ class Usuario {
   function esLibroGuardado($libro) {
     try {
       $query = $this->conexionDB->conn->prepare("SELECT * from libros
-        WHERE id = :idLibro AND id_usuario = :idUsuario");
+        WHERE (id = :idLibro OR id LIKE CONCAT(:idLibro, '%'))
+        AND id_usuario = :idUsuario");
       $query->execute(array(
         ":idLibro"    => $libro->getId(),
         ":idUsuario"  => $this->getId()

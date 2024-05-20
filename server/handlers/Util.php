@@ -7,6 +7,10 @@ class Util {
     // ID único a partir de: https://stackoverflow.com/questions/29235481/generate-a-readable-random-unique-id
     return join('-', str_split(bin2hex(openssl_random_pseudo_bytes(10)), 5));
   }
+  
+  static function anhadirDiferencia () {
+    return "-".bin2hex(openssl_random_pseudo_bytes(2));
+  }
 
   static function mostrarPantallaUsuarioBloqueado($idUsuario) {
     $listaBloqueosUsuario = Bloqueo::getBloqueosDe($idUsuario);

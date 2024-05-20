@@ -19,7 +19,7 @@ if (isset($_SESSION["usuarioActivo"])) {
 }
 
 if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
-  $idLibro = isset($_POST["anhadir-libro"]) ? $_POST["id"] : uniqid();
+  $idLibro = $_POST["id"];
   $nuevoLibro = new Libro($idLibro);
   $estanteriaDB = new Estanteria($usuarioActivo->getId());
 

@@ -25,7 +25,7 @@ class Libro {
 
     // Cuando se crea desde un form (Google API, libro desde 0...):
     if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"]) || isset($_POST["modificar-libro"])) {
-      if (isset($_POST["anhadir-libro"])) $this->id .= Util::anhadirDiferencia();
+      if (isset($_POST["anhadir-libro"])) $this->id .= Util::anhadirDiferenciaId();
       
       $datosLibro = [
         "titulo"            => $_POST["titulo"],

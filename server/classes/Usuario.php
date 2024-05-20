@@ -164,12 +164,15 @@ class Usuario {
 
   function esLibroGuardado($libro) {
     try {
+      $idLibroAPI = substr($libro->getId(), 0 , 12) . '%';
+      
       $query = $this->conexionDB->conn->prepare("SELECT * from libros
-        WHERE (id = :idLibro OR id LIKE CONCAT(:idLibro, '%'))
-        AND id_usuario = :idUsuario");
+        WHERE ((id = :idLibro OR id LIKE :idLibroAPI)
+        AND id_usuario = :idUsuario)");
       $query->execute(array(
-        ":idLibro"    => $libro->getId(),
-        ":idUsuario"  => $this->getId()
+        ":idLibro"      => $libro->getId(),
+        ":idLibroAPI"   => $idLibroAPI,
+        ":idUsuario"    => $this->getId()
       ));
       return $query->rowCount() > 0;
     }

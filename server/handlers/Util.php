@@ -8,7 +8,7 @@ class Util {
     return join('-', str_split(bin2hex(openssl_random_pseudo_bytes(10)), 5));
   }
   
-  static function anhadirDiferencia () {
+  static function anhadirDiferenciaId () {
     return "-".bin2hex(openssl_random_pseudo_bytes(2));
   }
 

@@ -11,10 +11,9 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/server/handlers/Util.php");
 if (isset($_SESSION["usuarioActivo"])) {
   $usuarioActivo = new Usuario($_SESSION["usuarioActivo"]["id"]);
   $usuarioActivo->setUltimoLoginDB();
-  $estanteriaDB = new Estanteria($usuarioActivo->getId());
 
-  if (!isset($_SESSION["estanteria"]))
-    $_SESSION["estanteria"] = $estanteriaDB;
+  $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
+  $ultimosLibros = $estanteriaUsuario->getUltimosLibrosAnhadidos(5);
 }
 ?>
 <!DOCTYPE html>
@@ -39,30 +38,32 @@ if (isset($_SESSION["usuarioActivo"])) {
   <?php elseif($usuarioActivo->estaBloqueado()): Util::mostrarPantallaUsuarioBloqueado($usuarioActivo->getId()) ?>
   <?php else: ?>
     <custom-header pagina-activa="inicio"></custom-header>
-    <h2>👋 Bienvenid@ de nuevo,
+    <h2>👋 ¡Hola,
       <a class="username-title" href="/mi-perfil">
         <?= $usuarioActivo->getNombreUsuario() ?>
-      </a>
+      </a>!
       </h2>
-    <h3>Tus últimos libros añadidos</h3>
-    <div class="ultimos-libros">
+      <?php if (count($ultimosLibros) <= 0): ?>
+        <h3>No hay nada que mostrar por aquí todavía 👀</h3>
+        <small>Todavía no has añadido ningún libro</small>
+      <?php else: ?>
+        <h3>Tus últimos libros añadidos</h3>
+        <div class="ultimos-libros">
+        <?php
+            foreach($ultimosLibros as $idLibro) {
+              $libro = new Libro($idLibro);
+              echo "<article class='libro'>
+                <div class='portada-container'>
+                  <img src='".$libro->getPortada()."' class='portada'>
+                </div>
+                <strong class='titulo' title='".$libro->getTitulo()."'>".$libro->getTitulo()."</strong>
+                <small>".$libro->getFechaAdicion()."</small>
+              </article>";
+            }
+          ?>
+        </div>
 
-    <?php
-        $estanteriaUsuario = new Estanteria($usuarioActivo->getId());
-        $ultimosLibros = $estanteriaUsuario->getUltimosLibrosAnhadidos(5);
-
-        foreach($ultimosLibros as $idLibro) {
-          $libro = new Libro($idLibro);
-          echo "<article class='libro'>
-            <div class='portada-container'>
-              <img src='".$libro->getPortada()."' class='portada'>
-            </div>
-            <strong class='titulo' title='".$libro->getTitulo()."'>".$libro->getTitulo()."</strong>
-            <small>".$libro->getFechaAdicion()."</small>
-          </article>";
-        }
-      ?>
-      </div>
+      <?php endif; ?>
   <?php endif; ?>
   <script src="/client/handlers/themeHandler.js"></script>
 </body>

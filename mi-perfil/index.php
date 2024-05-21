@@ -34,10 +34,14 @@ if (isset($usuarioActivo)) {
       $tiempoExpiracionCodigo = time() + 300;
       $_SESSION["codigoConfirmacion"] = $codigoGenerado;
 
-      $customData = ["nombreUsuario" => $usuarioActivo->getEmail(), "codigoConfirmacion" => $_SESSION["codigoConfirmacion"]];
+      $customData = ["nombreUsuario" => $usuarioActivo->getNombreUsuario(), "codigoConfirmacion" => $_SESSION["codigoConfirmacion"]];
 
-      $emailCambioCorreo = new Email($nuevoCorreo, $usuarioActivo->getNombreUsuario(), 0, $customData);
+      $emailCambioCorreo = new Email($nuevoCorreo, $usuarioActivo->getNombreUsuario(), 2, $customData);
       if ($emailCambioCorreo->sendMail()) {
+        $_SESSION["toast"]["tipo"] = "ok";
+        $_SESSION["toast"]["mensaje"] = "Se ha enviado el correo correctamente";
+        $_SESSION["toast"]["showToast"] = "true";
+
         echo "<dialog class='modal' id='configuracion-modal' style='z-index:15; margin-top: 200px' open>
           <form action='' method='POST'>
             <label for='codigo'>Introduce el código enviado a tu nuevo correo: </label>

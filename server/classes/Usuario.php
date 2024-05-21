@@ -314,10 +314,16 @@ class Usuario {
       $query->execute(array(
         ":id"  => $this->getId()
       ));
+
+      $_SESSION["toast"]["tipo"] = "ok";
+      $_SESSION["toast"]["mensaje"] = "Se ha eliminado tu cuenta de BiblioPocket correctamente";
     }
-    catch (PDOException $exception) {
-      echo "Ocurrió un error al tratar de eliminar la cuenta. ". $exception->getMessage();
+    catch (PDOException) {
+      $_SESSION["toast"]["tipo"] = "error";
+      $_SESSION["toast"]["mensaje"] = "No se ha podido eliminar tu cuenta";
     }
+
+    $_SESSION["toast"]["showToast"] = true;
   }
 
 

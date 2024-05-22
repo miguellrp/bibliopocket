@@ -1,5 +1,14 @@
+html[data-theme="light"] {
+  --anchor-color: #ba4050;
+}
+
+html[data-theme="dark"] {
+  --anchor-color: #f7b3ae;
+}
+
 .modal {
   width: 400px;
+  max-height: 85vh;
   padding: 30px 0;
 
   border-image-slice: 1;
@@ -63,7 +72,7 @@
 
 #login {
   & small {
-    color: var(--secondary-lighten-color);
+    color: var(--anchor-color);
     cursor: pointer;
   }
 }

@@ -160,7 +160,7 @@ main {
       & .marcador {
         position: relative;
         width: 30px;
-        top: -198px;
+        top: -197px;
         left: 3px;
         filter: drop-shadow(1px 1px 1px #2d2c2c);
         border-radius: 6px;
@@ -201,6 +201,29 @@ main {
         font-size: 15px;
         font-weight: 500;
         color: var(--color-autoria-libro);
+      }
+
+      & .categorias {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        column-gap: 7px;
+        row-gap: 5px;
+
+        & .categoria {
+          text-wrap: nowrap;
+          font-size: 13px;
+          font-weight: bold;
+          padding: 5px;
+
+          border: 2px solid var(--secondary-contrast-color);
+          border-radius: 20px;
+          color: var(--secondary-contrast-color);
+          background-color: #ffffff70;
+
+          cursor: default;
+        }
       }
 
       & .grupo-buttons-libro {
@@ -324,8 +347,7 @@ main {
 }
 
 #busqueda-libro-modal {
-  width: 80vw;
-  height: 65vh;
+  width: 70vw;
   padding: 40px;
 
   & h2 {
@@ -384,6 +406,12 @@ main {
         overflow: hidden;
         text-overflow: ellipsis;
       }
+
+      & a {
+        &:hover::after {
+          width: 0;
+        }
+      }
   
       & .portada {
         min-width: var(--ancho-portada-libro);
@@ -392,6 +420,13 @@ main {
         max-height: var(--alto-portada-libro);
   
         border-radius: 10px;
+        transition-delay: transform 1s;
+        transition: .5s ease;
+
+        &:hover {
+          transform: scale(1.5);
+          transition-delay: .4s;
+        }
       }
 
       & .autoria {
@@ -525,16 +560,18 @@ main {
     }
 
     & textarea {
-      min-height: 1rem;
+      min-height: 6rem;
       field-sizing: content; /* Propiedad no compatible con todos los navegadores */
       max-height: 20rem;
       padding: 7px;
       resize: vertical;
 
       font-size: 15px;
+      line-height: 1.5rem;
       outline: none;
       border: 2px solid var(--primary-color);
-      background-color: color-mix(in srgb, var(--secondary-lighten-color), white 30%);
+      color: var(--input-text-foreground);
+      background-color: var(--input-text-background);
     
       transition: box-shadow .6s ease;
     

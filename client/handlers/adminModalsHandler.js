@@ -148,7 +148,13 @@ function insertarMotivosBloqueo (selectMotivosTag) {
 /* Función asíncrona para recoger los permisos de las personas usuarias registradas en BP */
 async function fetchListaRoles () {
   try {
-    const response = await fetch(`http://localhost/server/API.php?tipoPeticion=getRoles`);
+    let response;
+    if (location.hostname === "localhost")
+      response = await fetch(`http://localhost/server/API.php?tipoPeticion=getLibros&idUsuario=${idUsuario}&paginacion=${indexUltimoLibro}&limitado=${limitado}`);
+    else
+      response = await fetch(`http://192.168.0.25/server/API.php?tipoPeticion=getLibros&idUsuario=${idUsuario}&paginacion=${indexUltimoLibro}&limitado=${limitado}`);
+
+
     const data = await response.text();
 
     return data;

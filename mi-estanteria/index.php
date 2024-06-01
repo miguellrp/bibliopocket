@@ -19,7 +19,7 @@ if (isset($_SESSION["usuarioActivo"])) {
 }
 
 if (isset($_POST["anhadir-libro"]) || isset($_POST["anhadir-nuevo-libro"])) {
-  $idLibro = $_POST["id"];
+  $idLibro = $_POST["id"]??Util::generarId();
   $nuevoLibro = new Libro($idLibro);
   $estanteriaDB = new Estanteria($usuarioActivo->getId());
 

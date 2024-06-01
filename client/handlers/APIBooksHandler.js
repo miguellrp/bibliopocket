@@ -1,7 +1,7 @@
 import { Libro } from "/client/classes/Libro.js";
 
 /* VARIABLES GLOBALES */
-const MAX_RESULTADOS = 15;
+const MAX_RESULTADOS = 25;
 
 export async function buscarLibroAPI () {
   const buscadorTag = document.querySelector("input[type=search]");

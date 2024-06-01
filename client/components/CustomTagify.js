@@ -25,7 +25,8 @@ class CustomTagify extends HTMLElement {
           font-size: 15px;
           outline: none;
           border: 2px solid var(--primary-color);
-          background-color: color-mix(in srgb, var(--secondary-lighten-color), white 30%);
+          color: var(--input-text-foreground);
+          background-color: var(--input-text-background);
 
           transition: .6s ease;
 

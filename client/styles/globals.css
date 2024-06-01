@@ -19,6 +19,9 @@ html[data-theme="light"] {
   --user-invalid-color: #8f2929;
   --user-valid-color: #56ac3c;
 
+  --input-text-background: color-mix(in srgb, var(--secondary-contrast-color), transparent 80%);
+  --input-text-foreground: #000;
+
   --header-active-color: #fdd9d6;
   --header-background: color-mix(in srgb, var(--secondary-color), black 20%);
 }
@@ -33,6 +36,9 @@ html[data-theme="dark"] {
   --background-contrast-color: #3d2e41;
   --user-invalid-color: #ba1313;
   --user-valid-color: #46d01c;
+
+  --input-text-background: color-mix(in srgb, var(--secondary-lighten-color), transparent 80%);
+  --input-text-foreground: #fff;
 
   --header-active-color: #fdd9d6;
   --header-background: color-mix(in srgb, var(--background-color), white 10%);
@@ -140,7 +146,8 @@ input[type="text"], input[type="email"], input[type="password"], input[type="num
   font-size: 15px;
   outline: none;
   border: 2px solid var(--primary-color);
-  background-color: color-mix(in srgb, var(--secondary-lighten-color), white 30%);
+  color: var(--input-text-foreground);
+  background-color: var(--input-text-background);
 
   transition: .6s ease;
 
@@ -197,7 +204,8 @@ input[type="text"], input[type="email"], input[type="password"], input[type="num
 
   outline: none;
   border: 2px solid var(--primary-color);
-  background-color: color-mix(in srgb, var(--secondary-lighten-color), white 60%);
+  color: var(--input-text-foreground);
+  background-color: var(--input-text-background);
 
   transition: .6s ease;
 

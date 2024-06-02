@@ -12,6 +12,12 @@ class Util {
     return "-".bin2hex(openssl_random_pseudo_bytes(2));
   }
 
+  static function getExtensionArchivo($nombreArchivo) {
+    $infoArchivo = pathinfo($nombreArchivo);
+    
+    return strtolower($infoArchivo['extension']);
+}
+
   static function mostrarPantallaUsuarioBloqueado($idUsuario) {
     $listaBloqueosUsuario = Bloqueo::getBloqueosDe($idUsuario);
     $razonesBloqueoHTML = "";

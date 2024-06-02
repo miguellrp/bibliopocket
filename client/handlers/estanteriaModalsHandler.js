@@ -89,7 +89,8 @@ function generarFormDatosLibro () {
         border-type="2px dashed var(--primary-color)"
         border-radius="5%"
         data-name="portadaLibro"
-        data-form="libroModalForm">
+        data-form="libroModalForm"
+        data-type="portadaLibro">
       </custom-image-uploader>  
       <div class="datos-cabecera">
         <label for="titulo">Título:</label>
@@ -192,7 +193,7 @@ function getDataForm (tipoForm, libro) {
 
   const dataForm = {
     "titleForm": (tipoForm == 0) ? "Añadir nuevo libro desde 0 📖" : "Modificar datos del libro ✍️",
-    "portadaLibro": (tipoForm == 0) ? "/client/assets/images/portadas/placeholder-portada-libro.webp" : dataModificacionForm.portada,
+    "portadaLibro": (tipoForm == 0) ? "" : dataModificacionForm.portada,
     "altPortadaLibro": (tipoForm == 0) ? "Portada del nuevo libro" : `Portada de ${dataModificacionForm.titulo}`,
     "tituloLibro": (tipoForm == 0) ? "" : dataModificacionForm.titulo,
     "subtituloLibro": (tipoForm == 0) ? "" : dataModificacionForm.subtitulo,

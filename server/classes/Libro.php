@@ -67,10 +67,8 @@ class Libro {
     $this->estado           = $datosLibro["estado"];
     $this->fechaAdicion     = $datosLibro["fechaAdicion"];
 
-    
     if (isset($_FILES["portadaLibro"]) && is_uploaded_file($_FILES["portadaLibro"]["tmp_name"])) {
-      $extension = explode(".", $_FILES["portadaLibro"]["name"]);
-      $extension = end($extension);
+      $extension = Util::getExtensionArchivo($_FILES['portadaLibro']['name']);
       
       $nombreArchivoImagen = $this->getId().".".$extension;
       $rutaImagen = dirname(__DIR__, 2)."/client/assets/images/portadas/" . $nombreArchivoImagen;
@@ -79,8 +77,8 @@ class Libro {
       
       if (!empty($rutaSinExtension)) unlink($rutaSinExtension[0]);
 
-      move_uploaded_file($_FILES["portadaLibro"]["tmp_name"], $rutaImagen);
-      $this->portada = "http://localhost/client/assets/images/portadas/" . $nombreArchivoImagen;
+      if (move_uploaded_file($_FILES["portadaLibro"]["tmp_name"], $rutaImagen))
+        $this->portada = "http://localhost/client/assets/images/portadas/" . $nombreArchivoImagen;
     }
   }
 
@@ -183,7 +181,7 @@ class Libro {
   }
 
   function getPortada() {
-    return $this->portada;
+    return $this->portada??"/client/assets/images/portadas/placeholder-portada-libro.webp";
   }
 
   function getNumPaginas() {

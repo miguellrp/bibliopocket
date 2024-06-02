@@ -10,7 +10,7 @@ class CustomImageUploader extends HTMLElement {
   }
 
   render () {
-    const imagenPreview = this.getAttribute("data-src") ?? "/client/assets/images/user-pics/placeholderUserPic.webp";
+    const imagenPreview = this.getAttribute("data-src") ?? this.getPlaceholder();
     const nameInputTag = this.getAttribute("data-name") ?? "userProfilePic";
 
     const anchoPreview = this.getAttribute("width-preview") ?? "128px";
@@ -104,6 +104,15 @@ class CustomImageUploader extends HTMLElement {
       this.previsualizarNuevaImagen(uploader, previewer);
       this.generarImagenHidden();
     });
+  }
+
+  getPlaceholder () {
+    const tipoUploader = this.getAttribute("data-type") ?? "userPic";
+    let placeholder = "/client/assets/images/user-pics/placeholderUserPic.webp"; // por defecto, es de tipo "userPic"
+
+    if (tipoUploader == "portadaLibro") placeholder = "/client/assets/images/portadas/placeholder-portada-libro.webp";
+
+    return placeholder;
   }
 
   previsualizarNuevaImagen () {

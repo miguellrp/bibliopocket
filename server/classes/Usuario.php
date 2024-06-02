@@ -205,9 +205,7 @@ class Usuario {
   }
 
   function actualizarUserPic() {
-    $extension = explode(".", $_FILES["userProfilePic"]["name"]);
-    $extension = end($extension);
-    $subidaOk = false;
+    $extension = Util::getExtensionArchivo($_FILES["userProfilePic"]["name"]);
     
     $nombreArchivoImagen = $this->getId().".".$extension;
     $rutaImagen = dirname(__DIR__, 2)."/client/assets/images/user-pics/" . $nombreArchivoImagen;
@@ -217,7 +215,7 @@ class Usuario {
     if (!empty($rutaSinExtension)) unlink($rutaSinExtension[0]);
 
     if (move_uploaded_file($_FILES["userProfilePic"]["tmp_name"], $rutaImagen))
-    $this->userPic = "http://localhost/client/assets/images/user-pics/" . $nombreArchivoImagen;
+      $this->userPic = "http://localhost/client/assets/images/user-pics/" . $nombreArchivoImagen;
 
     try {
       $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET

@@ -202,44 +202,52 @@ main {
         font-weight: 500;
         color: var(--color-autoria-libro);
       }
+    }
+  }
 
-      & .categorias {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        column-gap: 7px;
-        row-gap: 5px;
+  & .datos-extra {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-        & .categoria {
-          text-wrap: nowrap;
-          font-size: 13px;
-          font-weight: bold;
-          padding: 5px;
+    & .grupo-buttons-libro {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
 
-          border: 2px solid var(--secondary-contrast-color);
-          border-radius: 20px;
-          color: var(--secondary-contrast-color);
-          background-color: #ffffff70;
+      & .icon {
+        margin: unset;
+        width: 32px;
+        height: 32px;
+        transition: fill .3s ease;
 
-          cursor: default;
+        &:hover {
+          fill: var(--button-libro-hover);
         }
       }
+    }
 
-      & .grupo-buttons-libro {
-        text-align: end;
-        margin: 50px auto 0 auto;
-
-        & .icon {
-          margin: unset;
-          width: 32px;
-          height: 32px;
-          transition: fill .3s ease;
-
-          &:hover {
-            fill: var(--button-libro-hover);
-          }
-        }
+    & .categorias {
+      min-height: 29px;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      column-gap: 7px;
+      justify-content: center;
+  
+      & .categoria {
+        text-wrap: nowrap;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 5px;
+  
+        border: 2px solid var(--secondary-contrast-color);
+        border-radius: 20px;
+        color: var(--secondary-contrast-color);
+        background-color: #ffffff70;
+        margin-bottom: 6px;
+  
+        cursor: default;
       }
     }
   }
@@ -721,6 +729,29 @@ main {
 
     & .libro {
       width: 80vw !important;
+      flex-direction: column;
+      text-align: center;
+
+      & .portada-container {
+        min-width: var(--ancho-portada-libro);
+        max-width: var(--ancho-portada-libro);
+      }
+
+      & .marcador {
+        top: -198px !important;
+        left: -44px !important;
+      }
+
+      & .datos-libro {
+        & hr {
+          margin: 15px auto 2px auto !important;
+        }
+      }
+
+      & .categorias {
+        max-width: unset !important;
+        min-height: unset !important;
+      }
     }
   }
 

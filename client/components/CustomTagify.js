@@ -70,6 +70,7 @@ class CustomTagify extends HTMLElement {
           font-weight: bold;
           color: var(--secondary-contrast-color);
           background-color: #ffffff70;
+          cursor: default;
 
           animation: pop-in .4s ease;
 

@@ -8,7 +8,7 @@ export function prepararListenersLibro () {
 function listenersModalEliminarLibro () {
   const eliminarGroupBtn = document.querySelectorAll(".icon.eliminar");
   eliminarGroupBtn.forEach(eliminarButton => {
-    const libroVinculado = eliminarButton.parentNode.parentNode;
+    const libroVinculado = eliminarButton.parentNode.parentNode.parentNode;
     const datosLibro = libroVinculado.querySelector("form").elements;
 
     eliminarButton.addEventListener("click", () => {
@@ -25,7 +25,7 @@ function listenersModalEliminarLibro () {
 function listenersModalModificarLibro () {
   const modificarGroupBtn = document.querySelectorAll(".icon.modificar");
   modificarGroupBtn.forEach(modificarButton => {
-    const libroVinculado = modificarButton.parentNode.parentNode;
+    const libroVinculado = modificarButton.parentNode.parentNode.parentNode;
 
     modificarButton.addEventListener("click", () => {
       const modalModificacion = modalesEstanteria.getModalDatosLibro(libroVinculado);

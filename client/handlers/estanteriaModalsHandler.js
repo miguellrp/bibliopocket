@@ -369,6 +369,8 @@ function crearCustomTagify () {
 
   if (customTagifyTag != null) {
     customTagifyTag.remove();
+    const categoriasHidden = datosLibroModal.querySelector(".categorias-tagify");
+    categoriasHidden.replaceChildren();
   }
 
   customTagifyTag = document.createElement("custom-tagify");

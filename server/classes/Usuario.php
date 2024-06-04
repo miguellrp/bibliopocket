@@ -260,7 +260,7 @@ class Usuario {
 
   function actualizarContrasenha($contrasenhaAntigua, $nuevaContrasenha) {
     try {
-      if (password_verify($contrasenhaAntigua, $this->getContrasenha())) {
+      if (password_verify($contrasenhaAntigua, $this->getContrasenha()) || Usuario::loginTemporal($this->getNombreUsuario(), $contrasenhaAntigua)) {
         $nuevaContrasenhaHasheada = password_hash($nuevaContrasenha, PASSWORD_DEFAULT);
         $query = $this->conexionDB->conn->prepare("UPDATE usuarios SET
         contrasenha_usuario = :nuevaContrasenha

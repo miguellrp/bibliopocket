@@ -240,7 +240,7 @@ function actualizarDataForm (tipoForm, libro) {
   if (dataForm.estadoLibro == 1) camposForm.estadoLeyendo.setAttribute("checked", "");
   if (dataForm.estadoLibro == 2) camposForm.estadoLeido.setAttribute("checked", "");
 
-  getSubmitButtonForm();
+  getSubmitButtonForm(tipoForm);
   getInputHiddenFields();
   getCategorias();
 
@@ -258,22 +258,22 @@ function actualizarDataForm (tipoForm, libro) {
     titleFormTag.textContent = dataForm.titleForm;
   }
 
-  function getSubmitButtonForm () {
+  function getSubmitButtonForm (tipoForm) {
     let submitButtonTag = modalDatosLibro.querySelector("button[type=submit]");
 
-    if (submitButtonTag === null) {
+    if (submitButtonTag == null) {
       submitButtonTag = document.createElement("button");
       submitButtonTag.type = "submit";
-      submitButtonTag.className = "submit-btn";
-      submitButtonTag.name = dataForm.submitButtonName;
-
-      submitButtonTag.innerHTML = `
-      <svg class=icon>
-        <use xlink:href=/client/assets/images/floppy-disk-icon.svg#floppy-disk>
-        </use>
-      </svg>Guardar cambios`;
       form.append(submitButtonTag);
     }
+
+    submitButtonTag.className = "submit-btn";
+    submitButtonTag.name = dataForm.submitButtonName;
+    submitButtonTag.innerHTML = `
+    <svg class=icon>
+      <use xlink:href=/client/assets/images/floppy-disk-icon.svg#floppy-disk>
+      </use>
+    </svg>${(tipoForm == 0) ? "Crear libro" : "Guardar cambios"}`;
   }
 
   function getInputHiddenFields () {

@@ -40,6 +40,6 @@ Por último, para borrar todo lo relativo a la aplicación web de _BiblioPocket_
 | Mis objetivos | La persona usuaria puede establecer objetivos / metas en base a sus lecturas pendientes | ❌ |
 | Mis objetivos | La persona usuaria puede visualizar un histórico de los progresos de sus objetivos establecidos | ❌ |
 | Mi perfil | La persona usuaria puede modificar datos relativos a su cuenta personal y darse de baja | ✅ |
-| Mi perfil | La persona usuaria puede consultar estadísticas relativas a la actividad de su cuenta en _BiblioPocket_ | ✏️ |
+| Mi perfil | La persona usuaria puede consultar estadísticas relativas a la actividad de su cuenta en _BiblioPocket_ | ✅ |
 | Panel de admin | La persona administradora puede visualizar en una tabla los datos básicos relativos a todas aquellas personas registradas en _BiblioPocket_ | ✅
 | Panel de admin | La persona administradora puede ejecutar ciertas operaciones básicas relativas a todas aquellas personas registradas en _BiblioPocket_ | ✅
